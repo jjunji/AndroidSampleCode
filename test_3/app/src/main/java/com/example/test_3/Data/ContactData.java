@@ -1,17 +1,8 @@
 package com.example.test_3.Data;
 
 public class ContactData {
-    private int id;
     private String name;
     private String tel;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
 
     public String getName() {
         return name;

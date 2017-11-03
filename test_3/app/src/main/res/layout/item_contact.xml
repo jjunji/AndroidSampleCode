@@ -17,6 +17,7 @@
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
             android:hint="Name"
+            android:textColor="#000000"
             android:textSize="15sp" />
 
         <TextView
@@ -25,12 +26,13 @@
             android:layout_height="wrap_content"
             android:gravity="left|center_vertical"
             android:hint="Phone Number"
+            android:textColor="#000000"
             android:textSize="15sp" />
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/btnCall"
         android:layout_width="63dp"
         android:layout_height="wrap_content"
         android:text="Call" />

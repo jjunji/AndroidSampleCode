@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.SectionIndexer;
+import android.widget.TextView;
 
 import com.example.test_3.Data.ContactData;
 import com.example.test_3.Loader.ContactLoader;
@@ -18,7 +21,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class MainActivity extends Activity {
-    private ArrayList<String> mItems;
     private IndexableListView mListView;
 
     /** Called when the activity is first created. */
@@ -31,15 +33,9 @@ public class MainActivity extends Activity {
         // datas : 연락처 데이터
         List<ContactData> datas = CLoader.getContacts();
 
-        //ContentAdapter adapter = new ContentAdapter(datas);
-/*
-        ContentAdapter adapter = new ContentAdapter(this,
-                android.R.layout.simple_list_item_1, datas);*/
-
         mListView = (IndexableListView) findViewById(R.id.listview);
         ContentAdapter adapter = new ContentAdapter((ArrayList<ContactData>) datas, getApplicationContext());
 
-        //mListView = (IndexableListView) findViewById(R.id.listview);
         mListView.setAdapter(adapter);
         mListView.setFastScrollEnabled(true);
     }
@@ -109,12 +105,30 @@ public class MainActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            itemView view = new itemView(context);
-            ContactData data = datas.get(position);
-            view.setName(data.getName());
-            view.setTel(data.getTel());
 
-            return view;
+            ContactViewHolder viewHolder;
+
+            if(convertView == null){
+                viewHolder = new ContactViewHolder();
+
+                LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+                convertView = inflater.inflate(R.layout.item_contact, null);
+
+                viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtName);
+                viewHolder.txtPhoneNumber = (TextView) convertView.findViewById(R.id.txtPhoneNumber);
+                viewHolder.btnCall = (Button) convertView.findViewById(R.id.btnCall);
+
+                convertView.setTag(viewHolder);
+            }
+            else{
+                viewHolder = (ContactViewHolder) convertView.getTag();
+            }
+
+            viewHolder.txtName.setText(datas.get(position).getName());
+            viewHolder.txtPhoneNumber.setText(datas.get(position).getTel());
+
+
+            return convertView;
         }
     }
 }

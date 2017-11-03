@@ -160,8 +160,6 @@ public class IndexScroller {
             setState(STATE_HIDING);
     }
 
-    // TODO: 2017-11-03  
-    // 이 부분을 바꿔야하는데..
     public void setAdapter(Adapter adapter) {
         if (adapter instanceof SectionIndexer) {
             mIndexer = (SectionIndexer) adapter;

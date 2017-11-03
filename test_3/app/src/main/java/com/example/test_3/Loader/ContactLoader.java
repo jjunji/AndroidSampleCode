@@ -28,8 +28,7 @@ public class ContactLoader {
         Uri phoneUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI; // 테이블명과 같이 생각하면 된다.
 
         // 2. 데이터에서 가져올 컬럼명을 정의
-        String projections[] = {ContactsContract.CommonDataKinds.Phone.CONTACT_ID   // 고유값을 구분하기 위한 ID
-                , ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME               // 화면에 표시되는 이름
+        String projections[] = {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME               // 화면에 표시되는 이름
                 , ContactsContract.CommonDataKinds.Phone.NUMBER};                   // 실제 전화번호
 
         String sortOrder = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME;
@@ -48,14 +47,11 @@ public class ContactLoader {
                 // moveToNext() 다음 데이터로 이동, 데이터가 있으면 계속 while문이 동작
                 // moveToNext()가 true, false를 반환하기 때문에 while문으로 하는 것이 적합
                 // 4.1 위에 정의한 프로젝션의 컬럼명으로 cursor 있는 인덱스값을 조회하고
-                int idIndex = cursor.getColumnIndex(projections[0]);    // projection에서 어떤 컬럼을 가져올지를 Index로 지정
-                int id = cursor.getInt(idIndex);
-                // int id = cursor.getInt(0);   위의 2줄을 이렇게 해줘도 된다.
 
-                int nameIndex = cursor.getColumnIndex(projections[1]);
+                int nameIndex = cursor.getColumnIndex(projections[0]);
                 String name = cursor.getString(nameIndex);
 
-                int telIndex = cursor.getColumnIndex(projections[2]);
+                int telIndex = cursor.getColumnIndex(projections[1]);
                 // 4.2 해당 index를 사용해서 실제값을 가져온다.
                 String tel = cursor.getString(telIndex);
                 // String tel = cursor.getString(2);  라고 해도 되는데,
@@ -63,7 +59,6 @@ public class ContactLoader {
 
                 // 5. 내가 설계한 Data 클래스에 담아준다.
                 ContactData data = new ContactData();
-                data.setId(id);
                 data.setName(name);
                 data.setTel(tel);
 
