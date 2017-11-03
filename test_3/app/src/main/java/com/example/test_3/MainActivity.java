@@ -2,7 +2,10 @@ package com.example.test_3;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,9 +23,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MainActivity extends Activity {
-    private IndexableListView mListView;
+import static android.R.attr.onClick;
 
+public class MainActivity extends Activity{
+    private IndexableListView mListView;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,18 +38,61 @@ public class MainActivity extends Activity {
         List<ContactData> datas = CLoader.getContacts();
 
         mListView = (IndexableListView) findViewById(R.id.listview);
-        ContentAdapter adapter = new ContentAdapter((ArrayList<ContactData>) datas, getApplicationContext());
+        final ContentAdapter adapter = new ContentAdapter((ArrayList<ContactData>) datas, getApplicationContext());
+        adapter.setCallButtonClicklistener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (int)v.getTag();
+                ContactData contactData = adapter.getItem(position);
+                startActivity(new Intent("android.intent.action.DIAL", Uri.parse("tel:"+ contactData.getTel())));
+            }
+        });
+        adapter.setSmsButtonClicklistener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = (int)v.getTag();
+                ContactData contactData = adapter.getItem(position);
+                startActivity(new Intent("android.intent.action.SENDTO", Uri.parse("sms:"+contactData.getTel())));
+            }
+        });
+//        adapter.setSmsButtonClicklistener(new ContentAdapter.ContractButtonListener() {
+//            @Override
+//            public void onClickSMS(ContactData contactData) {
+//
+//            }
+//        });
 
         mListView.setAdapter(adapter);
         mListView.setFastScrollEnabled(true);
     }
 
-    private class ContentAdapter extends BaseAdapter implements SectionIndexer {
+    private class ContentAdapter extends BaseAdapter implements SectionIndexer{
+        private View.OnClickListener callButtonClicklistener;
+        private View.OnClickListener smsButtonClicklistener;
 
+//        private ContractButtonListener smsButtonClicklistener;
         private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
 
         ArrayList<ContactData> datas;
         Context context;
+
+
+//        interface ContractButtonListener {
+//            void onClickSMS(ContactData contactData);
+//        }
+
+        public void setCallButtonClicklistener(View.OnClickListener callButtonClicklistener) {
+            this.callButtonClicklistener = callButtonClicklistener;
+        }
+
+        public void setSmsButtonClicklistener(View.OnClickListener smsButtonClicklistener) {
+            this.smsButtonClicklistener = smsButtonClicklistener;
+        }
+
+
+//        public void setSmsButtonClicklistener(ContractButtonListener smsButtonClicklistener) {
+//            this.smsButtonClicklistener = smsButtonClicklistener;
+//        }
 
         public ContentAdapter(ArrayList<ContactData> datas, Context context) {
             this.datas = datas;
@@ -77,7 +124,7 @@ public class MainActivity extends Activity {
 
         @Override
         public int getSectionForPosition(int position) {
-            return 0;
+            return position;
         }
 
         @Override
@@ -94,7 +141,7 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public Object getItem(int position) {
+        public ContactData getItem(int position) {
             return datas.get(position);
         }
 
@@ -104,9 +151,9 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(final int position, View convertView, ViewGroup parent) {
 
-            ContactViewHolder viewHolder;
+            final ContactViewHolder viewHolder;
 
             if(convertView == null){
                 viewHolder = new ContactViewHolder();
@@ -117,6 +164,7 @@ public class MainActivity extends Activity {
                 viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtName);
                 viewHolder.txtPhoneNumber = (TextView) convertView.findViewById(R.id.txtPhoneNumber);
                 viewHolder.btnCall = (Button) convertView.findViewById(R.id.btnCall);
+                viewHolder.btnSns = (Button) convertView.findViewById(R.id.btnSms);
 
                 convertView.setTag(viewHolder);
             }
@@ -127,8 +175,38 @@ public class MainActivity extends Activity {
             viewHolder.txtName.setText(datas.get(position).getName());
             viewHolder.txtPhoneNumber.setText(datas.get(position).getTel());
 
+            if(callButtonClicklistener != null){
+                viewHolder.btnCall.setTag(position);
+                viewHolder.btnCall.setOnClickListener(callButtonClicklistener);
+            }
+            if(smsButtonClicklistener != null){
+                viewHolder.btnSns.setTag(position);
+                viewHolder.btnSns.setOnClickListener(smsButtonClicklistener);
+            }
+            //viewHolder.btnCall.setOnClickListener(listener);
+//            viewHolder.btnSns.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    if(smsButtonClicklistener != null){
+//                        smsButtonClicklistener.onClickSMS(getItem(position));
+//                    }
+////                    startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:"+ datas.get(position).getTel())));
+//                }
+//            });
 
             return convertView;
         }
+
+/*        View.OnClickListener listener = new View.OnClickListener(){
+
+            @Override
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.btnCall :
+                        startActivity(new Intent("android.intent.action.CALL", Uri.parse("tel:"+datas.get(position).getTel())));
+                        break;
+                }
+            }
+        };*/
     }
 }
