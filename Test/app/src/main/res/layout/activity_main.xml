@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.test.MainActivity">
+
+
+    <Button
+        android:id="@+id/btnContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="40dp"
+        android:text="연락처" />
+
+    <Button
+        android:id="@+id/btnCallHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnContact"
+        android:layout_alignStart="@+id/btnContact"
+        android:layout_below="@+id/btnContact"
+        android:layout_marginTop="25dp"
+        android:text="통화내역" />
+
+    <Button
+        android:id="@+id/btnSmsHistory"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/btnCallHistory"
+        android:layout_alignStart="@+id/btnCallHistory"
+        android:layout_below="@+id/btnCallHistory"
+        android:layout_marginTop="25dp"
+        android:text="문자내역" />
+</RelativeLayout>
