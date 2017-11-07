@@ -19,6 +19,7 @@ public class SmsHistoryActivity extends AppCompatActivity {
     ListView smsListView;
     SmsHistoryAdapter adapter;
     ContactLoader loader = new ContactLoader(this);
+    LoaderForMatch loader2 = new LoaderForMatch(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +28,8 @@ public class SmsHistoryActivity extends AppCompatActivity {
 
         smsListView = (ListView) findViewById(R.id.smsListView);
 
-        SmsHistoryLoader ShLoader = new SmsHistoryLoader(this, loader.getContacts());
+        //SmsHistoryLoader ShLoader = new SmsHistoryLoader(this, loader.getContacts());
+        SmsHistoryLoader ShLoader = new SmsHistoryLoader(this, loader2.getContacts());
 
         List<SmsHistoryData> datas = ShLoader.getContacts();
 
