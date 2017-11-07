@@ -8,6 +8,7 @@ import com.example.test.CallHistory.CallHistoryAdapter;
 import com.example.test.Data.CallHistoryData;
 import com.example.test.Data.SmsHistoryData;
 import com.example.test.Loader.CallHistoryLoader;
+import com.example.test.Loader.ContactLoader;
 import com.example.test.Loader.SmsHistoryLoader;
 import com.example.test.R;
 
@@ -17,6 +18,7 @@ import java.util.List;
 public class SmsHistoryActivity extends AppCompatActivity {
     ListView smsListView;
     SmsHistoryAdapter adapter;
+    ContactLoader loader = new ContactLoader(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,8 +26,8 @@ public class SmsHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sms_history);
 
         smsListView = (ListView) findViewById(R.id.smsListView);
-//
-        SmsHistoryLoader ShLoader = new SmsHistoryLoader(this);
+
+        SmsHistoryLoader ShLoader = new SmsHistoryLoader(this, loader.getContacts());
 
         List<SmsHistoryData> datas = ShLoader.getContacts();
 

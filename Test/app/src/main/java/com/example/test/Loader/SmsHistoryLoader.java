@@ -12,6 +12,7 @@ import android.provider.Telephony;
 import android.util.Log;
 
 
+import com.example.test.Data.ContactData;
 import com.example.test.Data.SmsHistoryData;
 
 import java.text.SimpleDateFormat;
@@ -27,9 +28,11 @@ public class SmsHistoryLoader {
     private List<SmsHistoryData> datas = new ArrayList<>();
     private Context context;
 
-    public SmsHistoryLoader(Context context) {
+    List<ContactData> searchDatas = new ArrayList<>();
+
+    public SmsHistoryLoader(Context context, List<ContactData> searchDatas) {
         this.context = context;
-        
+        this.searchDatas = searchDatas;
     }
 
     public List<SmsHistoryData> getContacts() {
@@ -71,7 +74,8 @@ public class SmsHistoryLoader {
                 // 4.2 해당 index를 사용해서 실제값을 가져온다.
                 String tel = cursor.getString(telIndex);
 
-                String name = getContactbyPhoneNumber(tel);
+                //String name = getContactbyPhoneNumber(tel);
+                String name = getMatchName(tel);
 
                 int dateIndex = cursor.getColumnIndex(projections[2]);
                 Date date = new Date(cursor.getLong(dateIndex));
@@ -118,7 +122,29 @@ public class SmsHistoryLoader {
         return datas;
     }
 
-    public String getContactbyPhoneNumber(String phoneNumber) {
+    public String getMatchName(String phoneNumber){ //01022530830
+        String name = "";
+
+        for(int i=0; i<searchDatas.size(); i++){
+            if(splitPhoneNumber(searchDatas.get(i).getTel()).equals(phoneNumber)){
+                name = searchDatas.get(i).getName();
+                return name;
+            }
+        }
+
+        return name;
+    }
+
+    public String splitPhoneNumber(String phoneNumberBeforeSplit){
+        String phoneNumberAfterSplit = "";
+        String split[] = phoneNumberBeforeSplit.split("-");
+        for(int i=0; i<split.length; i++){
+            phoneNumberAfterSplit += split[i];
+        }
+        return phoneNumberAfterSplit;
+    }
+
+/*    public String getContactbyPhoneNumber(String phoneNumber) {
         String name = "";
         Cursor cursor2 = null;
         ContentResolver resolver2 = context.getContentResolver();
@@ -157,5 +183,5 @@ public class SmsHistoryLoader {
         }
 
         return name;
-    }
+    }*/
 }
