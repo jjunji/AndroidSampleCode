@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.nfc.Tag;
 import android.provider.CallLog;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.provider.Telephony;
 import android.util.Log;
 
@@ -28,6 +29,7 @@ public class SmsHistoryLoader {
 
     public SmsHistoryLoader(Context context) {
         this.context = context;
+        
     }
 
     public List<SmsHistoryData> getContacts() {
@@ -54,7 +56,7 @@ public class SmsHistoryLoader {
                 null,           // 지정된 컬럼명과 매핑되는 실제 조건 값
                 sortOrder);          // 정렬
 
-
+        Log.i("test", "start : "+ System.currentTimeMillis());
         // 4. 반복문을 통해 cursor에 담겨있는 데이터를 하나씩 추출한다.
         if (cursor != null) {   // cursor에 데이터 존재여부 체크
             while (cursor.moveToNext()) {
@@ -67,7 +69,7 @@ public class SmsHistoryLoader {
 
                 int telIndex = cursor.getColumnIndex(projections[1]);
                 // 4.2 해당 index를 사용해서 실제값을 가져온다.
-                String tel = cursor.getString(telIndex);  // 0105484848484
+                String tel = cursor.getString(telIndex);
 
                 String name = getContactbyPhoneNumber(tel);
 
@@ -112,13 +114,13 @@ public class SmsHistoryLoader {
         }
         // * 중요 : 사용 후 close 를 호출하지 않으면 메모리 누수가 발생할 수 있다.
         cursor.close();
-
+        Log.i("test", "end : "+ System.currentTimeMillis());
         return datas;
     }
 
     public String getContactbyPhoneNumber(String phoneNumber) {
         String name = "";
-        Cursor cursor = null;
+        Cursor cursor2 = null;
         ContentResolver resolver2 = context.getContentResolver();
 
         //Uri uri = Uri.withAppendedPath(ContactsContract.PhoneLookup.CONTENT_FILTER_URI, Uri.encode(phoneNumber));
@@ -128,27 +130,27 @@ public class SmsHistoryLoader {
 
             //Cursor cursor = c.getContentResolver().query(uri, projection, null, null, null);
 
-            cursor = resolver2.query(uri,    // 데이터의 주소 (URI)
+            cursor2 = resolver2.query(uri,    // 데이터의 주소 (URI)
                     null,    // 가져올 데이터 컬럼명 배열 (projection)
                     null,           // 조건절에 들어가는 컬럼명들 지정
                     null,           // 지정된 컬럼명과 매핑되는 실제 조건 값
                     projection);          // 정렬
 
 
-            cursor.moveToFirst();
+            cursor2.moveToFirst();
             String savedName = "";
             String savedNumber = "";
 
-            int nameColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
-            int numberColumn = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+            int nameColumn = cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+            int numberColumn = cursor2.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
 
-            while (!cursor.isAfterLast()) {
-                savedName = cursor.getString(nameColumn);
-                savedNumber = cursor.getString(numberColumn);
+            while (!cursor2.isAfterLast()) {
+                savedName = cursor2.getString(nameColumn);
+                savedNumber = cursor2.getString(numberColumn);
                 if (phoneNumber.equals(savedNumber)) {
                     return savedName;
                 }
-                cursor.moveToNext();
+                cursor2.moveToNext();
             }
         } catch (Exception e) {
             Log.e("SmsLoader ====", e.toString());

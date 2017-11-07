@@ -24,7 +24,7 @@ public class SmsHistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sms_history);
 
         smsListView = (ListView) findViewById(R.id.smsListView);
-
+//
         SmsHistoryLoader ShLoader = new SmsHistoryLoader(this);
 
         List<SmsHistoryData> datas = ShLoader.getContacts();
