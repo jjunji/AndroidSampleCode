@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.tenmanager_1.ContactUtil.ContactAdapter;
+import com.example.tenmanager_1.ContactUtil.IndexableListView;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
 
@@ -21,7 +22,8 @@ public class Child_ContactFragment extends Fragment {
     Realm realm = Realm.getDefaultInstance();
     //Context context;
     View view;
-    ListView customerListView;
+    //ListView customerListView;
+    IndexableListView customerListView2;
     //ArrayList<ContactData> datas;
     //RealmResults<ContactVO> datas;
     RealmResults<ContactVO> datas;  // = realm.where(ContactVO.class).findAll();
@@ -53,14 +55,14 @@ public class Child_ContactFragment extends Fragment {
     }
 
     private void init() {
-        customerListView = (ListView) view.findViewById(R.id.customerListView);
+        customerListView2 = (IndexableListView) view.findViewById(R.id.customerListView);
         datas = realm.where(ContactVO.class).findAll();
         adapter = new ContactAdapter(getContext(), datas);
         //ContactAdapter adapter = new ContactAdapter(datas, getActivity());
     }
 
     private void setListView(){
-        customerListView.setAdapter(adapter);
+        customerListView2.setAdapter(adapter);
     }
 
 }

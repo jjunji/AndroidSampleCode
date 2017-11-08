@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ListView
+        <com.example.tenmanager_1.ContactUtil.IndexableListView
             android:id="@+id/customerListView"
             android:layout_width="match_parent"
             android:layout_height="440dp"
