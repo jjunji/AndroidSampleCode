@@ -1,0 +1,112 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/layoutBackGround"
+    tools:context="com.example.tenmanager_1.Fragment.ContactFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/fragment_contact_container"
+            android:layout_width="370dp"
+            android:layout_height="350dp"
+            android:layout_below="@+id/linearLayout6"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true">
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:background="@color/White"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout2"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout6">
+
+            <TextView
+                android:id="@+id/btnContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="연락처"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btnRecentCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="최근통화목록"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="13dp">
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="100dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.10"
+                android:background="@color/buttonColor"
+                android:text="연락처 검색"
+                android:textColor="@color/White" />
+
+            <EditText
+                android:id="@+id/textView8"
+                android:layout_width="250dp"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="14dp"
+                android:background="@color/White"
+                android:gravity="center_vertical"
+                android:hint="고객명 또는 전화번호" />
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="25dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/relativeLayout2"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout2">
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="13dp"
+                android:layout_weight="1"
+                android:text="선택된 인원 총 1 명 (김소나무)"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
+</FrameLayout>

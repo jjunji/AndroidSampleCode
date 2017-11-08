@@ -1,0 +1,30 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.tenmanager_1.Fragment.ContactFragment_Child.Child_ContactFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ListView
+            android:id="@+id/customerListView"
+            android:layout_width="match_parent"
+            android:layout_height="440dp"
+            android:layout_alignParentTop="true"
+            android:layout_above="@+id/button3" />
+
+        <Button
+            android:id="@+id/button3"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="@color/buttonColor"
+            android:text="완 료" />
+    </RelativeLayout>
+
+</FrameLayout>
