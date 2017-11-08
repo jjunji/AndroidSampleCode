@@ -56,6 +56,7 @@ public class Child_ContactFragment extends Fragment {
 
     private void init() {
         customerListView2 = (IndexableListView) view.findViewById(R.id.customerListView);
+        customerListView2.requestDisallowInterceptTouchEvent(true);
         datas = realm.where(ContactVO.class).findAll();
         adapter = new ContactAdapter(getContext(), datas);
         //ContactAdapter adapter = new ContactAdapter(datas, getActivity());
@@ -63,6 +64,7 @@ public class Child_ContactFragment extends Fragment {
 
     private void setListView(){
         customerListView2.setAdapter(adapter);
+        customerListView2.setFastScrollEnabled(true);
     }
 
 }

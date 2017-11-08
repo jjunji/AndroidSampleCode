@@ -27,13 +27,13 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
     //Context context;
     //ArrayList<ContactData> datas = new ArrayList<>();
     RealmResults<ContactVO> datas;
-//    Context context;
+    //Context context;
     LayoutInflater layoutInflater;
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
 
     public ContactAdapter(Context context, RealmResults<ContactVO> datas) {
         this.datas = datas;
-//        this.context = context;
+        //this.context = context;
 //        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutInflater = LayoutInflater.from(context);
     }

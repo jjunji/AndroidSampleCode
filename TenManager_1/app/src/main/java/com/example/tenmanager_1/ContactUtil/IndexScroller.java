@@ -13,6 +13,8 @@ import android.widget.Adapter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 
+import com.example.tenmanager_1.Fragment.ContactFragment_Child.Child_ContactFragment;
+
 
 public class IndexScroller {
 
@@ -20,7 +22,9 @@ public class IndexScroller {
     private float mIndexbarMargin;
     private float mPreviewPadding;
     private float mDensity;
+    //private float mDensity2;
     private float mScaledDensity;
+    //private float mScaledDensity2;
     private float mAlphaRate;
     private int mState = STATE_HIDDEN;
     private int mListViewWidth;
@@ -31,6 +35,7 @@ public class IndexScroller {
     private SectionIndexer mIndexer = null; //
     private String[] mSections = null; //
     private RectF mIndexbarRect;
+    //private Child_ContactFragment ch;
 
     private static final int STATE_HIDDEN = 0;
     private static final int STATE_SHOWING = 1;
@@ -39,8 +44,13 @@ public class IndexScroller {
 
     public IndexScroller(Context context, ListView lv) {
         mDensity = context.getResources().getDisplayMetrics().density;
+        //
+        //mDensity2 = ch.getActivity().getResources().getDisplayMetrics().density;
         mScaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
+        //mScaledDensity2 = ch.getActivity().getResources().getDisplayMetrics().scaledDensity;
+
         mListView = lv;
+        mListView.requestDisallowInterceptTouchEvent(true);
         setAdapter(mListView.getAdapter());
 
         mIndexbarWidth = 20 * mDensity;
@@ -113,6 +123,7 @@ public class IndexScroller {
                     // Determine which section the point is in, and move the list to that section
                     mCurrentSection = getSectionByPoint(ev.getY());
                     mListView.setSelection(mIndexer.getPositionForSection(mCurrentSection));
+                    mListView.requestDisallowInterceptTouchEvent(true);
                     return true;
                 }
                 break;
@@ -123,6 +134,7 @@ public class IndexScroller {
                         // Determine which section the point is in, and move the list to that section
                         mCurrentSection = getSectionByPoint(ev.getY());
                         mListView.setSelection(mIndexer.getPositionForSection(mCurrentSection));
+                        mListView.requestDisallowInterceptTouchEvent(true);
                     }
                     return true;
                 }

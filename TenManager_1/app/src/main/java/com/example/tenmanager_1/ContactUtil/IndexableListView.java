@@ -8,8 +8,11 @@ import android.view.MotionEvent;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
+import com.example.tenmanager_1.Fragment.ContactFragment_Child.Child_ContactFragment;
+
 
 public class IndexableListView extends ListView {
+    //Child_ContactFragment ch2;
 
     private boolean mIsFastScrollEnabled = false;
     private IndexScroller mScroller = null;
@@ -37,6 +40,7 @@ public class IndexableListView extends ListView {
         mIsFastScrollEnabled = enabled;
         if (mIsFastScrollEnabled) {
             if (mScroller == null)
+                //mScroller = new IndexScroller(getContext(), this);
                 mScroller = new IndexScroller(getContext(), this);
         } else {
             if (mScroller != null) {
@@ -71,6 +75,7 @@ public class IndexableListView extends ListView {
                     // If fling happens, index bar shows
                     if (mScroller != null)
                         mScroller.show();
+
                     return super.onFling(e1, e2, velocityX, velocityY);
                 }
 
@@ -83,10 +88,18 @@ public class IndexableListView extends ListView {
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if(mScroller.contains(ev.getX(), ev.getY()))
-            return true;
+        boolean ret = super.onInterceptTouchEvent(ev);
+        if(ret){
+            if(mScroller.contains(ev.getX(), ev.getY())){
+                getParent().requestDisallowInterceptTouchEvent(true);
+                return ret;
+            }
+        }
+/*        if(mScroller.contains(ev.getX(), ev.getY()))
+        return true;*/
 
-        return super.onInterceptTouchEvent(ev);
+        //return super.onInterceptTouchEvent(ev);
+        return ret;
     }
 
     @Override
