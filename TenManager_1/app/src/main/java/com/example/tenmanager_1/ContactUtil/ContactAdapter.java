@@ -1,21 +1,24 @@
 package com.example.tenmanager_1.ContactUtil;
 
 import android.content.Context;
+import android.text.InputFilter;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.tenmanager_1.Data.ContactData;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
@@ -24,24 +27,25 @@ import io.realm.RealmResults;
 
 public class ContactAdapter extends BaseAdapter implements SectionIndexer{
 
-    //Context context;
-    //ArrayList<ContactData> datas = new ArrayList<>();
+    Context context;
     RealmResults<ContactVO> datas;
-    //Context context;
     LayoutInflater layoutInflater;
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
 
+    private HashMap<ContactVO, Boolean> mapSelected;
+
     public ContactAdapter(Context context, RealmResults<ContactVO> datas) {
         this.datas = datas;
-        //this.context = context;
-//        layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         layoutInflater = LayoutInflater.from(context);
+        this.context = context;
+
+        // HashMap 초기화 -> 처음에 다 false를 주고 시작.
+        mapSelected = new HashMap<>();
+        for(ContactVO contactVO : datas){
+            mapSelected.put(contactVO, false);
+        }
     }
 
- /*   public ContactAdapter(RealmResults<ContactVO> datas, Context context) {
-        this.datas = datas;
-        //this.context = context;
-    }*/
 
     @Override
     public int getCount() {
@@ -59,7 +63,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
 //        final Context context = parent.getContext();
         final ContactViewHolder viewHolder;
 
@@ -69,6 +73,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
             convertView = layoutInflater.inflate(R.layout.item_contact, null);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtName);
             viewHolder.txtPhoneNumber = (TextView) convertView.findViewById(R.id.txtPhoneNumber);
+            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
 
             convertView.setTag(viewHolder);
         }else{
@@ -80,6 +85,29 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
 
         viewHolder.txtName.setText(contactVO.getName());
         viewHolder.txtPhoneNumber.setText(contactVO.getTel());
+
+
+        viewHolder.checkBox.setTag(position);
+
+        Boolean isCheck = mapSelected.get(contactVO);  // 처음에는 다 false 겠지
+        Log.i("test", "isCheck :" + isCheck);
+
+        viewHolder.checkBox.setChecked(isCheck);
+
+        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int index = (int) buttonView.getTag();
+                ContactVO contact = getItem(index);
+                Log.i("test", "change contact :" + contact.toString());
+                if(isChecked){
+                    mapSelected.put(contact, true);
+                }
+                else{
+                    mapSelected.put(contact, false);
+                }
+            }
+        });
 
         return convertView;
     }
@@ -97,8 +125,6 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
         // If there is no item for current section, previous section will be selected
         for (int i = section; i >= 0; i--) {
             for (int j = 0; j < getCount(); j++) {
-                //Log.i("MainActivity", "section=========" + section);
-                //Log.i("MainActivity", "getItem=========" + String.valueOf(datas.get(j).getName().charAt(0)));
                 if (i == 0) {
                     // For numeric section
                     for (int k = 0; k <= 9; k++) {

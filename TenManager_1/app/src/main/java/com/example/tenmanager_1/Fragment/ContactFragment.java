@@ -1,3 +1,4 @@
+/*
 package com.example.tenmanager_1.Fragment;
 
 
@@ -7,16 +8,17 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.tenmanager_1.Fragment.ContactFragment_Child.Child_ContactFragment;
-import com.example.tenmanager_1.Fragment.ContactFragment_Child.Child_RecentCallFragment;
+import com.example.tenmanager_1.Fragment.FindContactFragment.Child_ContactFragment;
+import com.example.tenmanager_1.Fragment.FindContactFragment.Child_RecentCallFragment;
 import com.example.tenmanager_1.R;
 
+*/
 /**
  * A simple {@link Fragment} subclass.
- */
+ *//*
+
 public class ContactFragment extends Fragment implements View.OnClickListener{
     View view;
     TextView btnContact, btnRecentCall;
@@ -83,3 +85,4 @@ public class ContactFragment extends Fragment implements View.OnClickListener{
         }
     }
 }
+*/

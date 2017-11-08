@@ -8,11 +8,8 @@ import android.view.MotionEvent;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 
-import com.example.tenmanager_1.Fragment.ContactFragment_Child.Child_ContactFragment;
-
 
 public class IndexableListView extends ListView {
-    //Child_ContactFragment ch2;
 
     private boolean mIsFastScrollEnabled = false;
     private IndexScroller mScroller = null;
@@ -97,7 +94,6 @@ public class IndexableListView extends ListView {
         }
 /*        if(mScroller.contains(ev.getX(), ev.getY()))
         return true;*/
-
         //return super.onInterceptTouchEvent(ev);
         return ret;
     }

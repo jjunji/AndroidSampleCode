@@ -1,16 +1,19 @@
-package com.example.tenmanager_1.Fragment.ContactFragment_Child;
+package com.example.tenmanager_1.Fragment.FindContactFragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.CheckBox;
 
 import com.example.tenmanager_1.ContactUtil.ContactAdapter;
 import com.example.tenmanager_1.ContactUtil.IndexableListView;
 import com.example.tenmanager_1.Data.ContactVO;
+import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.R;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -18,30 +21,17 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Child_ContactFragment extends Fragment {
+public class ContactFragment extends Fragment implements View.OnClickListener {
+    //CheckBox checkBox;
     Realm realm = Realm.getDefaultInstance();
-    //Context context;
     View view;
-    //ListView customerListView;
-    IndexableListView customerListView2;
-    //ArrayList<ContactData> datas;
-    //RealmResults<ContactVO> datas;
-    RealmResults<ContactVO> datas;  // = realm.where(ContactVO.class).findAll();
-//    //ContactAdapter adapter = new ContactAdapter(datas, getActivity());
+    IndexableListView customerListView;
+    RealmResults<ContactVO> datas;
     ContactAdapter adapter;
 
-    public Child_ContactFragment() {
+    public ContactFragment() {
         // Required empty public constructor
     }
-
-/*    public static Child_ContactFragment newInstance(Context mContext) {
-        Bundle args = new Bundle();
-        Child_ContactFragment fragment = new Child_ContactFragment();
-        fragment.context = mContext;
-        fragment.setArguments(args);
-        return fragment;
-    }*/
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,18 +45,29 @@ public class Child_ContactFragment extends Fragment {
     }
 
     private void init() {
-        customerListView2 = (IndexableListView) view.findViewById(R.id.customerListView);
-        customerListView2.requestDisallowInterceptTouchEvent(true);
+        customerListView = (IndexableListView) view.findViewById(R.id.customerListView);
+        //customerListView2.requestDisallowInterceptTouchEvent(true);
         datas = realm.where(ContactVO.class).findAll();
         adapter = new ContactAdapter(getContext(), datas);
-        //ContactAdapter adapter = new ContactAdapter(datas, getActivity());
+        view.findViewById(R.id.btnComfirm).setOnClickListener(this);
+        //checkBox = (CheckBox) view.findViewById(R.id.checkBox);
     }
 
     private void setListView(){
-        customerListView2.setAdapter(adapter);
-        customerListView2.setFastScrollEnabled(true);
+        customerListView.setAdapter(adapter);
+        customerListView.setFastScrollEnabled(true);
     }
 
+    @Override
+    public void onClick(View v) {
+        if(v.getId() == R.id.btnComfirm){
+            //선택 된 리스트 가져오기
+            // HashMap 또는 ArrayList
+            FindContactActivity activity = (FindContactActivity) getActivity();
+            // params HashMap 또는 ArrayList 로 변경 하면됨
+            activity.selectedContact(new ArrayList<ContactVO>());
+        }
+    }
 }
 
 // TODO: 2017-11-08

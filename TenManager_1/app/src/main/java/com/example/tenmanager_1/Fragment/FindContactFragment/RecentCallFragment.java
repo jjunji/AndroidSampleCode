@@ -1,4 +1,4 @@
-package com.example.tenmanager_1.Fragment.ContactFragment_Child;
+package com.example.tenmanager_1.Fragment.FindContactFragment;
 
 
 import android.os.Bundle;
@@ -12,10 +12,10 @@ import com.example.tenmanager_1.R;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Child_RecentCallFragment extends Fragment {
+public class RecentCallFragment extends Fragment {
 
 
-    public Child_RecentCallFragment() {
+    public RecentCallFragment() {
         // Required empty public constructor
     }
 

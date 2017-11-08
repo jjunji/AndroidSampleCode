@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.MainActivity;
 import com.example.tenmanager_1.R;
 
@@ -18,7 +19,6 @@ import com.example.tenmanager_1.R;
  */
 public class SmsFragment extends Fragment {
     View view;
-    private final int FRAGMENT6 = 6;
     Button btnContactSearch;
 
     public SmsFragment() {
@@ -40,9 +40,10 @@ public class SmsFragment extends Fragment {
         btnContactSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                MainActivity main = ((MainActivity)getActivity());
-                main.callFragment(FRAGMENT6);
+                Intent intent = new Intent(getActivity(), FindContactActivity.class);
+                startActivity(intent);
             }
         });
     }
+
 }

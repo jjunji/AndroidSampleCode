@@ -18,7 +18,6 @@ import android.widget.ImageView;
 import com.example.tenmanager_1.Data.ContactData;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Fragment.AlarmFragment;
-import com.example.tenmanager_1.Fragment.ContactFragment;
 import com.example.tenmanager_1.Fragment.CustomerFragment;
 import com.example.tenmanager_1.Fragment.HomeFragment;
 import com.example.tenmanager_1.Fragment.MarketFragment;
@@ -150,11 +149,11 @@ public class MainActivity extends AppCompatActivity
                 transaction.commit();
                 break;
 
-            case 6:
+/*            case 6:
                 ContactFragment contactFragment = new ContactFragment();
                 transaction.replace(R.id.fragment_container, contactFragment);
                 transaction.commit();
-                break;
+                break;*/
         }
     }
 

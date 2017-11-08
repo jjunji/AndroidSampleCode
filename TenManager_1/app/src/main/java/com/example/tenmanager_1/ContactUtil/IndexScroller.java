@@ -13,8 +13,6 @@ import android.widget.Adapter;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 
-import com.example.tenmanager_1.Fragment.ContactFragment_Child.Child_ContactFragment;
-
 
 public class IndexScroller {
 
@@ -44,11 +42,7 @@ public class IndexScroller {
 
     public IndexScroller(Context context, ListView lv) {
         mDensity = context.getResources().getDisplayMetrics().density;
-        //
-        //mDensity2 = ch.getActivity().getResources().getDisplayMetrics().density;
         mScaledDensity = context.getResources().getDisplayMetrics().scaledDensity;
-        //mScaledDensity2 = ch.getActivity().getResources().getDisplayMetrics().scaledDensity;
-
         mListView = lv;
         mListView.requestDisallowInterceptTouchEvent(true);
         setAdapter(mListView.getAdapter());

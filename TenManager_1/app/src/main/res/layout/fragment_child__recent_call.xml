@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.tenmanager_1.Fragment.ContactFragment_Child.Child_RecentCallFragment">
+    tools:context="com.example.tenmanager_1.Fragment.FindContactFragment.RecentCallFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView

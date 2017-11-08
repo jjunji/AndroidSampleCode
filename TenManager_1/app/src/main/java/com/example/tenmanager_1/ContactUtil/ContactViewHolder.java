@@ -1,6 +1,7 @@
 package com.example.tenmanager_1.ContactUtil;
 
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 /**
@@ -10,6 +11,7 @@ import android.widget.TextView;
 public class ContactViewHolder {
     public TextView txtName;
     public TextView txtPhoneNumber;
+    public CheckBox checkBox;
     //public Button btnCall;
     //public Button btnSns;
 }
