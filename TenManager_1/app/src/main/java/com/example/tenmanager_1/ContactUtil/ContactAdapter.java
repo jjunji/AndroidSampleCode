@@ -25,7 +25,7 @@ import io.realm.RealmResults;
  * Created by 전지훈 on 2017-11-08.
  */
 
-public class ContactAdapter extends BaseAdapter implements SectionIndexer{
+public class ContactAdapter extends BaseAdapter implements SectionIndexer {
 
     Context context;
     RealmResults<ContactVO> datas;
@@ -33,17 +33,16 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
 
     private HashMap<ContactVO, Boolean> mapSelected;
+    //ArrayList<ContactVO> list = new ArrayList<>();
 
-    public ContactAdapter(Context context, RealmResults<ContactVO> datas) {
+
+    public ContactAdapter(Context context, RealmResults<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
         this.datas = datas;
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
 
         // HashMap 초기화 -> 처음에 다 false를 주고 시작.
-        mapSelected = new HashMap<>();
-        for(ContactVO contactVO : datas){
-            mapSelected.put(contactVO, false);
-        }
+        this.mapSelected = mapSelected;
     }
 
 
@@ -67,7 +66,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
 //        final Context context = parent.getContext();
         final ContactViewHolder viewHolder;
 
-        if(convertView == null){
+        if (convertView == null) {
             viewHolder = new ContactViewHolder();
 
             convertView = layoutInflater.inflate(R.layout.item_contact, null);
@@ -76,7 +75,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
             viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
 
             convertView.setTag(viewHolder);
-        }else{
+        } else {
             viewHolder = (ContactViewHolder) convertView.getTag();
         }
 
@@ -100,17 +99,44 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer{
                 int index = (int) buttonView.getTag();
                 ContactVO contact = getItem(index);
                 Log.i("test", "change contact :" + contact.toString());
-                if(isChecked){
+                if (isChecked) {
                     mapSelected.put(contact, true);
-                }
-                else{
+                } else {
                     mapSelected.put(contact, false);
                 }
             }
         });
-
         return convertView;
     }
+
+/*    public ArrayList<ContactVO> getCheckedList(){
+        for(int i=0; i<datas.size(); i++){
+
+        }
+
+        return list;
+    }*/
+
+/*    public static Object getKey(HashMap<ContactVO, Boolean> m, Object value) {
+        for (Object o : m.keySet()) {
+            if (m.get(o).equals(value)) {
+                return o;
+            }
+        }
+        return null;
+    }*/
+
+    public static ArrayList<ContactVO> getKey2(HashMap<ContactVO, Boolean> m, boolean value){
+        ArrayList<ContactVO> list = new ArrayList<>();
+
+        for(ContactVO li : m.keySet()){
+            if(m.get(li).equals(value)){
+                list.add(li);
+            }
+        }
+        return list;
+    }
+
 
     @Override
     public Object[] getSections() {

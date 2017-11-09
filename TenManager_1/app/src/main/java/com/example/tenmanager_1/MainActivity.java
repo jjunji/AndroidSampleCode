@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity
 
     public void doCopyContact(Realm realm){
         realm.beginTransaction(); //
-        Log.i(TAG, "copy start");
+        //Log.i(TAG, "copy start");
 
         for(int i = 0; i<datas.size(); i++){ // 주소록의 사이즈만큼 돌면서
             String tel = datas.get(i).getTel();
@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity
                 ContactVO cv = realm.createObject(ContactVO.class); // cv : 새로운 객체 생성.
                 cv.setName(datas.get(i).getName());
                 cv.setTel(tel);
-                Log.i(TAG, "insert data is : "+cv.toString());
+                //Log.i(TAG, "insert data is : "+cv.toString());
             }
         }
         realm.commitTransaction();
@@ -181,8 +181,8 @@ public class MainActivity extends AppCompatActivity
         RealmResults<ContactVO>  results = realm.where(ContactVO.class).findAll();
 
         for(ContactVO contactVO :  results){
-            Log.i("test", "printAllContact data is : "+contactVO.toString());
-            Log.i(TAG, "position data : " + contactVO.getName());
+           /* Log.i("test", "printAllContact data is : "+contactVO.toString());
+            Log.i(TAG, "position data : " + contactVO.getName());*/
         }
     }
 

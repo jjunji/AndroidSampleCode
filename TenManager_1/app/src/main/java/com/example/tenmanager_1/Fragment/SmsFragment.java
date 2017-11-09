@@ -20,6 +20,7 @@ import com.example.tenmanager_1.R;
 public class SmsFragment extends Fragment {
     View view;
     Button btnContactSearch;
+    private  final int REQUESTCODE = 1;
 
     public SmsFragment() {
         // Required empty public constructor
@@ -35,13 +36,24 @@ public class SmsFragment extends Fragment {
         return view;
     }
 
-    private void initView() {
+/*    private void initView() {
         btnContactSearch = (Button) view.findViewById(R.id.btnContactSearch);
         btnContactSearch.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FindContactActivity.class);
                 startActivity(intent);
+            }
+        });
+    }*/
+
+    private void initView() {
+        btnContactSearch = (Button) view.findViewById(R.id.btnContactSearch);
+        btnContactSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FindContactActivity.class);
+                startActivityForResult(intent, REQUESTCODE);
             }
         });
     }

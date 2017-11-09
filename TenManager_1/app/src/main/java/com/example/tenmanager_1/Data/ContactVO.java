@@ -1,12 +1,14 @@
 package com.example.tenmanager_1.Data;
 
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 
 /**
  * Created by 전지훈 on 2017-11-07.
  */
 
-public class ContactVO extends RealmObject{
+public class ContactVO extends RealmObject implements Serializable{
 
     private String name;
     private String tel;
