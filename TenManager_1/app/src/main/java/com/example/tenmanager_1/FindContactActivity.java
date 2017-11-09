@@ -74,13 +74,17 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void selectedContact(ArrayList<ContactVO> list){
-        //           변수(객체) list.size() 만큼
-        for(ContactVO contactVO : list){
+        ArrayList arIndex = new ArrayList();
 
-            Log.i("test", "selected contact : " + contactVO.toString());
+        for(ContactVO contactVO : list){
+            arIndex.add(new Integer(contactVO.getId()));
+//            Log.i("test", "selected contact : " + contactVO.toString());   // 체크한 contactVO 담겨있음.
         }
 
-        // 나중에 activityfForResult 사용시 데이터 전달하는 방법 찾아서 넣기
+        Intent intent = getIntent();  // Sms프래그먼트로 부터 받은 intent
+        intent.putExtra("listObject", arIndex);
+        setResult(RESULT_OK, intent);
 
+        finish();
     }
 }

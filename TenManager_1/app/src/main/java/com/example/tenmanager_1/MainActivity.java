@@ -167,7 +167,15 @@ public class MainActivity extends AppCompatActivity
 
             // 중복되는 것이 없다면 추가.
             if(contactVO == null){
+                Number maxid = realm.where(ContactVO.class).max("id");
+
+                int id = 1;
+                if(maxid != null){
+                    id = maxid.intValue()+1;
+                }
+
                 ContactVO cv = realm.createObject(ContactVO.class); // cv : 새로운 객체 생성.
+                cv.setId(id);
                 cv.setName(datas.get(i).getName());
                 cv.setTel(tel);
                 //Log.i(TAG, "insert data is : "+cv.toString());

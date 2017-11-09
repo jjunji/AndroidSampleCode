@@ -1,5 +1,8 @@
 package com.example.tenmanager_1.Data;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 
 import io.realm.RealmObject;
@@ -8,10 +11,19 @@ import io.realm.RealmObject;
  * Created by 전지훈 on 2017-11-07.
  */
 
-public class ContactVO extends RealmObject implements Serializable{
+public class ContactVO extends RealmObject{
 
+    private int id;
     private String name;
     private String tel;
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;
@@ -31,7 +43,12 @@ public class ContactVO extends RealmObject implements Serializable{
 
     @Override
     public String toString() {
-        return "name :" + name + "/n  tel :" +tel;
-
+        return "ContactVO{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", tel='" + tel + '\'' +
+                '}';
     }
+
+
 }

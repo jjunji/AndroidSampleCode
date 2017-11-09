@@ -13,6 +13,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tenmanager_1.Data.ContactData;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
 
@@ -31,10 +32,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
     RealmResults<ContactVO> datas;
     LayoutInflater layoutInflater;
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
-
     private HashMap<ContactVO, Boolean> mapSelected;
-    //ArrayList<ContactVO> list = new ArrayList<>();
-
 
     public ContactAdapter(Context context, RealmResults<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
         this.datas = datas;
@@ -80,25 +78,22 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
         }
 
         ContactVO contactVO = getItem(position);
-        Log.i("test", "contactVO : " + contactVO.toString());
+        //Log.i("test", "contactVO : " + contactVO.toString());
 
         viewHolder.txtName.setText(contactVO.getName());
         viewHolder.txtPhoneNumber.setText(contactVO.getTel());
-
-
         viewHolder.checkBox.setTag(position);
 
         Boolean isCheck = mapSelected.get(contactVO);  // 처음에는 다 false 겠지
-        Log.i("test", "isCheck :" + isCheck);
+        //Log.i("test", "isCheck :" + isCheck);
 
         viewHolder.checkBox.setChecked(isCheck);
-
         viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int index = (int) buttonView.getTag();
                 ContactVO contact = getItem(index);
-                Log.i("test", "change contact :" + contact.toString());
+                //Log.i("test", "change contact :" + contact.toString());
                 if (isChecked) {
                     mapSelected.put(contact, true);
                 } else {
@@ -109,35 +104,17 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
         return convertView;
     }
 
-/*    public ArrayList<ContactVO> getCheckedList(){
-        for(int i=0; i<datas.size(); i++){
-
-        }
-
-        return list;
-    }*/
-
-/*    public static Object getKey(HashMap<ContactVO, Boolean> m, Object value) {
-        for (Object o : m.keySet()) {
-            if (m.get(o).equals(value)) {
-                return o;
-            }
-        }
-        return null;
-    }*/
-
-    public static ArrayList<ContactVO> getKey2(HashMap<ContactVO, Boolean> m, boolean value){
+    public static ArrayList<ContactVO> getKey(HashMap<ContactVO, Boolean> map, boolean value){
         ArrayList<ContactVO> list = new ArrayList<>();
 
-        for(ContactVO li : m.keySet()){
-            if(m.get(li).equals(value)){
+        for(ContactVO li : map.keySet()){
+            if(map.get(li).equals(value)){
                 list.add(li);
             }
         }
         return list;
     }
-
-
+    
     @Override
     public Object[] getSections() {
         String[] sections = new String[mSections.length()];
