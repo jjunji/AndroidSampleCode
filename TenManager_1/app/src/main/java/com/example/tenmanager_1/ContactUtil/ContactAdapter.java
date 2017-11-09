@@ -114,7 +114,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
         }
         return list;
     }
-    
+
     @Override
     public Object[] getSections() {
         String[] sections = new String[mSections.length()];

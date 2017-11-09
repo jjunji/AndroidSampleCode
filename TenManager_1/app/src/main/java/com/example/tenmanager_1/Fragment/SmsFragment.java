@@ -80,7 +80,6 @@ public class SmsFragment extends Fragment {
                 Realm realm = Realm.getDefaultInstance();
                 RealmResults<ContactVO> results = realm.where(ContactVO.class).in("id", arList).findAll();
 
-                Log.i("test","test" + arList[0] + arList[1] + arList[2]);
                 Log.i("test","results==============" + results);
 
                 String resultName = "";

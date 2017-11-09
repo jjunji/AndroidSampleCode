@@ -35,7 +35,6 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
     RealmResults<ContactVO> datas;
     ContactAdapter adapter;
     private HashMap<ContactVO, Boolean> mapSelected;
-    private HashMap<ContactVO, Boolean> mapselected2;
     ArrayList<ContactVO> list;
 
     // TODO: 2017-11-09 프래그먼트 생성자는 항상 비워두는 것이 아닌가? ->
@@ -44,11 +43,9 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         realm = Realm.getDefaultInstance();
         datas = realm.where(ContactVO.class).findAll();
         mapSelected = new HashMap<>();
-        mapselected2 = new HashMap<>();
 
         for(ContactVO contactVO : datas){
             mapSelected.put(contactVO, false);  // 연락처(datas) 길이만큼 contactVo(키) 를 false(값)로 설정.
-            mapselected2.put(contactVO, false);
         }
     }
 

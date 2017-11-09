@@ -22,6 +22,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     ArrayList<ContactVO> checkedContactResult;
     ContactFragment contactFragment = new ContactFragment();
     RecentCallFragment recentCallFragment = new RecentCallFragment();
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
