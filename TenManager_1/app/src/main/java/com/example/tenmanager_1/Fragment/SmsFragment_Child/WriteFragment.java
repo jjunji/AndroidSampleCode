@@ -41,7 +41,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     RealmResults<WriteSmsVO> datas; // 저장문자 DB 데이터
     private HashMap<Integer, Boolean> mapSelected;
     private HashMap<WriteSmsVO, Boolean> mapSelected2;
-    ArrayList<WriteSmsVO> checkedSmsList;
+    ArrayList<Integer> checkedSmsList;
 
     private final int REQUESTCODE_STORE = 1;
 
@@ -68,15 +68,15 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     private void init() {
         datas = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
         mapSelected = new HashMap<>();
-        mapSelected2 = new HashMap<>();
+        //mapSelected2 = new HashMap<>();
 
-        for(int i=0;  i>datas.size(); i++){
+        for(int i=0;  i<datas.size(); i++){
             mapSelected.put(i, false);  // sms 저장문자 데이터베이스의 크기만큼 writeSmsVo(키) 를 false(값)로 설정.
         }
 
-        for(WriteSmsVO so : datas){
+/*        for(WriteSmsVO so : datas){
             mapSelected2.put(so, false);  // 연락처(datas) 길이만큼 contactVo(키) 를 false(값)로 설정.
-        }
+        }*/
 
         btnAddContent = (Button) view.findViewById(R.id.btnAddContent);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
@@ -159,8 +159,19 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     }
 
     private void doDelete() {
-        checkedSmsList = adapter.getKey(mapSelected2, true);
+        checkedSmsList = adapter.getKey(mapSelected, true);
         Log.i(TAG, "checkedSmsList ========== : "+ checkedSmsList);
+        final RealmResults<WriteSmsVO> results = realm.where(WriteSmsVO.class).findAll();
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                for(int i=0; i<checkedSmsList.size(); i++){
+                    WriteSmsVO writeSmsVO = results.get(checkedSmsList.get(i));
+                    Log.i(TAG, "result.get(CheckedSmsList.get(i) : " + results.get(checkedSmsList.get(i)) + "==============" + checkedSmsList.get(i));
+                    writeSmsVO.deleteFromRealm();
+                }
+            }
+        });
     }
 
     public void setListView(){

@@ -138,20 +138,20 @@ public class WriteAdapter extends BaseAdapter{
         return convertView;
     }
 
-    public static ArrayList<WriteSmsVO> getKey(HashMap<WriteSmsVO, Boolean> map, boolean value){
-        ArrayList<WriteSmsVO> list = new ArrayList<>();
+    public static ArrayList<Integer> getKey(HashMap<Integer, Boolean> map, boolean value){
+        ArrayList<Integer> list = new ArrayList<>();
 
-        for(WriteSmsVO li : map.keySet()){
+/*        for(WriteSmsVO li : map.keySet()){
             if(map.get(li).equals(value)){
                 list.add(li);
             }
-        }
-
-     /*   for(int i=0; i<map.size(); i++){
-            if(map.get(i).equals(value)){
-
-            }
         }*/
+
+          for(int i=0; i<map.size(); i++){
+            if(map.get(i).equals(value)){
+                list.add(i);
+            }
+        }
 
         return list;
     }
