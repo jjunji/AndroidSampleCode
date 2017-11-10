@@ -29,12 +29,12 @@ import io.realm.RealmResults;
 public class ContactAdapter extends BaseAdapter implements SectionIndexer {
 
     Context context;
-    RealmResults<ContactVO> datas;
+    ArrayList<ContactVO> datas;
     LayoutInflater layoutInflater;
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
     private HashMap<ContactVO, Boolean> mapSelected;
 
-    public ContactAdapter(Context context, RealmResults<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
+    public ContactAdapter(Context context, ArrayList<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
         this.datas = datas;
         layoutInflater = LayoutInflater.from(context);
         this.context = context;

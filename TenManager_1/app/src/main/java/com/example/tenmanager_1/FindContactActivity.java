@@ -4,8 +4,11 @@ import android.content.Intent;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.ContactData;
@@ -18,11 +21,14 @@ import java.util.ArrayList;
 public class FindContactActivity extends AppCompatActivity implements View.OnClickListener{
     private final int FRAGMENT1 = 1;
     private final int FRAGMENT2 = 2;
+
+    private  int currentFragment = 0;
+
     TextView btnContact, btnRecentCall;
     ArrayList<ContactVO> checkedContactResult;
     ContactFragment contactFragment = new ContactFragment();
     RecentCallFragment recentCallFragment = new RecentCallFragment();
-    
+    EditText editTxtSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +42,30 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     private void init() {
         btnContact = (TextView) findViewById(R.id.btnContact);
         btnRecentCall = (TextView) findViewById(R.id.btnRecentCall);
+        editTxtSearch = (EditText) findViewById(R.id.editTxtSearch);
+        editTxtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if(currentFragment == FRAGMENT1){
+                    contactFragment.search(editTxtSearch.getText().toString());
+                }
+                else if(currentFragment == FRAGMENT2){
+
+                }
+            }
+        });
         checkedContactResult = new ArrayList<>();
+        doSearch();
     }
 
     public void setButtonClickListener(){
@@ -58,6 +87,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void callFragment(int fragmentNo) {
+        currentFragment = fragmentNo;
         // 프래그먼트 사용을 위해 트랜잭션 객체 선언
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
 
@@ -88,4 +118,31 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
 
         finish();
     }
+
+    public void doSearch(){
+        editTxtSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = editTxtSearch.getText().toString();
+                //search(text);
+                contactFragment.search(text);
+            }
+        });
+    }
+
+    /*public void search(String charText){
+        contactFragment.doListClear();
+    }*/
+
+
 }

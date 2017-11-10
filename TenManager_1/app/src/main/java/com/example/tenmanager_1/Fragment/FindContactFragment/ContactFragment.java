@@ -32,7 +32,9 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
     Realm realm;
     View view;
     IndexableListView customerListView;
-    RealmResults<ContactVO> datas;
+//    RealmResults<ContactVO> datas;
+    ArrayList<ContactVO> datas;
+    RealmResults<ContactVO> datas2;
     ContactAdapter adapter;
     private HashMap<ContactVO, Boolean> mapSelected;
     ArrayList<ContactVO> list;
@@ -41,8 +43,15 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
     public ContactFragment() {
         // Required empty public constructor
         realm = Realm.getDefaultInstance();
-        datas = realm.where(ContactVO.class).findAll();
+
         mapSelected = new HashMap<>();
+        datas2 = realm.where(ContactVO.class).findAll();
+
+        datas = new ArrayList<>();
+
+        for(ContactVO contactVO : datas2){
+            datas.add(contactVO);
+        }
 
         for(ContactVO contactVO : datas){
             mapSelected.put(contactVO, false);  // 연락처(datas) 길이만큼 contactVo(키) 를 false(값)로 설정.
@@ -57,6 +66,8 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         init();
         setListView();
 
+
+
         return view;
     }
 
@@ -65,6 +76,8 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         //customerListView2.requestDisallowInterceptTouchEvent(true);
         adapter = new ContactAdapter(getContext(), datas, mapSelected);
         view.findViewById(R.id.btnComfirm).setOnClickListener(this);
+
+
     }
 
     private void setListView(){
@@ -84,6 +97,40 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
             FindContactActivity activity = (FindContactActivity) getActivity();
             activity.selectedContact(list);
         }
+    }
+
+/*    public void doListClear(){
+        datas.clear();
+    }*/
+
+    public void search(String charText) {
+
+        // 문자 입력시마다 리스트를 지우고 새로 뿌려준다.
+        //list.clear();
+        datas.clear();
+
+        // 문자 입력이 없을때는 모든 데이터를 보여준다.
+        if (charText.length() == 0) {
+            for(ContactVO contactVO : datas2){
+                datas.add(contactVO);
+            }
+        }
+        // 문자 입력을 할때..
+        else
+        {
+            // 리스트의 모든 데이터를 검색한다.
+            for(int i = 0;i < datas2.size(); i++)
+            {
+                // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
+                if (datas2.get(i).getName().toLowerCase().contains(charText) || datas2.get(i).getTel().toLowerCase().contains(charText))
+                {
+                    // 검색된 데이터를 리스트에 추가한다.
+                    datas.add(datas2.get(i));
+                }
+            }
+        }
+        // 리스트 데이터가 변경되었으므로 아답터를 갱신하여 검색된 데이터를 화면에 보여준다.
+        adapter.notifyDataSetChanged();
     }
 
 }
