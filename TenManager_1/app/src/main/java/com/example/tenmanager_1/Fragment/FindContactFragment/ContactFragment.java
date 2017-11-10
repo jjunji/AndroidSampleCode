@@ -1,16 +1,11 @@
 package com.example.tenmanager_1.Fragment.FindContactFragment;
 
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.CheckBox;
-import android.widget.Toast;
-
 import com.example.tenmanager_1.ContactUtil.ContactAdapter;
 import com.example.tenmanager_1.ContactUtil.IndexableListView;
 import com.example.tenmanager_1.Data.ContactData;

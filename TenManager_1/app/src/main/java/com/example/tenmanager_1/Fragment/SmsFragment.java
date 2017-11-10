@@ -1,40 +1,33 @@
 package com.example.tenmanager_1.Fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.tenmanager_1.Data.ContactVO;
-import com.example.tenmanager_1.FindContactActivity;
-import com.example.tenmanager_1.MainActivity;
+import com.example.tenmanager_1.Fragment.SmsFragment_Child.PromoteFragment;
+import com.example.tenmanager_1.Fragment.SmsFragment_Child.RepresentFragment;
+import com.example.tenmanager_1.Fragment.SmsFragment_Child.StoredSmsFragment;
+import com.example.tenmanager_1.Fragment.SmsFragment_Child.WriteFragment;
 import com.example.tenmanager_1.R;
 
 import org.w3c.dom.Text;
 
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
-
-import static android.app.Activity.RESULT_OK;
-
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SmsFragment extends Fragment {
+public class SmsFragment extends Fragment implements View.OnClickListener{
     View view;
-    TextView txtResultName;
-    Button btnContactSearch;
-    private  final int REQUESTCODE = 1;
+    TextView btnStored, btnRepresent, btnPromote, btnWrite;
+    private final int FRAGMENT1 = 1;
+    private final int FRAGMENT2 = 2;
+    private final int FRAGMENT3 = 3;
+    private final int FRAGMENT4 = 4;
 
     public SmsFragment() {
         // Required empty public constructor
@@ -46,49 +39,71 @@ public class SmsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_sms, container, false);
 
         initView();
+        setButtonListener();
+        callFragment(FRAGMENT1);
 
         return view;
     }
 
     private void initView() {
-        txtResultName = (TextView) view.findViewById(R.id.txtResultName);
-        btnContactSearch = (Button) view.findViewById(R.id.btnContactSearch);
-        btnContactSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FindContactActivity.class);
-                startActivityForResult(intent, REQUESTCODE);
-            }
-        });
+        btnStored = (TextView) view.findViewById(R.id.btnStored);
+        btnRepresent = (TextView) view.findViewById(R.id.btnRepresent);
+        btnPromote = (TextView) view.findViewById(R.id.btnPromote);
+        btnWrite = (TextView) view.findViewById(R.id.btnWrite);
+    }
+
+
+    private void callFragment(int num) {
+        // 프래그먼트 사용을 위해 트랜잭션 객체 선언
+        FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
+
+        switch (num){
+            case FRAGMENT1 :
+                StoredSmsFragment storedFragment = new StoredSmsFragment();
+                transaction.replace(R.id.smsFragmentContainer, storedFragment);
+                transaction.commit();
+                break;
+            case FRAGMENT2 :
+                RepresentFragment representFragment = new RepresentFragment();
+                transaction.replace(R.id.smsFragmentContainer, representFragment);
+                transaction.commit();
+                break;
+            case FRAGMENT3 :
+                PromoteFragment promoteFragment = new PromoteFragment();
+                transaction.replace(R.id.smsFragmentContainer, promoteFragment);
+                transaction.commit();
+                break;
+            case FRAGMENT4 :
+                WriteFragment writeFragment = new WriteFragment();
+                transaction.replace(R.id.smsFragmentContainer, writeFragment);
+                transaction.commit();
+                break;
+        }
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == RESULT_OK){
-
-            if(requestCode == REQUESTCODE){
-                ArrayList<Integer> ar = data.getIntegerArrayListExtra("listObject"); // 체크박스 누른 포지션
-//                Integer arIds[] = new Integer[];
-
-                Integer arList[] = new Integer[ar.size()]; // arList 배열 선언
-
-                for(int i=0; i<arList.length; i++){
-                    arList[i] = ar.get(i); // arList 에는 체크박스 누른 포지션이 담긴다.
-                }
-                Realm realm = Realm.getDefaultInstance();
-                RealmResults<ContactVO> results = realm.where(ContactVO.class).in("id", arList).findAll();
-
-                Log.i("test","results==============" + results);
-
-                String resultName = "";
-                for(int i=0; i<arList.length; i++){
-                    //resultName += results.get(i).getName();
-                    resultName = resultName + (results.get(i).getName() + "  /");
-                }
-                txtResultName.setText(resultName);
-            }
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btnStored :
+                callFragment(FRAGMENT1);
+                break;
+            case R.id.btnRepresent :
+                callFragment(FRAGMENT2);
+                break;
+            case R.id.btnPromote :
+                callFragment(FRAGMENT3);
+                break;
+            case R.id.btnWrite :
+                callFragment(FRAGMENT4);
+                break;
         }
     }
+
+    private void setButtonListener(){
+        btnStored.setOnClickListener(this);
+        btnPromote.setOnClickListener(this);
+        btnRepresent.setOnClickListener(this);
+        btnWrite.setOnClickListener(this);
+    }
+
 }

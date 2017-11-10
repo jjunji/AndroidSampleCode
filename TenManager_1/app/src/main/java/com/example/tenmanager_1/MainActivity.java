@@ -177,7 +177,8 @@ public class MainActivity extends AppCompatActivity
                 ContactVO cv = realm.createObject(ContactVO.class); // cv : 새로운 객체 생성.
                 cv.setId(id);
                 cv.setName(datas.get(i).getName());
-                cv.setTel(tel);
+                cv.setTel(tel); // TODO: 2017-11-10
+                //cv.setTel(datas.get(i).getTel());
                 //Log.i(TAG, "insert data is : "+cv.toString());
             }
         }

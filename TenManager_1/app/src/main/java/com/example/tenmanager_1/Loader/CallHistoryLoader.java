@@ -14,7 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by 김혜정 on 2017-11-06.
+ * Created by 전지훈 on 2017-11-06.
  */
 
 public class CallHistoryLoader {
