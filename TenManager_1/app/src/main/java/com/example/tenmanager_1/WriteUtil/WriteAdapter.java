@@ -34,10 +34,13 @@ public class WriteAdapter extends BaseAdapter{
     private View.OnClickListener btnUpClickListener;
     private View.OnClickListener btnDownClickListener;
 
-    public WriteAdapter(RealmResults<WriteSmsVO> datas, Context context, HashMap<Integer, Boolean> mapSelected) {
+    public WriteAdapter(RealmResults<WriteSmsVO> datas, Context context) {
         this.datas = datas;
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
+
+//        mapSelected = new HashMap<>();
+        initSelectedMap();
 
         // HashMap 초기화 -> 처음에 다 false를 주고 시작.
         this.mapSelected = mapSelected;
@@ -138,8 +141,8 @@ public class WriteAdapter extends BaseAdapter{
         return convertView;
     }
 
-    public static ArrayList<Integer> getKey(HashMap<Integer, Boolean> map, boolean value){
-        ArrayList<Integer> list = new ArrayList<>();
+    public ArrayList<WriteSmsVO> getKey( boolean value){
+        ArrayList<WriteSmsVO> list = new ArrayList<>();
 
 /*        for(WriteSmsVO li : map.keySet()){
             if(map.get(li).equals(value)){
@@ -147,9 +150,9 @@ public class WriteAdapter extends BaseAdapter{
             }
         }*/
 
-          for(int i=0; i<map.size(); i++){
-            if(map.get(i).equals(value)){
-                list.add(i);
+          for(int i=0; i<mapSelected.size(); i++){
+            if(mapSelected.get(i).equals(value)){
+                list.add(getItem(i));
             }
         }
 
@@ -161,12 +164,31 @@ public class WriteAdapter extends BaseAdapter{
         super.notifyDataSetChanged();
     }*/
 
+    @Override
+    public void notifyDataSetChanged() {
+        for(int i=0; i<mapSelected.size(); i++){
+            if(mapSelected.get(i) == null){
+                mapSelected.put(i, false);
+            }
+        }
+        super.notifyDataSetChanged();
+    }
+
     public HashMap<Integer, Boolean> getMapSelected() {
         return mapSelected;
     }
 
     public void setMapSelected(HashMap<Integer, Boolean> mapSelected) {
         this.mapSelected = mapSelected;
+    }
+
+    public void initSelectedMap(){
+        HashMap<Integer, Boolean> mapSelected = new HashMap<Integer, Boolean>();
+        for(int i=0;  i<datas.size(); i++){
+            mapSelected.put(i, false);  // sms 저장문자 데이터베이스의 크기만큼 writeSmsVo(키) 를 false(값)로 설정.
+        }
+        this.mapSelected = mapSelected;
+        this.notifyDataSetChanged();
     }
 
     public View.OnClickListener getBtnUpClickListener() {

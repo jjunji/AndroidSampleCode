@@ -2,7 +2,6 @@ package com.example.tenmanager_1.Fragment.SmsFragment_Child;
 
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -11,9 +10,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.example.tenmanager_1.AddSmsActivity;
-import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Data.WriteSmsVO;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.WriteUtil.WriteAdapter;
@@ -37,11 +36,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     Button btnAddContent;  // 문자내용 추가하기
     Button btnDelete, btnUpdate, btnStore; // 리스트 체크 후 삭제, 수정, 저장 버튼
     ListView storedSmsListView;
-    WriteAdapter adapter;  //
-    RealmResults<WriteSmsVO> datas; // 저장문자 DB 데이터
-    private HashMap<Integer, Boolean> mapSelected;
-    private HashMap<WriteSmsVO, Boolean> mapSelected2;
-    ArrayList<Integer> checkedSmsList;
+    WriteAdapter adapter;
 
     private final int REQUESTCODE_STORE = 1;
 
@@ -66,24 +61,13 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     }
 
     private void init() {
-        datas = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
-        mapSelected = new HashMap<>();
-        //mapSelected2 = new HashMap<>();
-
-        for(int i=0;  i<datas.size(); i++){
-            mapSelected.put(i, false);  // sms 저장문자 데이터베이스의 크기만큼 writeSmsVo(키) 를 false(값)로 설정.
-        }
-
-/*        for(WriteSmsVO so : datas){
-            mapSelected2.put(so, false);  // 연락처(datas) 길이만큼 contactVo(키) 를 false(값)로 설정.
-        }*/
-
         btnAddContent = (Button) view.findViewById(R.id.btnAddContent);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
         btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
         btnStore = (Button) view.findViewById(R.id.btnStore);
         storedSmsListView = (ListView) view.findViewById(R.id.storedSmsListView);
-        adapter = new WriteAdapter(datas, getContext(), mapSelected);
+        RealmResults<WriteSmsVO> datas = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
+        adapter = new WriteAdapter(datas, getContext());
 
         adapter.setBtnUpClickListener(new View.OnClickListener() {
             @Override
@@ -94,17 +78,18 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
                 int beforeIndex = position-1;
                 WriteSmsVO downWriteSmsVO = adapter.getItem(beforeIndex);
                 long tempDownId = downWriteSmsVO.getId();
-                Boolean tempDownChecked = mapSelected.get(beforeIndex);
+                Boolean tempDownChecked = adapter.getMapSelected().get(beforeIndex);
 
                 realm.beginTransaction();
                 downWriteSmsVO.setId(upWriteSmsVO.getId());
                 upWriteSmsVO.setId(tempDownId);
                 realm.commitTransaction();
-                mapSelected.put(beforeIndex, mapSelected.get(position));
-                mapSelected.put(position, tempDownChecked);
+                adapter.getMapSelected().put(beforeIndex, adapter.getMapSelected().get(position));
+                adapter.getMapSelected().put(position, tempDownChecked);
 
-                datas = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
-                adapter.setDatas(datas);
+//                datas = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
+//                adapter.setDatas(datas);
+                adapter.notifyDataSetChanged();
             }
         });
 
@@ -117,20 +102,20 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
                 int afterIndex = position+1;
                 WriteSmsVO upWriteSmsVO = adapter.getItem(afterIndex);
                 long tempUpId = upWriteSmsVO.getId();
-                Boolean tempUpChecked = mapSelected.get(afterIndex);
+                Boolean tempUpChecked = adapter.getMapSelected().get(afterIndex);
 
                 realm.beginTransaction();
                 upWriteSmsVO.setId(downWriteSmsVO.getId());
                 downWriteSmsVO.setId(tempUpId);
                 realm.commitTransaction();
-                mapSelected.put(afterIndex, mapSelected.get(position));
-                mapSelected.put(position, tempUpChecked);
+                adapter.getMapSelected().put(afterIndex, adapter.getMapSelected().get(position));
+                adapter.getMapSelected().put(position, tempUpChecked);
 
-                adapter.setDatas(datas);
+                //adapter.setDatas(datas);
+                adapter.notifyDataSetChanged();
             }
         });
     }
-
 
     private void setButtonClickListener(){
         btnAddContent.setOnClickListener(this);
@@ -159,19 +144,29 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     }
 
     private void doDelete() {
-        checkedSmsList = adapter.getKey(mapSelected, true);
+        ArrayList<WriteSmsVO> checkedSmsList = adapter.getKey(true);
         Log.i(TAG, "checkedSmsList ========== : "+ checkedSmsList);
-        final RealmResults<WriteSmsVO> results = realm.where(WriteSmsVO.class).findAll();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                for(int i=0; i<checkedSmsList.size(); i++){
-                    WriteSmsVO writeSmsVO = results.get(checkedSmsList.get(i));
-                    Log.i(TAG, "result.get(CheckedSmsList.get(i) : " + results.get(checkedSmsList.get(i)) + "==============" + checkedSmsList.get(i));
-                    writeSmsVO.deleteFromRealm();
-                }
-            }
-        });
+        //final RealmResults<WriteSmsVO> results = realm.where(WriteSmsVO.class).findAll().sort("id");
+
+        realm.beginTransaction();
+        for(int i=0; i<checkedSmsList.size(); i++){
+            WriteSmsVO writeSmsVO = checkedSmsList.get(i);
+            Log.i(TAG, "result.get(CheckedSmsList.get(i) : " + checkedSmsList.get(i) + "==============" + checkedSmsList.get(i));
+
+            writeSmsVO.deleteFromRealm();
+        }
+        realm.commitTransaction();
+        adapter.initSelectedMap();
+        adapter.notifyDataSetChanged();
+        Toast.makeText(getContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
+
+//        realm.executeTransaction(new Realm.Transaction() {
+//            @Override
+//            public void execute(Realm realm) {
+//
+//            }
+//        });
+
     }
 
     public void setListView(){
