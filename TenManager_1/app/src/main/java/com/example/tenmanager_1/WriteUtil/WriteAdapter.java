@@ -1,6 +1,10 @@
 package com.example.tenmanager_1.WriteUtil;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +14,9 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.tenmanager_1.AddSmsActivity;
 import com.example.tenmanager_1.Data.CallHistoryData;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Data.WriteSmsVO;
@@ -67,12 +73,11 @@ public class WriteAdapter extends BaseAdapter{
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final WriteViewHolder viewHolder;
 
         if(convertView == null){
             viewHolder = new WriteViewHolder();
-
             convertView = layoutInflater.inflate(R.layout.item_storedsms, null);
             viewHolder.txtTitle = (TextView) convertView.findViewById(R.id.txtTitle);
             viewHolder.txtContent = (TextView) convertView.findViewById(R.id.txtContent);
@@ -80,18 +85,37 @@ public class WriteAdapter extends BaseAdapter{
             viewHolder.btnDown = (ImageView) convertView.findViewById(R.id.btnDown);
             viewHolder.smsCheckBox = (CheckBox) convertView.findViewById(R.id.smsCheckBox);
 
+            //convertView.setOnClickListener(clickDetail(getItem(position)));
+
             convertView.setTag(viewHolder);
         }
         else{
             viewHolder = (WriteViewHolder) convertView.getTag();
         }
 
-        WriteSmsVO writeSmsVO = getItem(position);
+        final WriteSmsVO writeSmsVO = getItem(position);
 
         viewHolder.txtTitle.setText(writeSmsVO.getTitle());
         viewHolder.txtContent.setText(writeSmsVO.getContent());
         viewHolder.smsCheckBox.setTag(position);
-        // 업,다운 버튼
+        convertView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.i("Adapter", String.valueOf(getItemId(position)));
+                Intent intent = new Intent(context, AddSmsActivity.class);
+/*                intent.putExtra("flag", 2);
+                intent.putExtra("smsObject", writeSmsVO);*/
+                Bundle bundle = new Bundle();
+                bundle.putInt("flag", 2);
+                // bundle.putSerializable("smsObject", writeSmsVO); // Realm 객체 전달 불가.
+                // putExtra 여러개 사용할 때 bundle에 담아서.
+                bundle.putString("title", writeSmsVO.getTitle());
+                bundle.putString("content", writeSmsVO.getContent());
+                bundle.putLong("id", writeSmsVO.getId());
+                intent.putExtras(bundle);
+                context.startActivity(intent);
+            }
+        });
 
         Boolean isCheck = mapSelected.get(position);  // 처음에는 다 false 겠지
         if(isCheck != null){
@@ -140,6 +164,15 @@ public class WriteAdapter extends BaseAdapter{
 
         return convertView;
     }
+
+/*    private View.OnClickListener clickDetail(final WriteSmsVO wso){
+        return new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Log.d("Adapter", "onClick: ============="+wso.getTitle());
+            }
+        };
+    }*/
 
     public ArrayList<WriteSmsVO> getKey( boolean value){
         ArrayList<WriteSmsVO> list = new ArrayList<>();
@@ -206,4 +239,5 @@ public class WriteAdapter extends BaseAdapter{
     public void setBtnDownClickListener(View.OnClickListener btnDownClickListener) {
         this.btnDownClickListener = btnDownClickListener;
     }
+
 }

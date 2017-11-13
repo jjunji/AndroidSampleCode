@@ -17,6 +17,9 @@ import io.realm.Realm;
 
 public class AddSmsActivity extends AppCompatActivity implements View.OnClickListener{
     private final String TAG = AddSmsActivity.class.getSimpleName();
+    private final int ADDSMS = 1;
+    private final int UPDATE = 2;
+    int flag = 0;  // WriteAdapter(리스트 아이템 클릭시 호출된건지), WriteFragment(문자내용 추가하기 버튼 눌러서 호출된건지 판별)
     EditText etTitle, etContent;
     Button btnCancel, btnStore;
 
@@ -29,6 +32,7 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
 
         realm = Realm.getDefaultInstance();
         init();
+        checkIntent(flag);
         setButtonClickListener();
     }
 
@@ -37,25 +41,56 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
         etContent = (EditText) findViewById(R.id.etContent);
         btnCancel = (Button) findViewById(R.id.btnCancel);
         btnStore = (Button) findViewById(R.id.btnStore);
+        flag = getIntent().getExtras().getInt("flag");  // 출처 판별.
+    }
+
+    private void checkIntent(int flag){
+        switch (flag){
+            case ADDSMS:
+                etTitle.setText("");
+                etContent.setText("");
+                break;
+
+            case UPDATE:
+                updateSms();
+                break;
+        }
+    }
+
+    // 저장된 저장문자 수정하기.
+    private void updateSms() {
+        Bundle bundle = getIntent().getExtras();
+        String title = bundle.getString("title");
+        String content = bundle.getString("content");
+        etTitle.setText(title);
+        etContent.setText(content);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()){
+            // 공통으로 사용.
             case R.id.btnCancel :
                 finish();
                 break;
 
+            // 호출 flag에 따라 각각에 맞는 이벤트 처리.
             case R.id.btnStore :
-                doStore(realm);
-                // 데이터를 넣을 필요가 없으니 putExtra는 필요없고 종료메서드 호출 후 돌아갔을 때 setNotifychanged 만 되게끔 하면 될텐데..
-                Intent intent = getIntent();
-                intent.putExtra("test", true);
-                Log.i(TAG, "store write date ========== "+ realm.where(WriteSmsVO.class).findAll());
-                Toast.makeText(AddSmsActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
-                setResult(RESULT_OK, intent);
-                finish();
-                break;
+                if(flag == ADDSMS){
+                    doStore(realm);
+                    // 데이터를 넣을 필요가 없으니 putExtra는 필요없고 종료메서드 호출 후 돌아갔을 때 setNotifychanged 만 되게끔 하면 될텐데..
+                    Intent intent = getIntent();
+                    intent.putExtra("test", true);
+                    Log.i(TAG, "store write date ========== "+ realm.where(WriteSmsVO.class).findAll());
+                    Toast.makeText(AddSmsActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
+                    setResult(RESULT_OK, intent);
+                    finish();
+                    break;
+                }else if(flag == UPDATE){
+                    Toast.makeText(this, "TEST!!", Toast.LENGTH_SHORT).show();
+                    doStore2(realm);
+                }
+
         }
     }
 
@@ -79,6 +114,16 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
         wso.setTitle(etTitle.getText().toString());
         wso.setContent(etContent.getText().toString());
 
+        realm.commitTransaction();
+    }
+
+    private void doStore2(Realm realm) {
+        realm.beginTransaction();
+        Bundle bundle = getIntent().getExtras();
+        long id = bundle.getLong("id"); // 리스트 항목에 해당하는 DB의 id값.
+        WriteSmsVO wso = realm.where(WriteSmsVO.class).equalTo("id", id).findFirst();  // TODO: 2017-11-13  findFirst() :  
+        wso.setTitle(etTitle.getText().toString());
+        wso.setContent(etContent.getText().toString());
         realm.commitTransaction();
     }
 

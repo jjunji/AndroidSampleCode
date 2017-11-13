@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -56,6 +57,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
         init();
         setButtonClickListener();
         setListView();
+        //setListViewClickListener();
 
         return view;
     }
@@ -63,7 +65,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     private void init() {
         btnAddContent = (Button) view.findViewById(R.id.btnAddContent);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
-        btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
+        //btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
         btnStore = (Button) view.findViewById(R.id.btnStore);
         storedSmsListView = (ListView) view.findViewById(R.id.storedSmsListView);
         RealmResults<WriteSmsVO> datas = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
@@ -128,6 +130,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
             case R.id.btnAddContent :
                 Intent intent = new Intent(getContext(), AddSmsActivity.class);
                 //startActivity(intent);
+                intent.putExtra("flag",1);
                 startActivityForResult(intent, REQUESTCODE_STORE);
                 break;
 
@@ -135,13 +138,15 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
                 doDelete();
                 break;
 
-            case R.id.btnUpdate :
-                break;
+/*            case R.id.btnUpdate :
+                doUpdate();
+                break;*/
 
             case R.id.btnStore :
                 break;
         }
     }
+
 
     private void doDelete() {
         ArrayList<WriteSmsVO> checkedSmsList = adapter.getKey(true);
@@ -172,6 +177,17 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     public void setListView(){
         storedSmsListView.setAdapter(adapter);
     }
+
+/*    public void setListViewClickListener(){
+        storedSmsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String pos = (String)storedSmsListView.getItemAtPosition(position);
+                //Toast.makeText(getContext(), pos+"번", Toast.LENGTH_SHORT).show();
+                Log.i("WriteFragment", "position ============" + pos);
+            }
+        });
+    }*/
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

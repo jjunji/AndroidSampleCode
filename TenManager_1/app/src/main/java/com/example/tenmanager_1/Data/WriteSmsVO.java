@@ -1,12 +1,16 @@
 package com.example.tenmanager_1.Data;
 
+import android.view.View;
+
+import java.io.Serializable;
+
 import io.realm.RealmObject;
 
 /**
  * Created by 전지훈 on 2017-11-10.
  */
 
-public class WriteSmsVO extends RealmObject {
+public class WriteSmsVO extends RealmObject{
     private long id;
     private String title;
     private String content;
