@@ -81,14 +81,18 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
                     // 데이터를 넣을 필요가 없으니 putExtra는 필요없고 종료메서드 호출 후 돌아갔을 때 setNotifychanged 만 되게끔 하면 될텐데..
                     Intent intent = getIntent();
                     intent.putExtra("test", true);
-                    Log.i(TAG, "store write date ========== "+ realm.where(WriteSmsVO.class).findAll());
+                    //Log.i(TAG, "store write date ========== "+ realm.where(WriteSmsVO.class).findAll());
                     Toast.makeText(AddSmsActivity.this, "저장되었습니다.", Toast.LENGTH_SHORT).show();
                     setResult(RESULT_OK, intent);
                     finish();
                     break;
                 }else if(flag == UPDATE){
-                    Toast.makeText(this, "TEST!!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "수정되었습니다.", Toast.LENGTH_SHORT).show();
                     doStore2(realm);
+                    Intent intent = new Intent();
+                    intent.putExtra("test2", true);
+                    setResult(RESULT_OK, intent);
+                    finish();
                 }
 
         }

@@ -30,7 +30,6 @@ import io.realm.RealmResults;
 
 
 public class WriteAdapter extends BaseAdapter{
-
     Context context;
     //ArrayList<WriteSmsVO> datas = new ArrayList<>();
     RealmResults<WriteSmsVO> datas;  // DB에 있는 저장문자 정보
@@ -39,6 +38,8 @@ public class WriteAdapter extends BaseAdapter{
 
     private View.OnClickListener btnUpClickListener;
     private View.OnClickListener btnDownClickListener;
+
+    private View.OnClickListener holderClickListener;
 
     public WriteAdapter(RealmResults<WriteSmsVO> datas, Context context) {
         this.datas = datas;
@@ -84,9 +85,6 @@ public class WriteAdapter extends BaseAdapter{
             viewHolder.btnUp = (ImageView) convertView.findViewById(R.id.btnUp);
             viewHolder.btnDown = (ImageView) convertView.findViewById(R.id.btnDown);
             viewHolder.smsCheckBox = (CheckBox) convertView.findViewById(R.id.smsCheckBox);
-
-            //convertView.setOnClickListener(clickDetail(getItem(position)));
-
             convertView.setTag(viewHolder);
         }
         else{
@@ -98,13 +96,15 @@ public class WriteAdapter extends BaseAdapter{
         viewHolder.txtTitle.setText(writeSmsVO.getTitle());
         viewHolder.txtContent.setText(writeSmsVO.getContent());
         viewHolder.smsCheckBox.setTag(position);
-        convertView.setOnClickListener(new View.OnClickListener() {
+
+        // 여기
+/*        convertView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.i("Adapter", String.valueOf(getItemId(position)));
                 Intent intent = new Intent(context, AddSmsActivity.class);
-/*                intent.putExtra("flag", 2);
-                intent.putExtra("smsObject", writeSmsVO);*/
+*//*                intent.putExtra("flag", 2);
+                intent.putExtra("smsObject", writeSmsVO);*//*
                 Bundle bundle = new Bundle();
                 bundle.putInt("flag", 2);
                 // bundle.putSerializable("smsObject", writeSmsVO); // Realm 객체 전달 불가.
@@ -115,7 +115,7 @@ public class WriteAdapter extends BaseAdapter{
                 intent.putExtras(bundle);
                 context.startActivity(intent);
             }
-        });
+        });*/
 
         Boolean isCheck = mapSelected.get(position);  // 처음에는 다 false 겠지
         if(isCheck != null){
@@ -136,6 +136,12 @@ public class WriteAdapter extends BaseAdapter{
                 }
             }
         });
+
+        // 뷰 홀더에 Tag를 달고, write프래그먼에서 Tag를 꺼내쓰기 위해 WriteViewHolder에 getter & setter를 만들었다.
+        viewHolder.setTag(position);
+        if(holderClickListener != null){
+            convertView.setOnClickListener(holderClickListener);
+        }
 
         viewHolder.btnUp.setTag(position);
         if(btnUpClickListener != null){
@@ -160,7 +166,6 @@ public class WriteAdapter extends BaseAdapter{
         else{
             viewHolder.btnDown.setVisibility(View.VISIBLE);
         }
-
 
         return convertView;
     }
@@ -238,6 +243,14 @@ public class WriteAdapter extends BaseAdapter{
 
     public void setBtnDownClickListener(View.OnClickListener btnDownClickListener) {
         this.btnDownClickListener = btnDownClickListener;
+    }
+
+    public View.OnClickListener getHolderClickListener() {
+        return holderClickListener;
+    }
+
+    public void setHolderClickListener(View.OnClickListener holderClickListener) {
+        this.holderClickListener = holderClickListener;
     }
 
 }

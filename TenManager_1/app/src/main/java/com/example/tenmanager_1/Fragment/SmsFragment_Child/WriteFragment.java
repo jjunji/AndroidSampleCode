@@ -2,8 +2,11 @@ package com.example.tenmanager_1.Fragment.SmsFragment_Child;
 
 
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
+import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +20,7 @@ import com.example.tenmanager_1.AddSmsActivity;
 import com.example.tenmanager_1.Data.WriteSmsVO;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.WriteUtil.WriteAdapter;
+import com.example.tenmanager_1.WriteUtil.WriteViewHolder;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +44,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     WriteAdapter adapter;
 
     private final int REQUESTCODE_STORE = 1;
+    private final int REQUESTCODE_TEST = 2;
 
     public WriteFragment() {
         realm = Realm.getDefaultInstance();
@@ -53,11 +58,12 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_write, container, false);
-
+        RealmResults<WriteSmsVO> datas = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
+        adapter = new WriteAdapter(datas, getContext());
+        adapter.notifyDataSetChanged();
         init();
         setButtonClickListener();
         setListView();
-        //setListViewClickListener();
 
         return view;
     }
@@ -68,8 +74,26 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
         //btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
         btnStore = (Button) view.findViewById(R.id.btnStore);
         storedSmsListView = (ListView) view.findViewById(R.id.storedSmsListView);
-        RealmResults<WriteSmsVO> datas = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
-        adapter = new WriteAdapter(datas, getContext());
+
+        adapter.setHolderClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                WriteViewHolder holder = (WriteViewHolder) v.getTag();
+                int position = holder.getTag();
+                WriteSmsVO writeSmsVO = adapter.getItem(position);
+                //Log.i("Adapter", String.valueOf(adapter.getItemId()));
+                Intent intent = new Intent(getContext(), AddSmsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("flag", 2);
+                // bundle.putSerializable("smsObject", writeSmsVO); // Realm 객체 전달 불가.
+                // putExtra 여러개 사용할 때 bundle에 담아서.
+                bundle.putString("title", writeSmsVO.getTitle());
+                bundle.putString("content", writeSmsVO.getContent());
+                bundle.putLong("id", writeSmsVO.getId());
+                intent.putExtras(bundle);
+                startActivityForResult(intent, REQUESTCODE_TEST);
+            }
+        });
 
         adapter.setBtnUpClickListener(new View.OnClickListener() {
             @Override
@@ -138,10 +162,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
                 doDelete();
                 break;
 
-/*            case R.id.btnUpdate :
-                doUpdate();
-                break;*/
-
             case R.id.btnStore :
                 break;
         }
@@ -178,17 +198,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
         storedSmsListView.setAdapter(adapter);
     }
 
-/*    public void setListViewClickListener(){
-        storedSmsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String pos = (String)storedSmsListView.getItemAtPosition(position);
-                //Toast.makeText(getContext(), pos+"번", Toast.LENGTH_SHORT).show();
-                Log.i("WriteFragment", "position ============" + pos);
-            }
-        });
-    }*/
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -196,7 +205,11 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
         if(resultCode == RESULT_OK){
             if(requestCode == REQUESTCODE_STORE){
                 adapter.notifyDataSetChanged();
+            }else if (requestCode == REQUESTCODE_TEST){
+                adapter.notifyDataSetChanged();
             }
         }
     }
+
+
 }

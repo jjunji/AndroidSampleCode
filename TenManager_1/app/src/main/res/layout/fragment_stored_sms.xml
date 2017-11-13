@@ -15,7 +15,7 @@
             android:id="@+id/relativeLayout"
             android:layout_width="match_parent"
             android:layout_height="330dp"
-            android:layout_above="@+id/button2"
+            android:layout_above="@+id/btnSend"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/linearLayout5">
@@ -25,6 +25,24 @@
                 android:layout_width="match_parent"
                 android:layout_height="250dp">
 
+                <TextView
+                    android:id="@+id/txtTitle"
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:text="TextView"
+                    android:layout_marginBottom="15dp"
+                    android:layout_above="@+id/txtContent"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:id="@+id/txtContent"
+                    android:layout_width="320dp"
+                    android:layout_height="100dp"
+                    android:text="TextView"
+                    android:layout_marginBottom="28dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignLeft="@+id/txtTitle"
+                    android:layout_alignStart="@+id/txtTitle" />
             </RelativeLayout>
 
             <View
@@ -35,13 +53,19 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
-                android:layout_alignParentBottom="true"
+                android:layout_height="match_parent"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentStart="true"
+                android:layout_below="@+id/view"
+                android:layout_marginTop="7dp"
                 android:orientation="horizontal">
 
 
+                <ListView
+                    android:id="@+id/storedItemListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp" />
             </LinearLayout>
 
             <de.hdodenhof.circleimageview.CircleImageView
@@ -57,6 +81,7 @@
         </RelativeLayout>
 
         <LinearLayout
+            android:background="@color/layoutBackGround"
             android:id="@+id/linearLayout5"
             android:layout_width="match_parent"
             android:layout_height="35dp"
@@ -67,6 +92,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:background="@color/White"
                 android:id="@+id/txtResultName"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
@@ -96,7 +122,7 @@
         </LinearLayout>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/btnSend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

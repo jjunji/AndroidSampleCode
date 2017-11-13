@@ -9,11 +9,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.R;
+import com.example.tenmanager_1.StoredSmsUtil.StoredSmsAdapter;
+import com.example.tenmanager_1.StoredSmsUtil.StoredSmsViewHolder;
 
 import java.util.ArrayList;
 
@@ -28,7 +31,13 @@ import static android.app.Activity.RESULT_OK;
 public class StoredSmsFragment extends Fragment {
     View view;
     TextView txtResultName;
+    TextView txtTitle, txtContent;
+    TextView txtItemTitle, txtItemContent;
     Button btnContactSearch;
+    Button btnSend;
+    ListView storedItemListView;
+    StoredSmsAdapter adapter;
+
     private  final int REQUESTCODE = 1;
 
     public StoredSmsFragment() {
@@ -41,6 +50,7 @@ public class StoredSmsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_stored_sms, container, false);
 
         initView();
+        setListItem();
 
         return view;
     }
@@ -55,6 +65,18 @@ public class StoredSmsFragment extends Fragment {
                 startActivityForResult(intent, REQUESTCODE);
             }
         });
+        btnSend = (Button) view.findViewById(R.id.btnSend);
+        txtTitle = (TextView) view.findViewById(R.id.txtTitle);
+        txtContent = (TextView) view.findViewById(R.id.txtContent);
+        txtItemTitle = (TextView) view.findViewById(R.id.txtItemTitle);
+        txtItemContent = (TextView) view.findViewById(R.id.txtContent);
+        storedItemListView = (ListView) view.findViewById(R.id.storedItemListView);
+        adapter = new StoredSmsAdapter(getContext());
+    }
+
+    public void setListItem(){
+        storedItemListView.setAdapter(adapter);
+        storedItemListView.setFastScrollEnabled(true);
     }
 
     @Override

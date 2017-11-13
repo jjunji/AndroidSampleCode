@@ -27,7 +27,6 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
     Realm realm;
     View view;
     IndexableListView customerListView;
-//    RealmResults<ContactVO> datas;
     ArrayList<ContactVO> datas;
     RealmResults<ContactVO> datas2;
     ContactAdapter adapter;
@@ -61,8 +60,6 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         init();
         setListView();
 
-
-
         return view;
     }
 
@@ -71,8 +68,6 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         //customerListView2.requestDisallowInterceptTouchEvent(true);
         adapter = new ContactAdapter(getContext(), datas, mapSelected);
         view.findViewById(R.id.btnComfirm).setOnClickListener(this);
-
-
     }
 
     private void setListView(){
