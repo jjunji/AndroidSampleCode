@@ -2,6 +2,8 @@ package com.example.tenmanager_1.Fragment.SmsFragment_Child;
 
 
 import android.content.Intent;
+import android.net.Uri;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Data.WriteSmsVO;
@@ -24,6 +27,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -33,6 +37,8 @@ import static android.app.Activity.RESULT_OK;
 public class StoredSmsFragment extends Fragment {
     private final String TAG = StoredSmsFragment.class.getSimpleName();
 
+    RealmResults<WriteSmsVO> storedSmsResults;
+    RealmResults<ContactVO> contactResults;
     Realm realm;
     View view;
     TextView txtResultName;
@@ -42,16 +48,12 @@ public class StoredSmsFragment extends Fragment {
     Button btnSend;
     ListView storedItemListView;
     StoredSmsAdapter adapter;
+    ArrayList<String> contactResultList;
 
     private  final int REQUESTCODE = 1;
 
-    private int mSelectedRadioPosition;
-    private RadioButton mLastSelectedRadioButton;
-
-    //
     private RadioButton mSelectedRB;
     private int mSelectedPosition = -1;
-
 
     public StoredSmsFragment() {
 
@@ -63,6 +65,7 @@ public class StoredSmsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_stored_sms, container, false);
         adapter = new StoredSmsAdapter(getContext());
         realm = Realm.getDefaultInstance();
+        storedSmsResults = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
         initView();
         setListItem();
         return view;
@@ -79,17 +82,29 @@ public class StoredSmsFragment extends Fragment {
             }
         });
         btnSend = (Button) view.findViewById(R.id.btnSend);
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(contactResultList.size() < 1){
+                    Toast.makeText(getContext(), "연락처를 추가하세요~", Toast.LENGTH_SHORT).show();
+                    return;
+                }else{
+                    sendSms();
+                }
+            }
+        });
         txtTitle = (TextView) view.findViewById(R.id.txtTitle);
         txtContent = (TextView) view.findViewById(R.id.txtContent);
         txtItemTitle = (TextView) view.findViewById(R.id.txtItemTitle);
         txtItemContent = (TextView) view.findViewById(R.id.txtContent);
         storedItemListView = (ListView) view.findViewById(R.id.storedItemListView);
 
+        txtTitle.setText(storedSmsResults.get(0).getTitle());
+        txtContent.setText(storedSmsResults.get(0).getContent());
+
         adapter.setHolderClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //StoredSmsViewHolder holder = (StoredSmsViewHolder) v.getTag();
-                //int pos = holder.getTag();
                 int position = (int) v.getTag();  // 누른 포지션.
                 RadioButton radioBtn = (RadioButton) v;
                 Log.i(TAG, "positioin ======="+position);
@@ -105,40 +120,17 @@ public class StoredSmsFragment extends Fragment {
                     radioBtn.setChecked(false);
                 }else{
                     radioBtn.setChecked(true);
+                    txtTitle.setText(storedSmsResults.get(position).getTitle());
+                    txtContent.setText(storedSmsResults.get(position).getContent());
                     if(mSelectedRB != null && radioBtn != mSelectedRB){
                         mSelectedRB = radioBtn;
                     }
                 }
 
-
-                //StoredSmsViewHolder holder = new StoredSmsViewHolder();
-                //int position = holder.getTag();
-
-    /*            if(mSelectedRadioPosition == position) {
-                    //holder.radioBtn.setChecked(true);
-                    radioBtn.setChecked(true);
-                } else {
-                    //holder.radioBtn.setChecked(false);
-                    radioBtn.setChecked(false);
-                }*/
-
-/*                if (mSelectedRadioPosition == position) {
-                    return;
-                }*/
-
-                //mLastSelectedRadioButton = (RadioButton) v;
-
-   /*             mSelectedRadioPosition = position;  // 위에서 세팅 후 현재 값 저장.
-
-                // 마지막에 눌린 버튼이 있으면 체크해제
-                if (mLastSelectedRadioButton != null) {
-                    mLastSelectedRadioButton.setChecked(false);
-                }
-
-                mLastSelectedRadioButton = (RadioButton) v;*/
                 adapter.notifyDataSetChanged();
             }
         });
+        contactResultList = new ArrayList<>();
     }
 
     public void setListItem(){
@@ -162,25 +154,31 @@ public class StoredSmsFragment extends Fragment {
                     arList[i] = ar.get(i); // arList 에는 체크박스 누른 포지션이 담긴다.
                 }
                 //Realm realm = Realm.getDefaultInstance();
-                RealmResults<ContactVO> results = realm.where(ContactVO.class).in("id", arList).findAll();
+                contactResults = realm.where(ContactVO.class).in("id", arList).findAll();
 
-                Log.i("test","results==============" + results);
+                Log.i("test","results==============" + contactResults);
 
                 String resultName = "";
                 for(int i=0; i<arList.length; i++){
                     //resultName += results.get(i).getName();
-                    resultName = resultName + (results.get(i).getName() + "  /");
+                    resultName = resultName + (contactResults.get(i).getName() + "  /");
+                    contactResultList.add(contactResults.get(i).getTel());
                 }
                 txtResultName.setText(resultName);
             }
         }
     }
 
-/*    public void setSmsContent(int position){
-        WriteSmsVO results = realm.where(WriteSmsVO.class).findAll().get(position);
-        String title = results.getTitle();
-        String content = results.getContent();
-        txtTitle.setText(title);
-        txtContent.setText(content);
-    }*/
+    public void sendSms(){
+        String address = "";
+        for(int i=0; i<contactResultList.size(); i++){
+            address = address + contactResultList.get(i) + ";";
+        }
+        Log.i(TAG, address);
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + address));
+        intent.putExtra("sms_body", txtContent.getText().toString());
+        startActivity(intent);
+
+    }
+
 }

@@ -39,7 +39,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     Realm realm;
     View view;
     Button btnAddContent;  // 문자내용 추가하기
-    Button btnDelete, btnUpdate, btnStore; // 리스트 체크 후 삭제, 수정, 저장 버튼
+    Button btnDelete, btnStore; // 리스트 체크 후 삭제, 수정, 저장 버튼
     ListView storedSmsListView;
     WriteAdapter adapter;
 
