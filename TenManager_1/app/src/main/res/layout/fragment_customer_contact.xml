@@ -28,7 +28,7 @@
             android:textColor="@color/White" />
 
         <EditText
-            android:id="@+id/textView8"
+            android:id="@+id/txtSearch"
             android:layout_width="240dp"
             android:layout_height="30dp"
             android:layout_alignParentLeft="true"
@@ -50,7 +50,7 @@
         android:layout_marginTop="7dp" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
+        android:id="@+id/fab_addContact"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -59,7 +59,7 @@
         android:layout_marginBottom="15dp"
         android:layout_marginRight="15dp"
         android:clickable="true"
-        app:fabSize="mini"
+        app:fabSize="normal"
         app:srcCompat="@drawable/icon_plus" />
 
 </RelativeLayout>

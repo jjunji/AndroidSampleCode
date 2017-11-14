@@ -1,6 +1,7 @@
 package com.example.tenmanager_1.CustomerUtil;
 
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 /**
@@ -11,6 +12,6 @@ public class CustomerViewHolder
 {
     TextView txtName;
     TextView txtPhoneNumber;
-    Button btnCall;
-    Button btnSend;
+    ImageView btnCall;
+    ImageView btnSend;
 }

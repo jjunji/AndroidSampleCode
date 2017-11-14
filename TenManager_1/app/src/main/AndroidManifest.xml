@@ -29,8 +29,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".FindContactActivity"></activity>
-        <activity android:name=".AddSmsActivity"></activity>
+        <activity android:name=".FindContactActivity" />
+        <activity android:name=".AddSmsActivity" />
+        <activity android:name=".AddContactActivity"></activity>
     </application>
 
 </manifest>

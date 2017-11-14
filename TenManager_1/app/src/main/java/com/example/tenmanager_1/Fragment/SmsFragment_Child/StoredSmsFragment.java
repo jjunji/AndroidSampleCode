@@ -99,8 +99,14 @@ public class StoredSmsFragment extends Fragment {
         txtItemContent = (TextView) view.findViewById(R.id.txtContent);
         storedItemListView = (ListView) view.findViewById(R.id.storedItemListView);
 
-        txtTitle.setText(storedSmsResults.get(0).getTitle());
-        txtContent.setText(storedSmsResults.get(0).getContent());
+        if (storedSmsResults.size() != 0){
+            txtTitle.setText(storedSmsResults.get(0).getTitle());
+            txtContent.setText(storedSmsResults.get(0).getContent());
+        }else{
+            txtTitle.setText("");
+            txtContent.setText("");
+        }
+
 
         adapter.setHolderClickListener(new View.OnClickListener() {
             @Override

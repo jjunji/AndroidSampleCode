@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
@@ -13,6 +14,8 @@ import com.example.tenmanager_1.ContactUtil.StringMatcher;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.R;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -22,27 +25,48 @@ import io.realm.RealmResults;
  */
 
 public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
+    private View.OnClickListener callButtonClickListener;
+    private View.OnClickListener smsButtonClickListener;
+
+    public View.OnClickListener getCallButtonClickListener() {
+        return callButtonClickListener;
+    }
+
+    public void setCallButtonClickListener(View.OnClickListener callButtonClickListener) {
+        this.callButtonClickListener = callButtonClickListener;
+    }
+
+    public View.OnClickListener getSmsButtonClickListener() {
+        return smsButtonClickListener;
+    }
+
+    public void setSmsButtonClickListener(View.OnClickListener smsButtonClickListener) {
+        this.smsButtonClickListener = smsButtonClickListener;
+    }
+
     Context context;
-    Realm realm;
-    RealmResults<ContactVO> results;
+    //Realm realm;
+    //RealmResults<ContactVO> results;
+    ArrayList<ContactVO> datas;
     LayoutInflater inflater;
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
 
-    public CustomerAdapter(Context context) {
+    public CustomerAdapter(Context context, ArrayList<ContactVO> datas) {
+        this.datas = datas;
         this.context = context;
-        realm = Realm.getDefaultInstance();
-        results = realm.where(ContactVO.class).findAll().sort("id");
+        //realm = Realm.getDefaultInstance();
+        //results = realm.where(ContactVO.class).findAll().sort("id");
         inflater = LayoutInflater.from(context);
     }
 
     @Override
     public int getCount() {
-        return results.size();
+        return datas.size();
     }
 
     @Override
     public ContactVO getItem(int position) {
-        return results.get(position);
+        return datas.get(position);
     }
 
     @Override
@@ -60,14 +84,24 @@ public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
             convertView = inflater.inflate(R.layout.item_customerlist,null);
             holder.txtName = (TextView) convertView.findViewById(R.id.txtName);
             holder.txtPhoneNumber = (TextView) convertView.findViewById(R.id.txtPhoneNumber);
-            //holder.btnCall = (Button) convertView.findViewById(R.id.btnCall);
+            holder.btnCall = (ImageView) convertView.findViewById(R.id.btnCall);
+            holder.btnSend = (ImageView) convertView.findViewById(R.id.btnSend);
             convertView.setTag(holder);
         }else{
             holder = (CustomerViewHolder) convertView.getTag();
         }
 
-        holder.txtName.setText(results.get(position).getName());
-        holder.txtPhoneNumber.setText(results.get(position).getTel());
+        holder.txtName.setText(datas.get(position).getName());
+        holder.txtPhoneNumber.setText(datas.get(position).getTel());
+
+        if(callButtonClickListener != null){
+            holder.btnCall.setTag(position);
+            holder.btnCall.setOnClickListener(callButtonClickListener);
+        }
+        if(smsButtonClickListener != null){
+            holder.btnSend.setTag(position);
+            holder.btnSend.setOnClickListener(smsButtonClickListener);
+        }
 
         return convertView;
     }
@@ -88,12 +122,12 @@ public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
                 if (i == 0) {
                     // For numeric section
                     for (int k = 0; k <= 9; k++) {
-                        if (StringMatcher.match(String.valueOf(results.get(j).getName().charAt(0)), String.valueOf(k)))
+                        if (StringMatcher.match(String.valueOf(datas.get(j).getName().charAt(0)), String.valueOf(k)))
                             //Log.i("MainActivity", "getItem(j)========" + getItem(j) + ",  " + getItem(j).charAt(0));
                             return j;
                     }
                 } else {
-                    if (StringMatcher.match(String.valueOf(results.get(j).getName().charAt(0)), String.valueOf(mSections.charAt(i))))
+                    if (StringMatcher.match(String.valueOf(datas.get(j).getName().charAt(0)), String.valueOf(mSections.charAt(i))))
                         return j;
                 }
             }
