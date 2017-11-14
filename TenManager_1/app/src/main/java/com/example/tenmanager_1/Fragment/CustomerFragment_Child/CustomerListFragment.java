@@ -16,12 +16,16 @@ import android.widget.TextView;
 
 import com.example.tenmanager_1.AddContactActivity;
 import com.example.tenmanager_1.AddSmsActivity;
+import com.example.tenmanager_1.ContactUtil.ContactViewHolder;
 import com.example.tenmanager_1.CustomerUtil.CustomerAdapter;
+import com.example.tenmanager_1.CustomerUtil.CustomerViewHolder;
 import com.example.tenmanager_1.CustomerUtil.IndexableCustomerListView;
 import com.example.tenmanager_1.Data.AddContactVO;
 import com.example.tenmanager_1.Data.ContactData;
 import com.example.tenmanager_1.Data.ContactVO;
+import com.example.tenmanager_1.Data.WriteSmsVO;
 import com.example.tenmanager_1.R;
+import com.example.tenmanager_1.WriteUtil.WriteViewHolder;
 
 import org.w3c.dom.Text;
 
@@ -51,6 +55,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
     FloatingActionButton fab;
 
     private final int REQUESTCODE_STORE = 1;
+    private final int REQESTCODE_UPDATE = 2;
 
 
     public CustomerListFragment() {
@@ -106,7 +111,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
             public void onClick(View v) {
                 int position = (int)v.getTag();
                 ContactVO contactData = adapter.getItem(position);
-                startActivity(new Intent("android.intent.action.DIAL", Uri.parse("tel:"+ contactData.getTel())));
+                startActivity(new Intent("android.intent.action.DIAL", Uri.parse("tel:"+ contactData.getPhoneNumber())));
             }
         });
 
@@ -115,7 +120,34 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
             public void onClick(View v) {
                 int position = (int)v.getTag();
                 ContactVO contactData = adapter.getItem(position);
-                startActivity(new Intent("android.intent.action.SENDTO", Uri.parse("sms:"+contactData.getTel())));
+                startActivity(new Intent("android.intent.action.SENDTO", Uri.parse("sms:"+contactData.getPhoneNumber())));
+            }
+        });
+
+        adapter.setHolderClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomerViewHolder holder = (CustomerViewHolder) v.getTag();
+                int position = holder.getTag();
+                ContactVO contactVO = adapter.getItem(position);
+                //Log.i("Adapter", String.valueOf(adapter.getItemId()));
+                Intent intent = new Intent(getContext(), AddContactActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putInt("flag", 2);
+                // putExtra 여러개 사용할 때 bundle에 담아서.
+   /*             bundle.putString("title", writeSmsVO.getTitle());
+                bundle.putString("content", writeSmsVO.getContent());
+                bundle.putLong("id", writeSmsVO.getId());*/
+                bundle.putInt("id", contactVO.getId());
+                bundle.putString("name", contactVO.getName());
+                bundle.putString("call1", contactVO.getCall1());
+                bundle.putString("call2", contactVO.getCall2());
+                bundle.putString("phoneNumber", contactVO.getPhoneNumber());
+                bundle.putString("address", contactVO.getAddress());
+                bundle.putString("memo", contactVO.getMemo());
+                bundle.putString("callMemo", contactVO.getCallMemo());
+                intent.putExtras(bundle);
+                startActivityForResult(intent, REQESTCODE_UPDATE);
             }
         });
     }
@@ -144,7 +176,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
             for(int i = 0;i < datas2.size(); i++)
             {
                 // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
-                if (datas2.get(i).getName().toLowerCase().contains(charText) || datas2.get(i).getTel().toLowerCase().contains(charText))
+                if (datas2.get(i).getName().toLowerCase().contains(charText) || datas2.get(i).getPhoneNumber().toLowerCase().contains(charText))
                 {
                     // 검색된 데이터를 리스트에 추가한다.
                     datas.add(datas2.get(i));
@@ -170,6 +202,8 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
                     datas.add(contactVO);
                 }
                 adapter.setDatas(datas);
+                adapter.notifyDataSetChanged();
+            }else if (requestCode == REQESTCODE_UPDATE){
                 adapter.notifyDataSetChanged();
             }
         }

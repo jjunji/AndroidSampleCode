@@ -27,6 +27,15 @@ import io.realm.RealmResults;
 public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
     private View.OnClickListener callButtonClickListener;
     private View.OnClickListener smsButtonClickListener;
+    private View.OnClickListener holderClickListener;
+
+    public View.OnClickListener getHolderClickListener() {
+        return holderClickListener;
+    }
+
+    public void setHolderClickListener(View.OnClickListener holderClickListener) {
+        this.holderClickListener = holderClickListener;
+    }
 
     public View.OnClickListener getCallButtonClickListener() {
         return callButtonClickListener;
@@ -100,7 +109,7 @@ public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
         }
 
         holder.txtName.setText(datas.get(position).getName());
-        holder.txtPhoneNumber.setText(datas.get(position).getTel());
+        holder.txtPhoneNumber.setText(datas.get(position).getPhoneNumber());
 
         if(callButtonClickListener != null){
             holder.btnCall.setTag(position);
@@ -110,6 +119,12 @@ public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
             holder.btnSend.setTag(position);
             holder.btnSend.setOnClickListener(smsButtonClickListener);
         }
+
+        holder.setTag(position);
+        if(holderClickListener != null){
+            convertView.setOnClickListener(holderClickListener);
+        }
+
 
         return convertView;
     }

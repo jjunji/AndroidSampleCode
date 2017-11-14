@@ -81,7 +81,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
         //Log.i("test", "contactVO : " + contactVO.toString());
 
         viewHolder.txtName.setText(contactVO.getName());
-        viewHolder.txtPhoneNumber.setText(contactVO.getTel());
+        viewHolder.txtPhoneNumber.setText(contactVO.getPhoneNumber());
         viewHolder.checkBox.setTag(position);
 
         Boolean isCheck = mapSelected.get(contactVO);  // 처음에는 다 false 겠지

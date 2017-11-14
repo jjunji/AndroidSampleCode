@@ -168,7 +168,7 @@ public class StoredSmsFragment extends Fragment {
                 for(int i=0; i<arList.length; i++){
                     //resultName += results.get(i).getName();
                     resultName = resultName + (contactResults.get(i).getName() + "  /");
-                    contactResultList.add(contactResults.get(i).getTel());
+                    contactResultList.add(contactResults.get(i).getPhoneNumber());
                 }
                 txtResultName.setText(resultName);
             }

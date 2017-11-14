@@ -163,7 +163,7 @@ public class MainActivity extends AppCompatActivity
 
         for(int i = 0; i<datas.size(); i++){ // 주소록의 사이즈만큼 돌면서
             String tel = datas.get(i).getTel();
-            ContactVO contactVO = realm.where(ContactVO.class).equalTo("tel", tel).findFirst();  // 번호가 기존 데이터에 있는지 검사(중복 검사)
+            ContactVO contactVO = realm.where(ContactVO.class).equalTo("phoneNumber", tel).findFirst();  // 번호가 기존 데이터에 있는지 검사(중복 검사)
 
             // 중복되는 것이 없다면 추가.
             if(contactVO == null){
@@ -177,7 +177,7 @@ public class MainActivity extends AppCompatActivity
                 ContactVO cv = realm.createObject(ContactVO.class); // cv : 새로운 객체 생성.
                 cv.setId(id);
                 cv.setName(datas.get(i).getName());
-                cv.setTel(tel); // TODO: 2017-11-10
+                cv.setPhoneNumber(tel); // TODO: 2017-11-10
                 //cv.setTel(datas.get(i).getTel());
                 //Log.i(TAG, "insert data is : "+cv.toString());
             }

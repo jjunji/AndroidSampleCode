@@ -1,27 +1,17 @@
 package com.example.tenmanager_1.WriteUtil;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.tenmanager_1.AddSmsActivity;
-import com.example.tenmanager_1.Data.CallHistoryData;
-import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Data.WriteSmsVO;
 import com.example.tenmanager_1.R;
-import com.example.tenmanager_1.RecentCallUtil.CallHistoryViewHolder;
+
 
 import java.util.ArrayList;
 import java.util.HashMap;
