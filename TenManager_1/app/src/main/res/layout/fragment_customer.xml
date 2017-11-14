@@ -2,12 +2,57 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/layoutBackGround"
     tools:context="com.example.tenmanager_1.Fragment.CustomerFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/fragment_customer_container"
+            android:layout_width="370dp"
+            android:layout_height="350dp"
+            android:layout_alignParentBottom="true"
+            android:layout_below="@+id/linearLayout6"
+            android:layout_centerHorizontal="true">
+
+        </FrameLayout>
+
+        <LinearLayout
+            android:background="@color/White"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout2"
+            android:orientation="horizontal"
+            android:id="@+id/linearLayout6">
+
+            <TextView
+                android:id="@+id/btnContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="연락처"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/btnRecentCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:text="최근통화목록"
+                android:textSize="18dp"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+    </RelativeLayout>
 </FrameLayout>
