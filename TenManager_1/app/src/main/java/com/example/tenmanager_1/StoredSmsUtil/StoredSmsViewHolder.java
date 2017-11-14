@@ -10,5 +10,14 @@ import android.widget.TextView;
 
 public class StoredSmsViewHolder {
     TextView txtItemTitle;
-    RadioButton radioBtn;
+    public RadioButton radioBtn;
+    int tag;
+
+    public void setTag(int tag) {
+        this.tag = tag;
+    }
+
+    public int getTag(){
+        return tag;
+    }
 }

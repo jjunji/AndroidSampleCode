@@ -9,6 +9,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.WriteSmsVO;
+import com.example.tenmanager_1.Fragment.SmsFragment_Child.StoredSmsFragment;
 import com.example.tenmanager_1.R;
 
 import io.realm.Realm;
@@ -23,6 +24,11 @@ public class StoredSmsAdapter extends BaseAdapter {
     Context context;
     LayoutInflater layoutInflater;
     RealmResults<WriteSmsVO> results;
+
+    private int mSelectedRadioPosition;
+    private RadioButton mLastSelectedRadioButton;
+
+    private View.OnClickListener holderClickListener;
 
     public StoredSmsAdapter(Context context) {
         this.context = context;
@@ -47,7 +53,7 @@ public class StoredSmsAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         final StoredSmsViewHolder viewHolder;
 
         if(convertView == null){
@@ -56,15 +62,51 @@ public class StoredSmsAdapter extends BaseAdapter {
             convertView = layoutInflater.inflate(R.layout.item_storedsmslist, null);
             viewHolder.txtItemTitle = (TextView) convertView.findViewById(R.id.txtItemTitle);
             viewHolder.radioBtn = (RadioButton) convertView.findViewById(R.id.radioBtn);
-
             convertView.setTag(viewHolder);
         }else{
             viewHolder = (StoredSmsViewHolder) convertView.getTag();
         }
 
+/*        if(mSelectedRadioPosition == position) {
+            viewHolder.radioBtn.setChecked(true);
+        } else {
+            viewHolder.radioBtn.setChecked(false);
+        }*/
+
         viewHolder.txtItemTitle.setText(results.get(position).getTitle());
 
+        viewHolder.radioBtn.setTag(position);  // 뷰홀더 안에 라디오버튼의 포지션.
+        if(holderClickListener != null){
+            //convertView.setOnClickListener(holderClickListener);
+            viewHolder.radioBtn.setOnClickListener(holderClickListener);
+        }
+       /* viewHolder.radioBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (mSelectedRadioPosition == position) {
+                    return;
+                }
+
+                mSelectedRadioPosition = position;
+
+                if (mLastSelectedRadioButton != null) {
+                    mLastSelectedRadioButton.setChecked(false);
+                }
+
+                mLastSelectedRadioButton = (RadioButton) v;
+                notifyDataSetChanged();
+            }
+        });*/
+
         return convertView;
+    }
+
+    public View.OnClickListener getHolderClickListener() {
+        return holderClickListener;
+    }
+
+    public void setHolderClickListener(View.OnClickListener holderClickListener) {
+        this.holderClickListener = holderClickListener;
     }
 }
 
