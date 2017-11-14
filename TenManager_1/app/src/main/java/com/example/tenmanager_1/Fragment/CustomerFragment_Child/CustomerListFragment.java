@@ -29,6 +29,7 @@ import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 import static android.app.Activity.RESULT_OK;
 
@@ -55,7 +56,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
     public CustomerListFragment() {
         realm = Realm.getDefaultInstance();
 
-        datas2 = realm.where(ContactVO.class).findAll();
+        datas2 = realm.where(ContactVO.class).findAllSorted("name", Sort.ASCENDING);
 
         datas = new ArrayList<>();
 
@@ -161,6 +162,14 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
 
         if(resultCode == RESULT_OK){
             if(requestCode == REQUESTCODE_STORE) {
+                datas2 = realm.where(ContactVO.class).findAllSorted("name", Sort.ASCENDING);
+
+                datas = new ArrayList<>();
+
+                for(ContactVO contactVO : datas2){
+                    datas.add(contactVO);
+                }
+                adapter.setDatas(datas);
                 adapter.notifyDataSetChanged();
             }
         }

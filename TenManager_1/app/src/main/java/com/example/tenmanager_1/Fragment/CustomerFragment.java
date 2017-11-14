@@ -1,6 +1,7 @@
 package com.example.tenmanager_1.Fragment;
 
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -48,11 +49,15 @@ public class CustomerFragment extends Fragment implements View.OnClickListener{
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
         switch (num) {
             case FRAGMENT1:
+                btnContact.setBackgroundColor(Color.GRAY);
+                btnRecentCall.setBackgroundColor(Color.WHITE);
                 CustomerListFragment customerListFragment = new CustomerListFragment();
                 transaction.replace(R.id.fragment_customer_container, customerListFragment);
                 transaction.commit();
                 break;
             case FRAGMENT2:
+                btnContact.setBackgroundColor(Color.WHITE);
+                btnRecentCall.setBackgroundColor(Color.GRAY);
                 CustomerRecentCallFragment customerRecentCallFragment = new CustomerRecentCallFragment();
                 transaction.replace(R.id.fragment_customer_container, customerRecentCallFragment);
                 transaction.commit();

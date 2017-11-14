@@ -29,7 +29,7 @@ public class RecentCallFragment extends Fragment {
     CallHistoryAdapter adapter;
     CallHistoryLoader ChLoader;
     HashMap<CallHistoryData, Boolean> mapSelected;
-    CallHistoryData data;
+    //CallHistoryData data;
 
     public RecentCallFragment() {
         mapSelected = new HashMap<>();

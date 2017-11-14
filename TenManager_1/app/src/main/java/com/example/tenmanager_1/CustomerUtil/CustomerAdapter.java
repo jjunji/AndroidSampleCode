@@ -74,6 +74,14 @@ public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
         return position;
     }
 
+    public ArrayList<ContactVO> getDatas() {
+        return datas;
+    }
+
+    public void setDatas(ArrayList<ContactVO> datas) {
+        this.datas = datas;
+    }
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         final CustomerViewHolder holder;

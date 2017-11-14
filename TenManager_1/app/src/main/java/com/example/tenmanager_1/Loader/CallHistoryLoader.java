@@ -2,6 +2,7 @@ package com.example.tenmanager_1.Loader;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.CallLog;
@@ -62,11 +63,26 @@ public class CallHistoryLoader {
                 String tel = cursor.getString(telIndex);
 
                 int dateIndex = cursor.getColumnIndex(projections[2]);
-                Date date = new Date(cursor.getLong(dateIndex));
+
+                long setupTime = 0;
+                try {
+                    setupTime = context.getPackageManager().getPackageInfo(context.getApplicationContext().getPackageName(), 0).firstInstallTime;
+                    //setupTime = setupTime - 1000*60*60*24;
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
+
+                long callTime = cursor.getLong(dateIndex);
+                if(callTime < setupTime){
+                    continue;
+                }
+
+                Date date = new Date(callTime);
                 String date2 = date.toString();
 
-                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm");
                 String date3 = sdf.format(new Date(date2));
+
 
                 int typeIndex = cursor.getColumnIndex(projections[3]);
                 int checkType = cursor.getInt(typeIndex);
