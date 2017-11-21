@@ -1,5 +1,6 @@
 package com.example.tenmanager_1.Service_Dialog;
 
+import android.content.Intent;
 import android.icu.util.DateInterval;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
@@ -27,6 +28,7 @@ public class DialogActivity extends AppCompatActivity {
 
         init();
         callFragment(SMSFRAGMENT);
+        setText();
         setButtonListener();
     }
 
@@ -60,6 +62,11 @@ public class DialogActivity extends AppCompatActivity {
                 callFragment(HISTORYFRAGMENT);
             }
         });
+    }
+
+    private void setText(){
+        txtPhoneNumber.setText(getIntent().getStringExtra("phoneNumber"));
+
     }
 
     private void init() {

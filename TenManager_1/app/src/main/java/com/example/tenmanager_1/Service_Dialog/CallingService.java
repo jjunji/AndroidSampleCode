@@ -1,8 +1,11 @@
 package com.example.tenmanager_1.Service_Dialog;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
 /**
  * Created by 전지훈 on 2017-11-20.
@@ -32,8 +35,12 @@ public class CallingService extends Service  {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        //String pn = String.valueOf(intent.getExtras());
+        String pn = intent.getStringExtra("phoneNumber");
+        Log.i("Service","pn================" + pn);
 
         Intent popupIntent = new Intent(this, DialogActivity.class);
+        popupIntent.putExtra("phoneNumber", pn);
         popupIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(popupIntent);
 
@@ -53,6 +60,7 @@ public class CallingService extends Service  {
         super.onDestroy();
         //removePopup();
     }
+
 
 /*    public void removePopup() {
         if (rootView != null && windowManager != null) windowManager.removeView(rootView);

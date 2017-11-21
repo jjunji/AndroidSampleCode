@@ -1,11 +1,14 @@
 package com.example.tenmanager_1.Fragment.SmsFragment_Child;
 
 
+import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -51,7 +54,7 @@ public class StoredSmsFragment extends Fragment {
     StoredSmsAdapter adapter;
     ArrayList<String> contactResultList;
 
-    private  final int REQUESTCODE = 1;
+    private final int REQUESTCODE = 1;
 
     private RadioButton mSelectedRB;
     private int mSelectedPosition = -1;
@@ -86,11 +89,12 @@ public class StoredSmsFragment extends Fragment {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(contactResultList.size() < 1){
+                if (contactResultList.size() < 1) {
                     Toast.makeText(getContext(), "연락처를 추가하세요~", Toast.LENGTH_SHORT).show();
                     return;
-                }else{
-                    sendSms();
+                } else {
+                    //sendSms();
+                    sendSMS();
                 }
             }
         });
@@ -100,10 +104,10 @@ public class StoredSmsFragment extends Fragment {
         txtItemContent = (TextView) view.findViewById(R.id.txtContent);
         storedItemListView = (ListView) view.findViewById(R.id.storedItemListView);
 
-        if (storedSmsResults.size() != 0){
+        if (storedSmsResults.size() != 0) {
             txtTitle.setText(storedSmsResults.get(0).getTitle());
             txtContent.setText(storedSmsResults.get(0).getContent());
-        }else{
+        } else {
             txtTitle.setText("");
             txtContent.setText("");
         }
@@ -114,22 +118,22 @@ public class StoredSmsFragment extends Fragment {
             public void onClick(View v) {
                 int position = (int) v.getTag();  // 누른 포지션.
                 RadioButton radioBtn = (RadioButton) v;
-                Log.i(TAG, "positioin ======="+position);
+                Log.i(TAG, "positioin =======" + position);
 
-                if(position != mSelectedPosition && mSelectedRB != null){
+                if (position != mSelectedPosition && mSelectedRB != null) {
                     mSelectedRB.setChecked(false);
                 }
 
                 mSelectedPosition = position;
-                mSelectedRB = (RadioButton)v;
+                mSelectedRB = (RadioButton) v;
 
-                if(mSelectedPosition != position){
+                if (mSelectedPosition != position) {
                     radioBtn.setChecked(false);
-                }else{
+                } else {
                     radioBtn.setChecked(true);
                     txtTitle.setText(storedSmsResults.get(position).getTitle());
                     txtContent.setText(storedSmsResults.get(position).getContent());
-                    if(mSelectedRB != null && radioBtn != mSelectedRB){
+                    if (mSelectedRB != null && radioBtn != mSelectedRB) {
                         mSelectedRB = radioBtn;
                     }
                 }
@@ -140,7 +144,7 @@ public class StoredSmsFragment extends Fragment {
         contactResultList = new ArrayList<>();
     }
 
-    public void setListItem(){
+    public void setListItem() {
         storedItemListView.setAdapter(adapter);
         storedItemListView.setFastScrollEnabled(true);
     }
@@ -149,24 +153,24 @@ public class StoredSmsFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(resultCode == RESULT_OK){
+        if (resultCode == RESULT_OK) {
 
-            if(requestCode == REQUESTCODE){
+            if (requestCode == REQUESTCODE) {
                 ArrayList<Integer> ar = data.getIntegerArrayListExtra("listObject"); // 체크박스 누른 포지션
 //                Integer arIds[] = new Integer[];
 
                 Integer arList[] = new Integer[ar.size()]; // arList 배열 선언
 
-                for(int i=0; i<arList.length; i++){
+                for (int i = 0; i < arList.length; i++) {
                     arList[i] = ar.get(i); // arList 에는 체크박스 누른 포지션이 담긴다.
                 }
                 //Realm realm = Realm.getDefaultInstance();
                 contactResults = realm.where(ContactVO.class).in("id", arList).findAll();
 
-                Log.i("test","results==============" + contactResults);
+                Log.i("test", "results==============" + contactResults);
 
                 String resultName = "";
-                for(int i=0; i<arList.length; i++){
+                for (int i = 0; i < arList.length; i++) {
                     //resultName += results.get(i).getName();
                     resultName = resultName + (contactResults.get(i).getName() + "  /");
                     contactResultList.add(contactResults.get(i).getPhoneNumber());
@@ -176,16 +180,28 @@ public class StoredSmsFragment extends Fragment {
         }
     }
 
-    public void sendSms(){
+    // 메시지 창으로 이동 후 전송
+    public void sendSms() {
         String address = "";
-        for(int i=0; i<contactResultList.size(); i++){
+        for (int i = 0; i < contactResultList.size(); i++) {
             address = address + contactResultList.get(i) + ";";
         }
         Log.i(TAG, address);
         Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + address));
         intent.putExtra("sms_body", txtContent.getText().toString());
         startActivity(intent);
-
     }
 
+    // 즉시 메시지 전송 (다중 선택 안됨)
+    private void sendSMS() {
+        ProgressDialog dialog = ProgressDialog.show(getActivity(), "타이틀", "문자 전송중입니다.", true);
+        SmsManager sms = SmsManager.getDefault();
+        for (int i = 0; i < contactResultList.size(); i++) {
+            //address = address + contactResultList.get(i) + ";";
+            sms.sendTextMessage(contactResultList.get(i), null, txtContent.getText().toString(), null, null);
+        }
+        dialog.dismiss();
+        Toast.makeText(getActivity(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+        //PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, SmsSender.class), 0);
+    }
 }
