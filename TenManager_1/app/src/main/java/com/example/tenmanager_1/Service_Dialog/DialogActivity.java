@@ -13,10 +13,13 @@ import android.widget.TextView;
 
 import com.example.tenmanager_1.R;
 
+import org.w3c.dom.Text;
+
 public class DialogActivity extends AppCompatActivity {
 
     Button btnSms, btnHistory;
     TextView txtPhoneNumber, txtName;
+    TextView txtCallState;
     private final int SMSFRAGMENT = 1;
     private final int HISTORYFRAGMENT = 2;
 
@@ -65,7 +68,15 @@ public class DialogActivity extends AppCompatActivity {
     }
 
     private void setText(){
-        txtPhoneNumber.setText(getIntent().getStringExtra("phoneNumber"));
+        //txtPhoneNumber.setText(getIntent().getStringExtra("phoneNumber"));
+        txtPhoneNumber.setText(getIntent().getExtras().getString("phoneNumber"));
+
+        int flag = getIntent().getExtras().getInt("flag");
+        if(flag == 1){
+            txtCallState.setText("전화를 받았습니다.");
+        }else if(flag == 2){
+            txtCallState.setText("전화를 걸었습니다.");
+        }
 
     }
 
@@ -74,6 +85,7 @@ public class DialogActivity extends AppCompatActivity {
         btnHistory = (Button) findViewById(R.id.btnHistory);
         txtName = (TextView) findViewById(R.id.txtName);
         txtPhoneNumber = (TextView) findViewById(R.id.txtPhoneNumber);
+        txtCallState = (TextView) findViewById(R.id.txtCallState);
     }
 
 

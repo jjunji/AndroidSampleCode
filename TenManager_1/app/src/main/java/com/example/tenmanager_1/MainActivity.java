@@ -1,5 +1,6 @@
 package com.example.tenmanager_1;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import android.support.v4.app.FragmentTransaction;
@@ -23,6 +24,7 @@ import com.example.tenmanager_1.Fragment.HomeFragment;
 import com.example.tenmanager_1.Fragment.MarketFragment;
 import com.example.tenmanager_1.Fragment.SmsFragment;
 import com.example.tenmanager_1.Loader.ContactLoader;
+import com.example.tenmanager_1.Service_Dialog.CallingService;
 
 import java.util.ArrayList;
 
@@ -72,6 +74,9 @@ public class MainActivity extends AppCompatActivity
         callFragment(FRAGMENT1);
         doCopyContact(realm);
 
+
+        Intent intent = new Intent(this, CallingService.class);
+        startService(intent);
     }
 
     // 초기화

@@ -1,3 +1,4 @@
+/*
 package com.example.tenmanager_1.Service_Dialog;
 
 import android.content.BroadcastReceiver;
@@ -8,9 +9,11 @@ import android.telephony.PhoneStateListener;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+*/
 /**
  * Created by 전지훈 on 2017-11-20.
- */
+ *//*
+
 
 public class IncomingCallBroadcastReceiver extends BroadcastReceiver{
     public static final String TAG = "PHONE STATE";
@@ -52,3 +55,4 @@ public class IncomingCallBroadcastReceiver extends BroadcastReceiver{
         }
     }
 }
+*/
