@@ -67,7 +67,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         customerListView = (IndexableListView) view.findViewById(R.id.customerListView);
         //customerListView2.requestDisallowInterceptTouchEvent(true);
         adapter = new ContactAdapter(getContext(), datas, mapSelected);
-        view.findViewById(R.id.btnComfirm).setOnClickListener(this);
+        view.findViewById(R.id.btnConfirm).setOnClickListener(this);
     }
 
     private void setListView(){
@@ -77,7 +77,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.btnComfirm){
+        if(v.getId() == R.id.btnConfirm){
             //선택 된 리스트 가져오기
             // HashMap 또는 ArrayList
             list = adapter.getKey(mapSelected, true);
@@ -131,11 +131,9 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
 MainActivity -> 프래그먼트 -> 자식프래그먼트 구조에서
 Context를 잘못 참조하는 오류 발생.
 (프래그먼트에서도 context는 액티비티것을 가짐.)
-
 2.
 뷰홀더가 없을 경우 재생산 하는 부분에서
 setTag() 를 안해서 오류 발생. -> setTag, getTag 역할 알기.
-
 3.
 디버깅할 때 변수에 오른쪽 마우스 - Evaluate Expression 을 하여
 해당 변수가 호출 할 수 있는 메소드나, 가진 데이터를 확인 할 수 있다.

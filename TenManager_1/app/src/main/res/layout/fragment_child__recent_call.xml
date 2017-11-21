@@ -14,18 +14,18 @@
             android:id="@+id/recentCalListView"
             android:layout_width="match_parent"
             android:layout_height="440dp"
-            android:layout_alignParentTop="true"
-            android:layout_above="@+id/btnComfirm" />
+            android:layout_above="@+id/btnConfirm"
+            android:layout_alignParentTop="true" />
 
         <Button
-            android:id="@+id/btnComfirm"
+            android:id="@+id/btnConfirm"
             android:layout_width="match_parent"
             android:layout_height="30dp"
-            android:background="@color/buttonColor"
-            android:text="완 료"
             android:layout_alignParentBottom="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
+            android:layout_alignParentStart="true"
+            android:background="@color/buttonColor"
+            android:text="완 료" />
     </RelativeLayout>
 
 </FrameLayout>
