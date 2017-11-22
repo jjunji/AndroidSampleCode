@@ -109,7 +109,7 @@ public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
         }
 
         holder.txtName.setText(datas.get(position).getName());
-        holder.txtPhoneNumber.setText(datas.get(position).getPhoneNumber());
+        holder.txtPhoneNumber.setText(datas.get(position).getCellPhone());
 
         if(callButtonClickListener != null){
             holder.btnCall.setTag(position);

@@ -11,12 +11,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.example.tenmanager_1.Data.AddContactVO;
-import com.example.tenmanager_1.Data.ContactData;
 import com.example.tenmanager_1.Data.ContactVO;
-import com.example.tenmanager_1.Data.WriteSmsVO;
-
-import java.util.ArrayList;
 
 import io.realm.Realm;
 
@@ -90,12 +85,12 @@ public class AddContactActivity extends AppCompatActivity {
         int id = bundle.getInt("id"); // 리스트 항목에 해당하는 DB의 id값.
         ContactVO cvo = realm.where(ContactVO.class).equalTo("id", id).findFirst();
         cvo.setName(etName.getText().toString());
-        cvo.setPhoneNumber(etPhoneNumber.getText().toString());
-        cvo.setCall1(etCall1.getText().toString());
-        cvo.setCall2(etCall2.getText().toString());
+        cvo.setCellPhone(etPhoneNumber.getText().toString());
+        cvo.setTel1(etCall1.getText().toString());
+        cvo.setTel2(etCall2.getText().toString());
         cvo.setAddress(etAddress.getText().toString());
         cvo.setMemo(etMemo.getText().toString());
-        cvo.setCallMemo(etCallMemo.getText().toString());
+//        cvo.setCallMemo(etCallMemo.getText().toString());
 
         realm.commitTransaction();
     }
@@ -124,12 +119,12 @@ public class AddContactActivity extends AppCompatActivity {
 
         cvo.setId(id);
         cvo.setName(etName.getText().toString());
-        cvo.setCall1(etCall1.getText().toString());
-        cvo.setCall2(etCall2.getText().toString());
-        cvo.setPhoneNumber(etPhoneNumber.getText().toString());
+        cvo.setTel1(etCall1.getText().toString());
+        cvo.setTel2(etCall2.getText().toString());
+        cvo.setCellPhone(etPhoneNumber.getText().toString());
         cvo.setAddress(etAddress.getText().toString());
         cvo.setMemo(etMemo.getText().toString());
-        cvo.setCallMemo(etCallMemo.getText().toString());
+//        cvo.setCallMemo(etCallMemo.getText().toString());
 
         realm.commitTransaction();
     }

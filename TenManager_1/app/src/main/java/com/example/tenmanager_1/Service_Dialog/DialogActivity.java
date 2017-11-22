@@ -1,8 +1,5 @@
 package com.example.tenmanager_1.Service_Dialog;
 
-import android.content.Intent;
-import android.icu.util.DateInterval;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -13,10 +10,8 @@ import android.widget.TextView;
 
 import com.example.tenmanager_1.R;
 
-import org.w3c.dom.Text;
 
 public class DialogActivity extends AppCompatActivity {
-
     Button btnSms, btnHistory;
     TextView txtPhoneNumber, txtName;
     TextView txtCallState;
@@ -70,6 +65,7 @@ public class DialogActivity extends AppCompatActivity {
     private void setText(){
         //txtPhoneNumber.setText(getIntent().getStringExtra("phoneNumber"));
         txtPhoneNumber.setText(getIntent().getExtras().getString("phoneNumber"));
+        //String name =
 
         int flag = getIntent().getExtras().getInt("flag");
         if(flag == 1){

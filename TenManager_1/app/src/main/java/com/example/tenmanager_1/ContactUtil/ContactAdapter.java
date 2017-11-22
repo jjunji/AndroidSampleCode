@@ -1,8 +1,6 @@
 package com.example.tenmanager_1.ContactUtil;
 
 import android.content.Context;
-import android.text.InputFilter;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,16 +9,12 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.tenmanager_1.Data.ContactData;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import io.realm.RealmResults;
 
 /**
  * Created by 전지훈 on 2017-11-08.
@@ -81,7 +75,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
         //Log.i("test", "contactVO : " + contactVO.toString());
 
         viewHolder.txtName.setText(contactVO.getName());
-        viewHolder.txtPhoneNumber.setText(contactVO.getPhoneNumber());
+        viewHolder.txtPhoneNumber.setText(contactVO.getCellPhone());
         viewHolder.checkBox.setTag(position);
 
         Boolean isCheck = mapSelected.get(contactVO);  // 처음에는 다 false 겠지

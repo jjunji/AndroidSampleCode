@@ -10,11 +10,21 @@ import io.realm.RealmConfiguration;
  */
 
 public class MyApplication extends Application{
+    private static MyApplication INSTANCE;
+
     @Override
     public void onCreate() {
         super.onCreate();
+
         Realm.init(this);
         RealmConfiguration config = new RealmConfiguration.Builder().build();
         Realm.setDefaultConfiguration(config);
+
+        INSTANCE = this;
     }
+
+    public static MyApplication getInstance(){
+        return INSTANCE;
+    }
+
 }

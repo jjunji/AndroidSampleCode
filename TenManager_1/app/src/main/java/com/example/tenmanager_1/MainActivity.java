@@ -1,10 +1,11 @@
 package com.example.tenmanager_1;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentTransaction;
-import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -16,30 +17,23 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 
-import com.example.tenmanager_1.Data.ContactData;
-import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Fragment.AlarmFragment;
 import com.example.tenmanager_1.Fragment.CustomerFragment;
 import com.example.tenmanager_1.Fragment.HomeFragment;
 import com.example.tenmanager_1.Fragment.MarketFragment;
 import com.example.tenmanager_1.Fragment.SmsFragment;
-import com.example.tenmanager_1.Loader.ContactLoader;
 import com.example.tenmanager_1.Service_Dialog.CallingService;
-
-import java.util.ArrayList;
-
-import io.realm.Realm;
-import io.realm.RealmResults;
+import com.example.tenmanager_1.repositories.ContactDataSource;
+import com.example.tenmanager_1.repositories.impl.ContactRepository;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
 
     private final String TAG = MainActivity.class.getSimpleName();
 
-    Realm realm;
-    ArrayList<ContactData> datas = new ArrayList<>();
-    ContactLoader cLoader = new ContactLoader(this);
-    //RealmResults<ContactVO> customerList;
+
+
+//    RealmResults<ContactVO> customerList;
 
     private final int FRAGMENT1 = 1;
     private final int FRAGMENT2 = 2;
@@ -49,12 +43,12 @@ public class MainActivity extends AppCompatActivity
 
     ImageView btnHome, btnAlarm, btnSms, btnCustomer, btnMarket;
 
+    ContactDataSource contactDataSource = new ContactRepository();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        realm = Realm.getDefaultInstance();  // Realm 인스턴스를 얻는다.
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,10 +63,15 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
         // -----------------------------------------------------------------------------
 
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.getInstance());
+        Boolean isInit = prefs.getBoolean("init", true); // 저장된 값이 없으면 true , 있으면 false -> 있으면 카피메서드 실행 안함.
+        if(isInit){
+            contactDataSource.contactCopyFromDevice();
+        }
+
         init();
         setButtonListener();
         callFragment(FRAGMENT1);
-        doCopyContact(realm);
 
 
         Intent intent = new Intent(this, CallingService.class);
@@ -86,7 +85,7 @@ public class MainActivity extends AppCompatActivity
         btnSms = (ImageView) findViewById(R.id.btnSms);
         btnCustomer = (ImageView) findViewById(R.id.btnCustomer);
         btnMarket = (ImageView) findViewById(R.id.btnMarket);
-        datas = (ArrayList<ContactData>) cLoader.getContacts();
+
     }
 
     // 버튼 리스너 등록
@@ -162,43 +161,7 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-    public void doCopyContact(Realm realm){
-        realm.beginTransaction(); //
-        //Log.i(TAG, "copy start");
 
-        for(int i = 0; i<datas.size(); i++){ // 주소록의 사이즈만큼 돌면서
-            String tel = datas.get(i).getTel();
-            ContactVO contactVO = realm.where(ContactVO.class).equalTo("phoneNumber", tel).findFirst();  // 번호가 기존 데이터에 있는지 검사(중복 검사)
-
-            // 중복되는 것이 없다면 추가.
-            if(contactVO == null){
-                Number maxid = realm.where(ContactVO.class).max("id");
-
-                int id = 1;
-                if(maxid != null){
-                    id = maxid.intValue()+1;
-                }
-
-                ContactVO cv = realm.createObject(ContactVO.class); // cv : 새로운 객체 생성.
-                cv.setId(id);
-                cv.setName(datas.get(i).getName());
-                cv.setPhoneNumber(tel); // TODO: 2017-11-10
-                //cv.setTel(datas.get(i).getTel());
-                //Log.i(TAG, "insert data is : "+cv.toString());
-            }
-        }
-        realm.commitTransaction();
-        printAllContact();
-    }
-
-    private void printAllContact() {
-        RealmResults<ContactVO>  results = realm.where(ContactVO.class).findAll();
-
-        for(ContactVO contactVO :  results){
-           /* Log.i("test", "printAllContact data is : "+contactVO.toString());
-            Log.i(TAG, "position data : " + contactVO.getName());*/
-        }
-    }
 
 
     // ----------------------------------------------

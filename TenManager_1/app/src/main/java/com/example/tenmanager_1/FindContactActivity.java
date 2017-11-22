@@ -6,13 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.tenmanager_1.Data.CallHistoryData;
-import com.example.tenmanager_1.Data.ContactData;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Fragment.FindContactFragment.ContactFragment;
 import com.example.tenmanager_1.Fragment.FindContactFragment.RecentCallFragment;
@@ -109,7 +106,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         ArrayList arIndex = new ArrayList();
 
         for(ContactVO contactVO : list){
-            arIndex.add(new Integer(contactVO.getId()));
+            arIndex.add(new Long(contactVO.getId()));
 //            Log.i("test", "selected contact : " + contactVO.toString());   // 체크한 contactVO 담겨있음.
         }
 

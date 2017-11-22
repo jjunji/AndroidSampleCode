@@ -1,50 +1,63 @@
 package com.example.tenmanager_1.Data;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import java.io.Serializable;
-
+import io.realm.RealmList;
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
 
 /**
  * Created by 전지훈 on 2017-11-07.
  */
 
 public class ContactVO extends RealmObject{
-
-    private int id;
+    @PrimaryKey
+    private long id;
     private String name;
-    private String phoneNumber;
-    private String Call1;
-    private String Call2;
+    private String tel1;
+    private String tel2;
+    private String cellPhone;
+    private ContactGroupVO group;
     private String address;
     private String memo;
-    private String callMemo;
-    private int group;
+    private RealmList<CallMemoVO> arCallMemo;
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getName() {
+        return name;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public String getCall1() {
-        return Call1;
+    public String getTel1() {
+        return tel1;
     }
 
-    public void setCall1(String call1) {
-        Call1 = call1;
+    public void setTel1(String tel1) {
+        this.tel1 = tel1;
     }
 
-    public String getCall2() {
-        return Call2;
+    public String getTel2() {
+        return tel2;
     }
 
-    public void setCall2(String call2) {
-        Call2 = call2;
+    public void setTel2(String tel2) {
+        this.tel2 = tel2;
+    }
+
+    public String getCellPhone() {
+        return cellPhone;
+    }
+
+    public void setCellPhone(String cellPhone) {
+        this.cellPhone = cellPhone;
+    }
+
+    public ContactGroupVO getGroup() {
+        return group;
+    }
+
+    public void setGroup(ContactGroupVO group) {
+        this.group = group;
     }
 
     public String getAddress() {
@@ -63,47 +76,34 @@ public class ContactVO extends RealmObject{
         this.memo = memo;
     }
 
-    public String getCallMemo() {
-        return callMemo;
-    }
-
-    public void setCallMemo(String callMemo) {
-        this.callMemo = callMemo;
-    }
-
-    public int getGroup() {
-        return group;
-    }
-
-    public void setGroup(int group) {
-        this.group = group;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public RealmList<CallMemoVO> getArCallMemo() {
+        return arCallMemo;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setArCallMemo(RealmList<CallMemoVO> arCallMemo) {
+        this.arCallMemo = arCallMemo;
     }
-
 
     @Override
     public String toString() {
         return "ContactVO{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
-                ", tel='" + phoneNumber + '\'' +
+                ", tel1='" + tel1 + '\'' +
+                ", tel2='" + tel2 + '\'' +
+                ", cellPhone='" + cellPhone + '\'' +
+                ", contactGroupVO=" + group +
+                ", address='" + address + '\'' +
+                ", memo='" + memo + '\'' +
+                ", arCallMemo=" + arCallMemo +
                 '}';
     }
-
-
 }

@@ -6,22 +6,22 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
 
-import com.example.tenmanager_1.Data.ContactData;
+import com.example.tenmanager_1.Data.ContactVO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class ContactLoader {
-
-    private List<ContactData> datas = new ArrayList<>();
     private Context context;
 
     public ContactLoader(Context context){
         this.context = context;
     }
 
-    public List<ContactData> getContacts() {
+    public List<ContactVO> getContacts() {
+        List<ContactVO> datas = new ArrayList<>();
+
         ContentResolver resolver = context.getContentResolver();
 
         // 1. 데이터 컨텐츠 URI (자원의 주소)를 정의
@@ -58,9 +58,9 @@ public class ContactLoader {
                 // index값을 불러와 이름으로 해주면 실수하지 않고, 불러올 수 있다.
 
                 // 5. 내가 설계한 Data 클래스에 담아준다.
-                ContactData data = new ContactData();
+                ContactVO data = new ContactVO();
                 data.setName(name);
-                data.setTel(tel);
+                data.setCellPhone(tel.replace("-",""));
 
                 // 6. 여러개의 객체를 담을 수 있는 저장소에 적재한다.
                 datas.add(data);
