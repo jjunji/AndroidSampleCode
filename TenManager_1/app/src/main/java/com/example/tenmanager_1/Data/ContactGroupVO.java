@@ -4,7 +4,7 @@ import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
 /**
- * Created by 김혜정 on 2017-11-22.
+ * Created by 전지훈 on 2017-11-22.
  */
 
 public class ContactGroupVO extends RealmObject{

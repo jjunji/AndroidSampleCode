@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="250dp"
+    android:background="@drawable/border"
+    tools:context="com.example.tenmanager_1.CustomerGroup.AddCustomerGroupDialog">
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:text="알림"
+        android:textSize="30sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/txtSettingGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/txtUpdateGroup"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+        android:text="그룹 설정(추가, 삭제)"
+        android:textColor="#ff3535"
+        android:textSize="25dp" />
+
+    <TextView
+        android:clickable="true"
+        android:focusable="true"
+        android:id="@+id/txtUpdateGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="연락처 그룹 변경"
+        android:textColor="#ff3535"
+        android:textSize="25dp"
+        android:layout_marginBottom="45dp"
+        android:layout_above="@+id/btnOk"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:id="@+id/btnOk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:background="@color/buttonColor"
+        android:text="확인"
+        android:textColor="@color/White"
+        android:textSize="25sp" />
+</RelativeLayout>

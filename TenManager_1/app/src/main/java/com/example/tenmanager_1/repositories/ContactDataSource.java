@@ -1,7 +1,7 @@
 package com.example.tenmanager_1.repositories;
 
 /**
- * Created by 김혜정 on 2017-11-22.
+ * Created by 전지훈 on 2017-11-22.
  */
 
 public interface ContactDataSource {

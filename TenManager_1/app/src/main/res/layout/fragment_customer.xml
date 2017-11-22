@@ -52,6 +52,17 @@
                 android:text="최근통화목록"
                 android:textSize="18dp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:gravity="center_horizontal"
+                android:textSize="18dp"
+                android:textStyle="bold"
+                android:id="@+id/btnGroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="그룹" />
         </LinearLayout>
 
     </RelativeLayout>
