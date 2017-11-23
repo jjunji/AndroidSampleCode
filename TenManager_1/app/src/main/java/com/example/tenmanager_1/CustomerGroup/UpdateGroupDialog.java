@@ -42,8 +42,8 @@ public class UpdateGroupDialog extends Dialog {
             @Override
             public void onClick(View v) {
                 doUpdate();
+//                adapter.notifyDataSetChanged();
                 Toast.makeText(getContext(), "수정되었습니다.", Toast.LENGTH_SHORT).show();
-                adapter.notifyDataSetChanged();
                 dismiss();
             }
         });

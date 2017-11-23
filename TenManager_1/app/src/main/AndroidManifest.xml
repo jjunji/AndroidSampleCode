@@ -50,9 +50,9 @@
         <!-- </intent-filter> -->
         <!-- </receiver> -->
 
-
         <activity android:name=".CustomerGroup.SettingGroupActivity" />
         <activity android:name=".CustomerGroup.UpdateGroupActivity" />
+        <activity android:name=".CustomTextView"></activity>
     </application>
 
 </manifest>

@@ -14,6 +14,8 @@ import com.example.tenmanager_1.repositories.ContactDataSource;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -90,7 +92,20 @@ public class ContactRepository implements ContactDataSource {
 
         printAllContact();
     }
-//    public void doCopyContact(Realm realm){
+
+    @Override
+    public RealmResults<ContactGroupVO> getContactGroupList() {
+        RealmResults<ContactGroupVO> results = realm.where(ContactGroupVO.class).findAll();
+/*        results.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<ContactGroupVO>>() {
+            @Override
+            public void onChange(RealmResults<ContactGroupVO> contactGroupVOs, OrderedCollectionChangeSet changeSet) {
+
+            }
+        });*/
+        return results;
+    }
+
+    //    public void doCopyContact(Realm realm){
 //        realm.beginTransaction(); //
 //        //Log.i(TAG, "copy start");
 //

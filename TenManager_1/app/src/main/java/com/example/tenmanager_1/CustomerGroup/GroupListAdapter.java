@@ -12,6 +12,8 @@ import com.example.tenmanager_1.Data.ContactGroupVO;
 import com.example.tenmanager_1.MyApplication;
 import com.example.tenmanager_1.R;
 
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
@@ -46,6 +48,12 @@ public class GroupListAdapter extends BaseAdapter{
     public GroupListAdapter() {
         realm = Realm.getDefaultInstance();
         datas = realm.where(ContactGroupVO.class).findAll().sort("id");
+        datas.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<ContactGroupVO>>() {
+                @Override
+            public void onChange(RealmResults<ContactGroupVO> contactGroupVOs, OrderedCollectionChangeSet changeSet) {
+                notifyDataSetChanged();
+            }
+        });
         layoutInflater = LayoutInflater.from(MyApplication.getInstance());
     }
 
@@ -103,8 +111,4 @@ public class GroupListAdapter extends BaseAdapter{
         return convertView;
     }
 
-    @Override
-    public void notifyDataSetChanged() {
-        super.notifyDataSetChanged();
-    }
 }
