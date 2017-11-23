@@ -132,7 +132,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
                 bundle.putLong("id", contactVO.getId());
                 bundle.putString("name", contactVO.getName());
                 bundle.putString("call1", contactVO.getTel1());
-                bundle.putString("call2", contactVO.getTel1());
+                bundle.putString("call2", contactVO.getTel2());
                 bundle.putString("phoneNumber", contactVO.getCellPhone());
                 bundle.putString("address", contactVO.getAddress());
                 bundle.putString("memo", contactVO.getMemo());

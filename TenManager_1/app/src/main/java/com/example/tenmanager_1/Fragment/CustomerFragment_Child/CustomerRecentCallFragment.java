@@ -9,8 +9,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.Toast;
 
+import com.example.tenmanager_1.AddContactActivity;
 import com.example.tenmanager_1.CustomerUtil.CustomerRecentCallAdapter;
+import com.example.tenmanager_1.CustomerUtil.CustomerRecentCallViewHolder;
 import com.example.tenmanager_1.Data.CallHistoryData;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Loader.CallHistoryLoader;
@@ -46,6 +49,7 @@ public class CustomerRecentCallFragment extends Fragment {
         customerRecentCallListView = (ListView) view.findViewById(R.id.customerRecentCallListView);
         ChLoader = new CallHistoryLoader(getActivity());
         adapter = new CustomerRecentCallAdapter(getContext(), (ArrayList<CallHistoryData>) ChLoader.getContacts());
+
         adapter.setCallButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -60,6 +64,25 @@ public class CustomerRecentCallFragment extends Fragment {
                 int position = (int)v.getTag();
                 CallHistoryData data = adapter.getItem(position);
                 startActivity(new Intent("android.intent.action.SENDTO", Uri.parse("sms:"+data.getTel())));
+            }
+        });
+        adapter.setAddContactHolderClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CustomerRecentCallViewHolder holder = (CustomerRecentCallViewHolder) v.getTag();
+                int position = holder.getTag();
+                CallHistoryData data = adapter.getItem(position);
+                if(data.getName() == null){
+                    String phoneNumber = data.getTel();
+                    Intent intent = new Intent(getActivity(), AddContactActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("phoneNumber", phoneNumber);
+                    bundle.putInt("flag", 3);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else{
+                    Toast.makeText(getActivity(), "저장된 연락처입니다.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

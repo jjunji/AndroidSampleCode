@@ -26,6 +26,15 @@ public class CustomerRecentCallAdapter extends BaseAdapter{
     LayoutInflater inflater;
     private View.OnClickListener callButtonClickListener;
     private View.OnClickListener smsButtonClickListener;
+    private View.OnClickListener addContactHolderClickListener;
+
+    public View.OnClickListener getAddContactHolderClickListener() {
+        return addContactHolderClickListener;
+    }
+
+    public void setAddContactHolderClickListener(View.OnClickListener addContactHolderClickListener) {
+        this.addContactHolderClickListener = addContactHolderClickListener;
+    }
 
     public View.OnClickListener getCallButtonClickListener() {
         return callButtonClickListener;
@@ -82,7 +91,7 @@ public class CustomerRecentCallAdapter extends BaseAdapter{
             convertView.setTag(holder);
         }else{
             holder = (CustomerRecentCallViewHolder) convertView.getTag();
-        }
+    }
 
         //
         CallHistoryData callHistoryData = getItem(position);
@@ -91,14 +100,20 @@ public class CustomerRecentCallAdapter extends BaseAdapter{
         holder.txtNumber.setText(callHistoryData.getTel());
         holder.txtDate.setText(callHistoryData.getDate());
 
+        holder.setTag(position);
+        if(addContactHolderClickListener != null){
+            convertView.setOnClickListener(addContactHolderClickListener);
+        }
+
+        holder.btnCall.setTag(position);
         if(callButtonClickListener != null){
-            holder.btnCall.setTag(position);
             holder.btnCall.setOnClickListener(callButtonClickListener);
         }
+
+        holder.btnSend.setTag(position);
         if(smsButtonClickListener != null){
-            holder.btnSend.setTag(position);
             holder.btnSend.setOnClickListener(smsButtonClickListener);
-        }
+    }
 
         return convertView;
     }
