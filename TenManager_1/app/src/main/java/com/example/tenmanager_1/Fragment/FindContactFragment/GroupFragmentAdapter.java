@@ -16,17 +16,19 @@ import com.example.tenmanager_1.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import io.realm.RealmResults;
+
 /**
  * Created by 전지훈 on 2017-11-23.
  */
 
 public class GroupFragmentAdapter extends BaseAdapter{
     Context context;
-    ArrayList<ContactVO> datas;
+    RealmResults<ContactVO> datas;
     LayoutInflater layoutInflater;
     private HashMap<ContactVO, Boolean> mapSelected;
 
-    public GroupFragmentAdapter(Context context, ArrayList<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
+    public GroupFragmentAdapter(Context context, RealmResults<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
         this.datas = datas;
         layoutInflater = LayoutInflater.from(context);
         this.context = context;

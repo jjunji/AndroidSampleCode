@@ -48,7 +48,7 @@ public class Dialog_SmsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_dialog__sms, container, false);
         realm = Realm.getDefaultInstance();
-        storedSmsResults = realm.where(SmsVO.class).findAll().sort("id", Sort.ASCENDING);
+        storedSmsResults = realm.where(SmsVO.class).findAll().sort("regdate", Sort.ASCENDING);
         init();
         setListView();
         setRadionBtnClickListener();

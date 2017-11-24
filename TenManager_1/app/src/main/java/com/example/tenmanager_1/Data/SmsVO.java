@@ -11,9 +11,11 @@ import io.realm.annotations.PrimaryKey;
 public class SmsVO extends RealmObject{
     @PrimaryKey
     private long id;
+//    private int location;
     private String title;
     private String content;
     private SmsGroupVO group;
+    private long regdate;
 
     public long getId() {
         return id;
@@ -46,5 +48,22 @@ public class SmsVO extends RealmObject{
     public void setGroup(SmsGroupVO group) {
         this.group = group;
     }
+
+//    public int getLocation() {
+//        return location;
+//    }
+
+    public long getRegdate() {
+        return regdate;
+    }
+
+    public void setRegdate(long regdate) {
+        this.regdate = regdate;
+    }
+//
+//    public void setLocation(int location) {
+//        this.location = location;
+//    }
+
 }
 

@@ -2,28 +2,32 @@ package com.example.tenmanager_1.Fragment.SmsFragment_Child;
 
 
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
-import android.support.annotation.RequiresPermission;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.tenmanager_1.AddSmsActivity;
+import com.example.tenmanager_1.Data.ContactGroupVO;
+import com.example.tenmanager_1.Data.ContactVO;
+import com.example.tenmanager_1.Data.SmsGroupVO;
 import com.example.tenmanager_1.Data.SmsVO;
+import com.example.tenmanager_1.Fragment.CustomerFragment_Child.ItemizedListAdapter;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.WriteUtil.WriteAdapter;
 import com.example.tenmanager_1.WriteUtil.WriteViewHolder;
+import com.example.tenmanager_1.repositories.impl.SmsRepository;
+import com.example.tenmanager_1.repositories.service.SmsDataSource;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -34,19 +38,23 @@ import static android.app.Activity.RESULT_OK;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class WriteFragment extends Fragment implements View.OnClickListener{
-    private final String TAG = WriteFragment.class.getSimpleName();
+public class ManageSmsFragment extends Fragment implements View.OnClickListener{
+    private final String TAG = ManageSmsFragment.class.getSimpleName();
     Realm realm;
     View view;
     Button btnAddContent;  // 문자내용 추가하기
     Button btnDelete, btnStore; // 리스트 체크 후 삭제, 수정, 저장 버튼
     ListView storedSmsListView;
     WriteAdapter adapter;
+    Spinner spinner_Group;
+    ArrayList<String> spinner_items;
+    ArrayAdapter<String> spinner_adapter;
+    SmsDataSource smsDataSource;
 
     private final int REQUESTCODE_STORE = 1;
-    private final int REQUESTCODE_TEST = 2;
+    private final int REQUESTCODE_UPDATE = 2;
 
-    public WriteFragment() {
+    public ManageSmsFragment() {
         realm = Realm.getDefaultInstance();
 
 //        for(WriteSmsVO writeSmsVO : datas){
@@ -58,23 +66,55 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_write, container, false);
-        RealmResults<SmsVO> datas = realm.where(SmsVO.class).findAll().sort("id", Sort.ASCENDING);
+        RealmResults<SmsVO> datas = realm.where(SmsVO.class).findAll().sort("regdate", Sort.ASCENDING);
         adapter = new WriteAdapter(datas, getContext());
         adapter.notifyDataSetChanged();
         init();
         setButtonClickListener();
-        setListView();
+        //setListView();
+        reloadGroupList(0);
 
         return view;
     }
 
     private void init() {
+        smsDataSource = new SmsRepository();
+        spinner_Group = (Spinner) view.findViewById(R.id.spinner_Group);
+
+        spinner_items = new ArrayList<>();
+        for(int i=0; i<smsDataSource.getSmsGroupList().size(); i++){
+            spinner_items.add(smsDataSource.getSmsGroupList().get(i).getName());
+        }
+
+        spinner_adapter = new ArrayAdapter(getActivity(), android.R.layout.simple_spinner_item, spinner_items);
+        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinner_Group.setAdapter(spinner_adapter);
+
+        spinner_Group.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                reloadGroupList(position);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         btnAddContent = (Button) view.findViewById(R.id.btnAddContent);
         btnDelete = (Button) view.findViewById(R.id.btnDelete);
         //btnUpdate = (Button) view.findViewById(R.id.btnUpdate);
         btnStore = (Button) view.findViewById(R.id.btnStore);
         storedSmsListView = (ListView) view.findViewById(R.id.storedSmsListView);
+    }
 
+    private void setButtonClickListener(){
+        btnAddContent.setOnClickListener(this);
+        btnDelete.setOnClickListener(this);
+    }
+
+    private void setAdapterButtonListener(){
         adapter.setHolderClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -91,24 +131,26 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
                 bundle.putString("content", writeSmsVO.getContent());
                 bundle.putLong("id", writeSmsVO.getId());
                 intent.putExtras(bundle);
-                startActivityForResult(intent, REQUESTCODE_TEST);
+                startActivityForResult(intent, REQUESTCODE_UPDATE);
             }
         });
 
         adapter.setBtnUpClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i(TAG,"click/////");
                 int position = (int) v.getTag();
                 SmsVO upWriteSmsVO = adapter.getItem(position);
 
                 int beforeIndex = position-1;
                 SmsVO downWriteSmsVO = adapter.getItem(beforeIndex);
-                long tempDownId = downWriteSmsVO.getId();
+
+                long regdate = downWriteSmsVO.getRegdate();
                 Boolean tempDownChecked = adapter.getMapSelected().get(beforeIndex);
 
                 realm.beginTransaction();
-                downWriteSmsVO.setId(upWriteSmsVO.getId());
-                upWriteSmsVO.setId(tempDownId);
+                downWriteSmsVO.setRegdate(upWriteSmsVO.getRegdate());
+                upWriteSmsVO.setRegdate(regdate);
                 realm.commitTransaction();
                 adapter.getMapSelected().put(beforeIndex, adapter.getMapSelected().get(position));
                 adapter.getMapSelected().put(position, tempDownChecked);
@@ -127,12 +169,12 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
 
                 int afterIndex = position+1;
                 SmsVO upWriteSmsVO = adapter.getItem(afterIndex);
-                long tempUpId = upWriteSmsVO.getId();
+                long tempRegdate = upWriteSmsVO.getRegdate();
                 Boolean tempUpChecked = adapter.getMapSelected().get(afterIndex);
 
                 realm.beginTransaction();
-                upWriteSmsVO.setId(downWriteSmsVO.getId());
-                downWriteSmsVO.setId(tempUpId);
+                upWriteSmsVO.setRegdate(downWriteSmsVO.getRegdate());
+                downWriteSmsVO.setRegdate(tempRegdate);
                 realm.commitTransaction();
                 adapter.getMapSelected().put(afterIndex, adapter.getMapSelected().get(position));
                 adapter.getMapSelected().put(position, tempUpChecked);
@@ -141,11 +183,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
                 adapter.notifyDataSetChanged();
             }
         });
-    }
-
-    private void setButtonClickListener(){
-        btnAddContent.setOnClickListener(this);
-        btnDelete.setOnClickListener(this);
     }
 
     @Override
@@ -167,7 +204,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
         }
     }
 
-
     private void doDelete() {
         ArrayList<SmsVO> checkedSmsList = adapter.getKey(true);
         Log.i(TAG, "checkedSmsList ========== : "+ checkedSmsList);
@@ -185,17 +221,6 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
         adapter.notifyDataSetChanged();
         Toast.makeText(getContext(), "삭제되었습니다.", Toast.LENGTH_SHORT).show();
 
-//        realm.executeTransaction(new Realm.Transaction() {
-//            @Override
-//            public void execute(Realm realm) {
-//
-//            }
-//        });
-
-    }
-
-    public void setListView(){
-        storedSmsListView.setAdapter(adapter);
     }
 
     @Override
@@ -205,11 +230,26 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
         if(resultCode == RESULT_OK){
             if(requestCode == REQUESTCODE_STORE){
                 adapter.notifyDataSetChanged();
-            }else if (requestCode == REQUESTCODE_TEST){
+            }else if (requestCode == REQUESTCODE_UPDATE){
                 adapter.notifyDataSetChanged();
             }
         }
     }
 
+    private void reloadGroupList(int position) {
+        RealmResults<SmsGroupVO> arGroup = smsDataSource.getSmsGroupList();
+        SmsGroupVO smsGroupVO = arGroup.get(position);
+        Log.i("test", "selected group :"+smsGroupVO.toString());
 
+    matchingContactByGroup(smsGroupVO);
 }
+
+private void matchingContactByGroup(SmsGroupVO sgvo){
+        RealmResults<SmsVO> arSms = realm.where(SmsVO.class).equalTo("group.id", sgvo.getId()).findAll().sort("regdate", Sort.ASCENDING);
+        Log.i(TAG, "arSms =========== " + arSms);
+        adapter = new WriteAdapter(arSms, getContext());
+        storedSmsListView.setAdapter(adapter);
+        setAdapterButtonListener();
+        }
+
+        }

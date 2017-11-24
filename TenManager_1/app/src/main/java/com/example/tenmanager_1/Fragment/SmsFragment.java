@@ -7,16 +7,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.Fragment.SmsFragment_Child.PromoteFragment;
 import com.example.tenmanager_1.Fragment.SmsFragment_Child.RepresentFragment;
 import com.example.tenmanager_1.Fragment.SmsFragment_Child.StoredSmsFragment;
-import com.example.tenmanager_1.Fragment.SmsFragment_Child.WriteFragment;
+import com.example.tenmanager_1.Fragment.SmsFragment_Child.ManageSmsFragment;
 import com.example.tenmanager_1.R;
-
-import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -49,7 +46,7 @@ public class SmsFragment extends Fragment implements View.OnClickListener{
         btnStored = (TextView) view.findViewById(R.id.btnStored);
         btnRepresent = (TextView) view.findViewById(R.id.btnRepresent);
         btnPromote = (TextView) view.findViewById(R.id.btnPromote);
-        btnWrite = (TextView) view.findViewById(R.id.btnWrite);
+        btnWrite = (TextView) view.findViewById(R.id.btnManage);
     }
 
 
@@ -74,8 +71,8 @@ public class SmsFragment extends Fragment implements View.OnClickListener{
                 transaction.commit();
                 break;
             case FRAGMENT4 :
-                WriteFragment writeFragment = new WriteFragment();
-                transaction.replace(R.id.smsFragmentContainer, writeFragment);
+                ManageSmsFragment manageSmsFragment = new ManageSmsFragment();
+                transaction.replace(R.id.smsFragmentContainer, manageSmsFragment);
                 transaction.commit();
                 break;
         }
@@ -93,7 +90,7 @@ public class SmsFragment extends Fragment implements View.OnClickListener{
             case R.id.btnPromote :
                 callFragment(FRAGMENT3);
                 break;
-            case R.id.btnWrite :
+            case R.id.btnManage :
                 callFragment(FRAGMENT4);
                 break;
         }

@@ -1,19 +1,30 @@
 package com.example.tenmanager_1;
 
 import android.content.Intent;
+import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.tenmanager_1.Data.ContactGroupVO;
 import com.example.tenmanager_1.Data.ContactVO;
+import com.example.tenmanager_1.Data.SmsGroupVO;
 import com.example.tenmanager_1.Data.SmsVO;
+import com.example.tenmanager_1.repositories.impl.SmsRepository;
+import com.example.tenmanager_1.repositories.service.SmsDataSource;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
 
 public class AddSmsActivity extends AppCompatActivity implements View.OnClickListener{
     private final String TAG = AddSmsActivity.class.getSimpleName();
@@ -22,7 +33,10 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
     int flag = 0;  // WriteAdapter(리스트 아이템 클릭시 호출된건지), WriteFragment(문자내용 추가하기 버튼 눌러서 호출된건지 판별)
     EditText etTitle, etContent;
     Button btnCancel, btnStore;
-
+    Spinner seperateSpinner;
+    List<String> spinner_items;
+    ArrayAdapter<String> spinner_adapter;
+    SmsDataSource smsDataSource;
     Realm realm;
 
     @Override
@@ -31,17 +45,35 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
         setContentView(R.layout.activity_add_sms);
 
         realm = Realm.getDefaultInstance();
+        initView();
         init();
         checkIntent(flag);
         setButtonClickListener();
     }
 
-    private void init() {
+    private void initView() {
         etTitle = (EditText) findViewById(R.id.etTitle);
         etContent = (EditText) findViewById(R.id.etContent);
         btnCancel = (Button) findViewById(R.id.btnCancel);
         btnStore = (Button) findViewById(R.id.btnStore);
+        seperateSpinner = (Spinner) findViewById(R.id.seperateSpinner);
         flag = getIntent().getExtras().getInt("flag");  // 출처 판별.
+    }
+
+    private void init() {
+        smsDataSource = new SmsRepository();
+        spinner_items = new ArrayList<>();
+/*        spinner_items.add("저장문자");
+        spinner_items.add("대표안내문자");
+        spinner_items.add("매물홍보문자");*/
+
+        for(int i=0; i<smsDataSource.getSmsGroupList().size(); i++){
+            spinner_items.add(smsDataSource.getSmsGroupList().get(i).getName());
+        }
+
+        spinner_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinner_items);
+        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        seperateSpinner.setAdapter(spinner_adapter);
     }
 
     private void checkIntent(int flag){
@@ -94,7 +126,6 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
                     setResult(RESULT_OK, intent);
                     finish();
                 }
-
         }
     }
 
@@ -115,8 +146,15 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
 
         SmsVO svo = realm.createObject(SmsVO.class, id); // 관리 객체 생성.
         //wso.setId(id);
+        svo.setRegdate(System.currentTimeMillis());
         svo.setTitle(etTitle.getText().toString());
         svo.setContent(etContent.getText().toString());
+        svo.setRegdate(System.currentTimeMillis());
+
+        int selectedGroupPosition = seperateSpinner.getSelectedItemPosition();  // 누른 스피너 위치
+        SmsGroupVO selectedGroupVO = realm.where(SmsGroupVO.class).findAll().get(selectedGroupPosition);
+        svo.setGroup(selectedGroupVO);
+        Log.i(TAG, "selectedGroup =========== " + selectedGroupVO);
 
         realm.commitTransaction();
     }
@@ -128,6 +166,11 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
         SmsVO svo = realm.where(SmsVO.class).equalTo("id", id).findFirst();  // TODO: 2017-11-13  findFirst() :
         svo.setTitle(etTitle.getText().toString());
         svo.setContent(etContent.getText().toString());
+
+        int selectedGroupPosition = seperateSpinner.getSelectedItemPosition();  // 누른 스피너 위치
+        SmsGroupVO selectedGroupVO = realm.where(SmsGroupVO.class).findAll().get(selectedGroupPosition);
+        svo.setGroup(selectedGroupVO);
+
         realm.commitTransaction();
     }
 

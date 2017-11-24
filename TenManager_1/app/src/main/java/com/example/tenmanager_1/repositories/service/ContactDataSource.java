@@ -1,6 +1,7 @@
-package com.example.tenmanager_1.repositories;
+package com.example.tenmanager_1.repositories.service;
 
 import com.example.tenmanager_1.Data.ContactGroupVO;
+import com.example.tenmanager_1.Data.SmsGroupVO;
 
 import io.realm.RealmResults;
 
@@ -12,5 +13,4 @@ public interface ContactDataSource {
     void initGroup();
     void contactCopyFromDevice();
     RealmResults<ContactGroupVO> getContactGroupList();
-
 }

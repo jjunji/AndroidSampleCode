@@ -23,8 +23,10 @@ import com.example.tenmanager_1.Fragment.HomeFragment;
 import com.example.tenmanager_1.Fragment.MarketFragment;
 import com.example.tenmanager_1.Fragment.SmsFragment;
 import com.example.tenmanager_1.Service_Dialog.CallingService;
-import com.example.tenmanager_1.repositories.ContactDataSource;
+import com.example.tenmanager_1.repositories.impl.SmsRepository;
+import com.example.tenmanager_1.repositories.service.ContactDataSource;
 import com.example.tenmanager_1.repositories.impl.ContactRepository;
+import com.example.tenmanager_1.repositories.service.SmsDataSource;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener{
@@ -44,6 +46,7 @@ public class MainActivity extends AppCompatActivity
     ImageView btnHome, btnAlarm, btnSms, btnCustomer, btnMarket;
 
     ContactDataSource contactDataSource = new ContactRepository();
+    SmsDataSource smsDataSource = new SmsRepository();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         Boolean isInit = prefs.getBoolean("init", true); // 저장된 값이 없으면 true , 있으면 false -> 있으면 카피메서드 실행 안함.
         if(isInit){
             contactDataSource.contactCopyFromDevice();
+            smsDataSource.initSmsGroup();
         }
 
         init();

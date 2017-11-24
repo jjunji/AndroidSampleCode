@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.tenmanager_1.Fragment.SmsFragment_Child.WriteFragment">
+    tools:context="com.example.tenmanager_1.Fragment.SmsFragment_Child.ManageSmsFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -26,7 +26,7 @@
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spinner"
+                android:id="@+id/spinner_Group"
                 android:layout_width="193dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"

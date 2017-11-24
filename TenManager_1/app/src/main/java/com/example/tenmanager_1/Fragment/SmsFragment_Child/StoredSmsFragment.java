@@ -66,7 +66,7 @@ public class StoredSmsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_stored_sms, container, false);
         adapter = new StoredSmsAdapter(getContext());
         realm = Realm.getDefaultInstance();
-        storedSmsResults = realm.where(SmsVO.class).findAll().sort("id", Sort.ASCENDING);
+        storedSmsResults = realm.where(SmsVO.class).findAll().sort("regdate", Sort.ASCENDING);
         initView();
         setListItem();
         return view;

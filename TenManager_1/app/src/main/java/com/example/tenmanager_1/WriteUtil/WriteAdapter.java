@@ -10,6 +10,7 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.tenmanager_1.Data.SmsGroupVO;
 import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.R;
 
@@ -17,6 +18,8 @@ import com.example.tenmanager_1.R;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import io.realm.OrderedCollectionChangeSet;
+import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.RealmResults;
 
 
@@ -33,11 +36,12 @@ public class WriteAdapter extends BaseAdapter{
     private View.OnClickListener holderClickListener;
 
     public WriteAdapter(RealmResults<SmsVO> datas, Context context) {
-        this.datas = datas;
+
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
 
 //        mapSelected = new HashMap<>();
+        setDatas(datas);
         initSelectedMap();
 
         // HashMap 초기화 -> 처음에 다 false를 주고 시작.
@@ -45,7 +49,14 @@ public class WriteAdapter extends BaseAdapter{
     }
 
     public void setDatas(RealmResults<SmsVO> datas) {
-        this.datas = datas;
+       this.datas = datas;
+       this.datas.addChangeListener(new OrderedRealmCollectionChangeListener<RealmResults<SmsVO>>() {
+           @Override
+           public void onChange(RealmResults<SmsVO> smsVOs, OrderedCollectionChangeSet changeSet) {
+               notifyDataSetChanged();
+           }
+       });
+
         this.notifyDataSetChanged();
     }
 
@@ -195,11 +206,11 @@ public class WriteAdapter extends BaseAdapter{
 
     @Override
     public void notifyDataSetChanged() {
-        for(int i=0; i<mapSelected.size(); i++){
-            if(mapSelected.get(i) == null){
-                mapSelected.put(i, false);
-            }
-        }
+//        for(int i=0; i<mapSelected.size(); i++){
+//            if(mapSelected.get(i) == null){
+//                mapSelected.put(i, false);
+//            }
+//        }
         super.notifyDataSetChanged();
     }
 

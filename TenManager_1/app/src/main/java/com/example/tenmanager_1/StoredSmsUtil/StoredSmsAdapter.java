@@ -14,6 +14,7 @@ import com.example.tenmanager_1.R;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by 전지훈 on 2017-11-13.
@@ -34,7 +35,7 @@ public class StoredSmsAdapter extends BaseAdapter {
         this.context = context;
         realm = Realm.getDefaultInstance();
         layoutInflater = LayoutInflater.from(context);
-        results = realm.where(SmsVO.class).findAll().sort("id");
+        results = realm.where(SmsVO.class).findAll().sort("regdate", Sort.ASCENDING);
     }
 
     @Override

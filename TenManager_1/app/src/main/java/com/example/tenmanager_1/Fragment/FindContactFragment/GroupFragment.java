@@ -9,14 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.example.tenmanager_1.CustomerGroup.Util.UpdateGroupAdapter;
 import com.example.tenmanager_1.Data.ContactGroupVO;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.GroupView;
 import com.example.tenmanager_1.R;
-import com.example.tenmanager_1.repositories.ContactDataSource;
+import com.example.tenmanager_1.repositories.service.ContactDataSource;
 import com.example.tenmanager_1.repositories.impl.ContactRepository;
 
 import java.util.ArrayList;
@@ -33,17 +31,16 @@ public class GroupFragment extends Fragment {
     ArrayList<ContactVO> datas;
     RealmResults<ContactVO> results;
     View view;
-    ListView groupListView;
     LinearLayout llCategory;
     ArrayList<GroupView> arCategory;
     ContactDataSource contactDataSource;
     GroupFragmentAdapter adapter;
+    ListView groupListView;
     private HashMap<ContactVO, Boolean> mapSelected;
 
     public GroupFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,10 +49,7 @@ public class GroupFragment extends Fragment {
 
         initView();
         init();
-        setListView();
 
-        contactDataSource = new ContactRepository();
-        arCategory = new ArrayList<>();
         createMenu(contactDataSource.getContactGroupList());
 
         return view;
@@ -96,7 +90,14 @@ public class GroupFragment extends Fragment {
         ContactGroupVO contactGroupVO = arGroup.get(position);
         Log.i("test", "selected group :"+contactGroupVO.toString());
 
+        matchingContactByGroup(contactGroupVO);
 
+    }
+
+    private void matchingContactByGroup(ContactGroupVO cgvo){
+        RealmResults<ContactVO> arContact = realm.where(ContactVO.class).equalTo("group.id", cgvo.getId()).findAll();
+        adapter = new GroupFragmentAdapter(getContext(), arContact, mapSelected);
+        groupListView.setAdapter(adapter);
     }
 
     private void initView() {
@@ -109,6 +110,8 @@ public class GroupFragment extends Fragment {
         realm = Realm.getDefaultInstance();
         results = realm.where(ContactVO.class).findAll();
         mapSelected = new HashMap<>();
+        contactDataSource = new ContactRepository();
+        arCategory = new ArrayList<>();
 
         for(ContactVO contactVO : results){
             datas.add(contactVO);
@@ -118,7 +121,9 @@ public class GroupFragment extends Fragment {
             mapSelected.put(contactVO, false);
         }
 
-        adapter = new GroupFragmentAdapter(getActivity(), datas, mapSelected);
+        reloadGroupList(0);
+
+        //adapter = new GroupFragmentAdapter(getActivity(), datas, mapSelected);
     }
 
     private void setListView(){

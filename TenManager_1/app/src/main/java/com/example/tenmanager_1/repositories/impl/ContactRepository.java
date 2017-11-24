@@ -7,15 +7,13 @@ import android.util.Log;
 import com.example.tenmanager_1.Data.CallMemoVO;
 import com.example.tenmanager_1.Data.ContactGroupVO;
 import com.example.tenmanager_1.Data.ContactVO;
+import com.example.tenmanager_1.Data.SmsGroupVO;
 import com.example.tenmanager_1.Loader.ContactLoader;
 import com.example.tenmanager_1.MyApplication;
-import com.example.tenmanager_1.repositories.ContactDataSource;
+import com.example.tenmanager_1.repositories.service.ContactDataSource;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
@@ -104,6 +102,7 @@ public class ContactRepository implements ContactDataSource {
         });*/
         return results;
     }
+
 
     //    public void doCopyContact(Realm realm){
 //        realm.beginTransaction(); //

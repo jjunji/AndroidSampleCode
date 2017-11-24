@@ -4,36 +4,25 @@ package com.example.tenmanager_1.Fragment.CustomerFragment_Child;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.text.Layout;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.example.tenmanager_1.CustomerGroup.AddCustomerGroupDialog;
 import com.example.tenmanager_1.Data.ContactGroupVO;
 import com.example.tenmanager_1.Data.ContactVO;
-import com.example.tenmanager_1.Fragment.CustomerFragment;
 import com.example.tenmanager_1.GroupView;
 import com.example.tenmanager_1.R;
-import com.example.tenmanager_1.repositories.ContactDataSource;
+import com.example.tenmanager_1.repositories.service.ContactDataSource;
 import com.example.tenmanager_1.repositories.impl.ContactRepository;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.List;
 
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
 import io.realm.Realm;
 import io.realm.RealmResults;
 
