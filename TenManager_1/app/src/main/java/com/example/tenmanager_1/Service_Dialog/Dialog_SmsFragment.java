@@ -12,7 +12,7 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.example.tenmanager_1.Data.WriteSmsVO;
+import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.StoredSmsUtil.StoredSmsAdapter;
 
@@ -28,7 +28,7 @@ import io.realm.Sort;
 public class Dialog_SmsFragment extends Fragment {
     private final String TAG = Dialog_SmsFragment.class.getSimpleName();
     Realm realm;
-    RealmResults<WriteSmsVO> storedSmsResults;
+    RealmResults<SmsVO> storedSmsResults;
     View view;
     ListView storedSmsListView;
     Button btnSend;
@@ -48,7 +48,7 @@ public class Dialog_SmsFragment extends Fragment {
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_dialog__sms, container, false);
         realm = Realm.getDefaultInstance();
-        storedSmsResults = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
+        storedSmsResults = realm.where(SmsVO.class).findAll().sort("id", Sort.ASCENDING);
         init();
         setListView();
         setRadionBtnClickListener();

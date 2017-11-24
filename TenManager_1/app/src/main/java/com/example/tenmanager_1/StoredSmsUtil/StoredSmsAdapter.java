@@ -9,8 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.RadioButton;
 import android.widget.TextView;
 
-import com.example.tenmanager_1.Data.WriteSmsVO;
-import com.example.tenmanager_1.Fragment.SmsFragment_Child.StoredSmsFragment;
+import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.R;
 
 import io.realm.Realm;
@@ -24,7 +23,7 @@ public class StoredSmsAdapter extends BaseAdapter {
     Realm realm;
     Context context;
     LayoutInflater layoutInflater;
-    RealmResults<WriteSmsVO> results;
+    RealmResults<SmsVO> results;
 
     private int mSelectedRadioPosition;
     private RadioButton mLastSelectedRadioButton;
@@ -35,7 +34,7 @@ public class StoredSmsAdapter extends BaseAdapter {
         this.context = context;
         realm = Realm.getDefaultInstance();
         layoutInflater = LayoutInflater.from(context);
-        results = realm.where(WriteSmsVO.class).findAll().sort("id");
+        results = realm.where(SmsVO.class).findAll().sort("id");
     }
 
     @Override
@@ -44,7 +43,7 @@ public class StoredSmsAdapter extends BaseAdapter {
     }
 
     @Override
-    public WriteSmsVO getItem(int position) {
+    public SmsVO getItem(int position) {
         return results.get(position);
     }
 

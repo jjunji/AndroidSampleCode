@@ -17,7 +17,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.tenmanager_1.AddSmsActivity;
-import com.example.tenmanager_1.Data.WriteSmsVO;
+import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.WriteUtil.WriteAdapter;
 import com.example.tenmanager_1.WriteUtil.WriteViewHolder;
@@ -58,7 +58,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_write, container, false);
-        RealmResults<WriteSmsVO> datas = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
+        RealmResults<SmsVO> datas = realm.where(SmsVO.class).findAll().sort("id", Sort.ASCENDING);
         adapter = new WriteAdapter(datas, getContext());
         adapter.notifyDataSetChanged();
         init();
@@ -80,7 +80,7 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
             public void onClick(View v) {
                 WriteViewHolder holder = (WriteViewHolder) v.getTag();
                 int position = holder.getTag();
-                WriteSmsVO writeSmsVO = adapter.getItem(position);
+                SmsVO writeSmsVO = adapter.getItem(position);
                 //Log.i("Adapter", String.valueOf(adapter.getItemId()));
                 Intent intent = new Intent(getContext(), AddSmsActivity.class);
                 Bundle bundle = new Bundle();
@@ -99,10 +99,10 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 int position = (int) v.getTag();
-                WriteSmsVO upWriteSmsVO = adapter.getItem(position);
+                SmsVO upWriteSmsVO = adapter.getItem(position);
 
                 int beforeIndex = position-1;
-                WriteSmsVO downWriteSmsVO = adapter.getItem(beforeIndex);
+                SmsVO downWriteSmsVO = adapter.getItem(beforeIndex);
                 long tempDownId = downWriteSmsVO.getId();
                 Boolean tempDownChecked = adapter.getMapSelected().get(beforeIndex);
 
@@ -123,10 +123,10 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
             @Override
             public void onClick(View v) {
                 int position = (int) v.getTag();
-                WriteSmsVO downWriteSmsVO = adapter.getItem(position);
+                SmsVO downWriteSmsVO = adapter.getItem(position);
 
                 int afterIndex = position+1;
-                WriteSmsVO upWriteSmsVO = adapter.getItem(afterIndex);
+                SmsVO upWriteSmsVO = adapter.getItem(afterIndex);
                 long tempUpId = upWriteSmsVO.getId();
                 Boolean tempUpChecked = adapter.getMapSelected().get(afterIndex);
 
@@ -169,13 +169,13 @@ public class WriteFragment extends Fragment implements View.OnClickListener{
 
 
     private void doDelete() {
-        ArrayList<WriteSmsVO> checkedSmsList = adapter.getKey(true);
+        ArrayList<SmsVO> checkedSmsList = adapter.getKey(true);
         Log.i(TAG, "checkedSmsList ========== : "+ checkedSmsList);
         //final RealmResults<WriteSmsVO> results = realm.where(WriteSmsVO.class).findAll().sort("id");
 
         realm.beginTransaction();
         for(int i=0; i<checkedSmsList.size(); i++){
-            WriteSmsVO writeSmsVO = checkedSmsList.get(i);
+            SmsVO writeSmsVO = checkedSmsList.get(i);
             Log.i(TAG, "result.get(CheckedSmsList.get(i) : " + checkedSmsList.get(i) + "==============" + checkedSmsList.get(i));
 
             writeSmsVO.deleteFromRealm();

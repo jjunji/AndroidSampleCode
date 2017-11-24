@@ -11,7 +11,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tenmanager_1.Data.ContactVO;
-import com.example.tenmanager_1.Data.WriteSmsVO;
+import com.example.tenmanager_1.Data.SmsVO;
 
 import io.realm.Realm;
 
@@ -106,17 +106,17 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
     public void doStore(Realm realm){
         // 트랜잭션을 통해 데이터 영속화.
         realm.beginTransaction();
-        WriteSmsVO wso = realm.createObject(WriteSmsVO.class); // 관리 객체 생성.
 
-        Number maxid = realm.where(WriteSmsVO.class).max("id");
+        Number maxid = realm.where(SmsVO.class).max("id");
         int id = 1; // 빈 데이터베이스면 index 1로 시작.
         if(maxid != null){ // 비어있지 않으면 마지막 index + 1
             id = maxid.intValue()+1;
         }
 
-        wso.setId(id);
-        wso.setTitle(etTitle.getText().toString());
-        wso.setContent(etContent.getText().toString());
+        SmsVO svo = realm.createObject(SmsVO.class, id); // 관리 객체 생성.
+        //wso.setId(id);
+        svo.setTitle(etTitle.getText().toString());
+        svo.setContent(etContent.getText().toString());
 
         realm.commitTransaction();
     }
@@ -125,9 +125,9 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
         realm.beginTransaction();
         Bundle bundle = getIntent().getExtras();
         long id = bundle.getLong("id"); // 리스트 항목에 해당하는 DB의 id값.
-        WriteSmsVO wso = realm.where(WriteSmsVO.class).equalTo("id", id).findFirst();  // TODO: 2017-11-13  findFirst() :  
-        wso.setTitle(etTitle.getText().toString());
-        wso.setContent(etContent.getText().toString());
+        SmsVO svo = realm.where(SmsVO.class).equalTo("id", id).findFirst();  // TODO: 2017-11-13  findFirst() :
+        svo.setTitle(etTitle.getText().toString());
+        svo.setContent(etContent.getText().toString());
         realm.commitTransaction();
     }
 

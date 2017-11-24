@@ -9,7 +9,8 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-import com.example.tenmanager_1.Data.WriteSmsVO;
+
+import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.R;
 
 
@@ -22,7 +23,7 @@ import io.realm.RealmResults;
 public class WriteAdapter extends BaseAdapter{
     Context context;
     //ArrayList<WriteSmsVO> datas = new ArrayList<>();
-    RealmResults<WriteSmsVO> datas;  // DB에 있는 저장문자 정보
+    RealmResults<SmsVO> datas;  // DB에 있는 저장문자 정보
     LayoutInflater layoutInflater;
     private HashMap<Integer, Boolean> mapSelected;
 
@@ -31,7 +32,7 @@ public class WriteAdapter extends BaseAdapter{
 
     private View.OnClickListener holderClickListener;
 
-    public WriteAdapter(RealmResults<WriteSmsVO> datas, Context context) {
+    public WriteAdapter(RealmResults<SmsVO> datas, Context context) {
         this.datas = datas;
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
@@ -43,7 +44,7 @@ public class WriteAdapter extends BaseAdapter{
         this.mapSelected = mapSelected;
     }
 
-    public void setDatas(RealmResults<WriteSmsVO> datas) {
+    public void setDatas(RealmResults<SmsVO> datas) {
         this.datas = datas;
         this.notifyDataSetChanged();
     }
@@ -54,7 +55,7 @@ public class WriteAdapter extends BaseAdapter{
     }
 
     @Override
-    public WriteSmsVO getItem(int position) {
+    public SmsVO getItem(int position) {
         return datas.get(position);
     }
 
@@ -81,7 +82,7 @@ public class WriteAdapter extends BaseAdapter{
             viewHolder = (WriteViewHolder) convertView.getTag();
         }
 
-        final WriteSmsVO writeSmsVO = getItem(position);
+        final SmsVO writeSmsVO = getItem(position);
 
         viewHolder.txtTitle.setText(writeSmsVO.getTitle());
         viewHolder.txtContent.setText(writeSmsVO.getContent());
@@ -169,8 +170,8 @@ public class WriteAdapter extends BaseAdapter{
         };
     }*/
 
-    public ArrayList<WriteSmsVO> getKey( boolean value){
-        ArrayList<WriteSmsVO> list = new ArrayList<>();
+    public ArrayList<SmsVO> getKey( boolean value){
+        ArrayList<SmsVO> list = new ArrayList<>();
 
 /*        for(WriteSmsVO li : map.keySet()){
             if(map.get(li).equals(value)){

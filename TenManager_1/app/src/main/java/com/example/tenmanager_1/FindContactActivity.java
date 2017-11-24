@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Fragment.FindContactFragment.ContactFragment;
+import com.example.tenmanager_1.Fragment.FindContactFragment.GroupFragment;
 import com.example.tenmanager_1.Fragment.FindContactFragment.RecentCallFragment;
 
 import java.util.ArrayList;
@@ -19,13 +20,16 @@ import java.util.ArrayList;
 public class FindContactActivity extends AppCompatActivity implements View.OnClickListener{
     private final int FRAGMENT1 = 1;
     private final int FRAGMENT2 = 2;
+    private final int FRAGMENT3 = 3;
 
     private  int currentFragment = 0;
 
-    TextView btnContact, btnRecentCall;
+    TextView btnContact, btnRecentCall, btnGroup;
     ArrayList<ContactVO> checkedContactResult;
     ContactFragment contactFragment = new ContactFragment();
     RecentCallFragment recentCallFragment = new RecentCallFragment();
+    GroupFragment groupFragment = new GroupFragment();
+
     EditText editTxtSearch;
 
     @Override
@@ -40,6 +44,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     private void init() {
         btnContact = (TextView) findViewById(R.id.btnContact);
         btnRecentCall = (TextView) findViewById(R.id.btnRecentCall);
+        btnGroup = (TextView) findViewById(R.id.btnGroup);
         editTxtSearch = (EditText) findViewById(R.id.editTxtSearch);
         editTxtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -69,6 +74,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     public void setButtonClickListener(){
         btnContact.setOnClickListener(this);
         btnRecentCall.setOnClickListener(this);
+        btnGroup.setOnClickListener(this);
     }
 
     @Override
@@ -80,6 +86,10 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
 
             case R.id.btnRecentCall :
                 callFragment(FRAGMENT2);
+                break;
+
+            case R.id.btnGroup :
+                callFragment(FRAGMENT3);
                 break;
         }
     }
@@ -97,6 +107,11 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
 
             case 2:
                 transaction.replace(R.id.fragment_contact_container, recentCallFragment);
+                transaction.commit();
+                break;
+
+            case 3:
+                transaction.replace(R.id.fragment_contact_container, groupFragment);
                 transaction.commit();
                 break;
         }

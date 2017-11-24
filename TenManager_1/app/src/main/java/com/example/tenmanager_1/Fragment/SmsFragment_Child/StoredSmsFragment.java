@@ -1,7 +1,6 @@
 package com.example.tenmanager_1.Fragment.SmsFragment_Child;
 
 
-import android.app.PendingIntent;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,14 +17,12 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.tenmanager_1.Data.CallHistoryData;
 import com.example.tenmanager_1.Data.ContactVO;
-import com.example.tenmanager_1.Data.WriteSmsVO;
+
+import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.StoredSmsUtil.StoredSmsAdapter;
-import com.example.tenmanager_1.StoredSmsUtil.StoredSmsViewHolder;
 
 import java.util.ArrayList;
 
@@ -41,7 +38,7 @@ import static android.app.Activity.RESULT_OK;
 public class StoredSmsFragment extends Fragment {
     private final String TAG = StoredSmsFragment.class.getSimpleName();
 
-    RealmResults<WriteSmsVO> storedSmsResults;
+    RealmResults<SmsVO> storedSmsResults;
     RealmResults<ContactVO> contactResults;
     Realm realm;
     View view;
@@ -69,7 +66,7 @@ public class StoredSmsFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_stored_sms, container, false);
         adapter = new StoredSmsAdapter(getContext());
         realm = Realm.getDefaultInstance();
-        storedSmsResults = realm.where(WriteSmsVO.class).findAll().sort("id", Sort.ASCENDING);
+        storedSmsResults = realm.where(SmsVO.class).findAll().sort("id", Sort.ASCENDING);
         initView();
         setListItem();
         return view;
@@ -156,10 +153,12 @@ public class StoredSmsFragment extends Fragment {
         if (resultCode == RESULT_OK) {
 
             if (requestCode == REQUESTCODE) {
-                ArrayList<Integer> ar = data.getIntegerArrayListExtra("listObject"); // 체크박스 누른 포지션
+               // ArrayList<Integer> ar = data.getIntegerArrayListExtra("listObject"); // 체크박스 누른 포지션
+                ArrayList<Long> ar = (ArrayList<Long>) data.getSerializableExtra("listObject");
+                //ArrayList<Long> ar = data.getParcelableArrayListExtra("listObject");
 //                Integer arIds[] = new Integer[];
 
-                Integer arList[] = new Integer[ar.size()]; // arList 배열 선언
+                Long arList[] = new Long[ar.size()]; // arList 배열 선언
 
                 for (int i = 0; i < arList.length; i++) {
                     arList[i] = ar.get(i); // arList 에는 체크박스 누른 포지션이 담긴다.

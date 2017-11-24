@@ -124,6 +124,8 @@ public class CustomerGroupFragment extends Fragment {
     }
 
 
+
+
 //    private void setTextView(){
 //        DisplayMetrics dm = getResources().getDisplayMetrics();
 //        int size = Math.round(20 * dm.density);

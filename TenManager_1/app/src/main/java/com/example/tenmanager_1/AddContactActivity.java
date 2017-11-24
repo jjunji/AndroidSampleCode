@@ -102,6 +102,7 @@ public class AddContactActivity extends AppCompatActivity {
         cvo.setTel2(etCall2.getText().toString());
         cvo.setAddress(etAddress.getText().toString());
         cvo.setMemo(etMemo.getText().toString());
+
 //        cvo.setCallMemo(etCallMemo.getText().toString());
 
         realm.commitTransaction();

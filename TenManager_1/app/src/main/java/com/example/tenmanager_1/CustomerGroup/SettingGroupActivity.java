@@ -13,12 +13,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.tenmanager_1.Data.ContactGroupVO;
-import com.example.tenmanager_1.Data.WriteSmsVO;
 import com.example.tenmanager_1.R;
-import com.example.tenmanager_1.WriteUtil.WriteViewHolder;
-
 import io.realm.Realm;
-import io.realm.RealmResults;
 
 
 public class SettingGroupActivity extends AppCompatActivity {
