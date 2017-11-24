@@ -79,11 +79,12 @@
         </HorizontalScrollView>
 
         <ListView
+            android:id="@+id/itemizedListView"
             android:layout_width="match_parent"
             android:layout_height="410dp"
-            android:layout_below="@+id/horizontalScrollView"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_below="@+id/horizontalScrollView"
             android:layout_marginTop="10dp" />
 
     </RelativeLayout>

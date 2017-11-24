@@ -28,6 +28,9 @@ public class AddContactActivity extends AppCompatActivity {
     Button btnSave;
     EditText etName, etCall1, etCall2, etPhoneNumber, etAddress, etMemo, etCallMemo;
     Spinner spinner;
+    List<String> spinner_items;
+    ArrayAdapter<String> spinner_adapter;
+    RealmResults<ContactGroupVO> gro;
     int flag = 0;
     private final int ADDCONTACT = 1;
     private final int UPDATE = 2;
@@ -41,7 +44,7 @@ public class AddContactActivity extends AppCompatActivity {
         init();
         checkIntent(flag);
         setBtnSave();
-        setSpinner();
+        //setSpinner();
     }
 
     private void init() {
@@ -55,7 +58,13 @@ public class AddContactActivity extends AppCompatActivity {
         etMemo = (EditText) findViewById(R.id.etMemo);
         etCallMemo = (EditText) findViewById(R.id.etCallMemo);
         spinner = (Spinner) findViewById(R.id.spinner);
-
+        gro = realm.where(ContactGroupVO.class).findAll();
+        spinner_items = new ArrayList<>();
+        for (int i = 0; i < gro.size(); i++) {
+            spinner_items.add(gro.get(i).getName());
+        }
+        spinner_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinner_items);
+        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         flag = getIntent().getExtras().getInt("flag");  // 출처 판별.
     }
 
@@ -94,7 +103,7 @@ public class AddContactActivity extends AppCompatActivity {
         realm.beginTransaction();
 
         Bundle bundle = getIntent().getExtras();
-        int id = bundle.getInt("id"); // 리스트 항목에 해당하는 DB의 id값.
+        Long id = bundle.getLong("id"); // 리스트 항목에 해당하는 DB의 id값.
         ContactVO cvo = realm.where(ContactVO.class).equalTo("id", id).findFirst();
         cvo.setName(etName.getText().toString());
         cvo.setCellPhone(etPhoneNumber.getText().toString());
@@ -102,9 +111,12 @@ public class AddContactActivity extends AppCompatActivity {
         cvo.setTel2(etCall2.getText().toString());
         cvo.setAddress(etAddress.getText().toString());
         cvo.setMemo(etMemo.getText().toString());
-
+        int selectedGroupPosition = spinner.getSelectedItemPosition();
+        ContactGroupVO cgvo = realm.where(ContactGroupVO.class).findAll().get(selectedGroupPosition);
+        if(cgvo != null){
+            cvo.setGroup(cgvo);
+        }
 //        cvo.setCallMemo(etCallMemo.getText().toString());
-
         realm.commitTransaction();
     }
 
@@ -151,25 +163,41 @@ public class AddContactActivity extends AppCompatActivity {
                 etAddress.setText("");
                 etMemo.setText("");
                 etCallMemo.setText("");
+                spinner.setAdapter(spinner_adapter);
                 break;
 
             case UPDATE:
-                bundle = getIntent().getExtras();
+/*                bundle = getIntent().getExtras();
                 String name = bundle.getString("name");
                 String call1 = bundle.getString("call1");
                 String call2 = bundle.getString("call2");
                 phoneNumber = bundle.getString("phoneNumber");
                 String address = bundle.getString("address");
                 String memo = bundle.getString("memo");
-                String callMemo = bundle.getString("callMemo");
-                //
-                etName.setText(name);
+                String callMemo = bundle.getString("callMemo");*/
+
+
+
+                bundle = getIntent().getExtras();
+                Long id = bundle.getLong("id");
+
+                ContactVO cvo = realm.where(ContactVO.class).equalTo("id", id).findFirst();
+                etName.setText(cvo.getName());
+                etPhoneNumber.setText(cvo.getCellPhone());
+                Log.i(TAG, "group ============ " + cvo.getGroup());
+                //spinner.setSelection((int) cvo.getGroup().getId());
+                etMemo.setText("TEST!!!");
+                spinner.setAdapter(spinner_adapter);
+                int spinnerPosition = (int) cvo.getGroup().getId();
+                spinner.setSelection(spinnerPosition -1);
+
+/*                etName.setText(name);
                 etCall1.setText(call1);
                 etCall2.setText(call2);
                 etPhoneNumber.setText(phoneNumber);
                 etAddress.setText(address);
                 etMemo.setText(memo);
-                etCallMemo.setText(callMemo);
+                etCallMemo.setText(callMemo);*/
                 break;
 
             case FROMBLANK:
@@ -182,20 +210,21 @@ public class AddContactActivity extends AppCompatActivity {
                 etAddress.setText("");
                 etMemo.setText("");
                 etCallMemo.setText("");
+                spinner.setAdapter(spinner_adapter);
         }
     }
 
 
     private void setSpinner() {
-        RealmResults<ContactGroupVO> gro = realm.where(ContactGroupVO.class).findAll();
-        List<String> spinner_items = new ArrayList<>();
+        //RealmResults<ContactGroupVO> gro = realm.where(ContactGroupVO.class).findAll();
+        //List<String> spinner_items = new ArrayList<>();
 
         //스피너와 리스트를 연결하기 위해 사용되는 어댑터
-        ArrayAdapter<String> spinner_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinner_items);
-        for (int i = 0; i < gro.size(); i++) {
+        //ArrayAdapter<String> spinner_adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, spinner_items);
+/*        for (int i = 0; i < gro.size(); i++) {
             spinner_items.add(gro.get(i).getName());
-        }
-        spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(spinner_adapter);
+        }*/
+        //spinner_adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        //spinner.setAdapter(spinner_adapter);
     }
 }

@@ -1,41 +1,29 @@
-package com.example.tenmanager_1.CustomerUtil;
+package com.example.tenmanager_1.Fragment.CustomerFragment_Child;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.ContactUtil.StringMatcher;
 import com.example.tenmanager_1.Data.ContactVO;
-import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.R;
 
 import java.util.ArrayList;
 
-import io.realm.Realm;
 import io.realm.RealmResults;
 
 /**
- * Created by 전지훈 on 2017-11-14.
+ * Created by 전지훈 on 2017-11-24.
  */
 
-public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
+public class ItemizedListAdapter extends BaseAdapter implements SectionIndexer {
     private View.OnClickListener callButtonClickListener;
     private View.OnClickListener smsButtonClickListener;
-    private View.OnClickListener holderClickListener;
-
-    public View.OnClickListener getHolderClickListener() {
-        return holderClickListener;
-    }
-
-    public void setHolderClickListener(View.OnClickListener holderClickListener) {
-        this.holderClickListener = holderClickListener;
-    }
 
     public View.OnClickListener getCallButtonClickListener() {
         return callButtonClickListener;
@@ -53,18 +41,14 @@ public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
         this.smsButtonClickListener = smsButtonClickListener;
     }
 
-    //Realm realm;
-    //RealmResults<ContactVO> results;
     Context context;
-    ArrayList<ContactVO> datas;
+    RealmResults<ContactVO> datas;
     LayoutInflater inflater;
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
 
-    public CustomerAdapter(Context context, ArrayList<ContactVO> datas) {
-        this.datas = datas;
+    public ItemizedListAdapter(Context context, RealmResults<ContactVO> datas) {
         this.context = context;
-        //realm = Realm.getDefaultInstance();
-        //results = realm.where(ContactVO.class).findAll().sort("id");
+        this.datas = datas;
         inflater = LayoutInflater.from(context);
     }
 
@@ -83,29 +67,21 @@ public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
         return position;
     }
 
-    public ArrayList<ContactVO> getDatas() {
-        return datas;
-    }
-
-    public void setDatas(ArrayList<ContactVO> datas) {
-        this.datas = datas;
-    }
-
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final CustomerViewHolder holder;
+        final ItemizedListHolder holder;
 
-        if (convertView == null) {
-            holder = new CustomerViewHolder();
+        if(convertView == null){
+            holder = new ItemizedListHolder();
+            convertView = inflater.inflate(R.layout.item_customer_group_itemized, null);
 
-            convertView = inflater.inflate(R.layout.item_customerlist, null);
             holder.txtName = (TextView) convertView.findViewById(R.id.txtName);
             holder.txtPhoneNumber = (TextView) convertView.findViewById(R.id.txtPhoneNumber);
             holder.btnCall = (ImageView) convertView.findViewById(R.id.btnCall);
             holder.btnSend = (ImageView) convertView.findViewById(R.id.btnSend);
             convertView.setTag(holder);
-        } else {
-            holder = (CustomerViewHolder) convertView.getTag();
+        }else{
+            holder = (ItemizedListHolder) convertView.getTag();
         }
 
         holder.txtName.setText(datas.get(position).getName());
@@ -119,12 +95,6 @@ public class CustomerAdapter extends BaseAdapter implements SectionIndexer {
             holder.btnSend.setTag(position);
             holder.btnSend.setOnClickListener(smsButtonClickListener);
         }
-
-        holder.setTag(position);
-        if (holderClickListener != null) {
-            convertView.setOnClickListener(holderClickListener);
-        }
-
 
         return convertView;
     }

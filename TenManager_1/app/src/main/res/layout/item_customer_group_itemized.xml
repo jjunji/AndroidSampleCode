@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp">
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="12dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="10dp"
+            android:text="TextView"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/txtPhoneNumber"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/txtName"
+            android:layout_alignParentBottom="true"
+            android:layout_alignStart="@+id/txtName"
+            android:layout_marginBottom="10dp"
+            android:text="TextView"
+            android:textSize="16dp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/btnSend"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginEnd="22dp"
+            android:layout_marginRight="22dp"
+            app:srcCompat="@drawable/icon_sendsms"
+            android:layout_alignTop="@+id/txtName"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <ImageView
+            android:id="@+id/btnCall"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_alignTop="@+id/btnSend"
+            android:layout_marginEnd="11dp"
+            android:layout_marginRight="11dp"
+            android:layout_toLeftOf="@+id/btnSend"
+            android:layout_toStartOf="@+id/btnSend"
+            app:srcCompat="@drawable/icon_call" />
+    </RelativeLayout>
+</LinearLayout>
