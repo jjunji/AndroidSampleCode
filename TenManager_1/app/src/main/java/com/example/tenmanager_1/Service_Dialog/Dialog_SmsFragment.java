@@ -1,8 +1,11 @@
 package com.example.tenmanager_1.Service_Dialog;
 
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +16,7 @@ import android.widget.RadioButton;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.SmsVO;
+import com.example.tenmanager_1.Loader.CallHistoryLoader;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.StoredSmsUtil.StoredSmsAdapter;
 
@@ -36,6 +40,8 @@ public class Dialog_SmsFragment extends Fragment {
     StoredSmsAdapter storedSmsAdapter;
     private RadioButton mSelectedRB;
     private int mSelectedPosition = -1;
+    CallHistoryLoader loader;
+    SmsManager sms;
 
 
     public Dialog_SmsFragment() {
@@ -57,9 +63,14 @@ public class Dialog_SmsFragment extends Fragment {
     }
 
     private void init() {
+        sms = SmsManager.getDefault();
         storedSmsListView = (ListView) view.findViewById(R.id.storedSmsList);
         btnSend = (Button) view.findViewById(R.id.btnSend);
         txtContent = (TextView) view.findViewById(R.id.txtContent);
+        loader = new CallHistoryLoader(getActivity());
+        setSendButtonClickListener();
+        Log.i(TAG, "content =========== " + txtContent.getText().toString());
+        Log.i(TAG, "getTel ============ " + loader.getContacts().get(0).getTel());
     }
 
     private void setListView(){
@@ -98,6 +109,22 @@ public class Dialog_SmsFragment extends Fragment {
             }
         });
         //contactResultList = new ArrayList<>();
+    }
+
+    private void setSendButtonClickListener(){
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DialogActivity activity = (DialogActivity) getActivity();
+                if(txtContent.getText().toString() != null){
+                    sms.sendTextMessage(loader.getContacts().get(0).getTel(), null, txtContent.getText().toString(), null, null);
+                    activity.finish();
+                }else{
+                    activity.finish();
+                }
+
+            }
+        });
     }
 
 }

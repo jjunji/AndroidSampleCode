@@ -167,9 +167,16 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
         svo.setTitle(etTitle.getText().toString());
         svo.setContent(etContent.getText().toString());
 
+        long beforeSelectedGroupPosition = (svo.getGroup().getId()-1);
+        Log.i(TAG, "before ==== " + beforeSelectedGroupPosition);
         int selectedGroupPosition = seperateSpinner.getSelectedItemPosition();  // 누른 스피너 위치
+        Log.i(TAG, "after ==== " + selectedGroupPosition);
         SmsGroupVO selectedGroupVO = realm.where(SmsGroupVO.class).findAll().get(selectedGroupPosition);
         svo.setGroup(selectedGroupVO);
+
+        if(beforeSelectedGroupPosition != selectedGroupPosition){
+            svo.setRegdate(System.currentTimeMillis());
+        }
 
         realm.commitTransaction();
     }

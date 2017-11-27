@@ -80,7 +80,8 @@ public class CallHistoryLoader {
                 Date date = new Date(callTime);
                 String date2 = date.toString();
 
-                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm");
+                //SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm");
+                SimpleDateFormat sdf = new SimpleDateFormat("a HH:mm");
                 String date3 = sdf.format(new Date(date2));
 
 
@@ -95,7 +96,7 @@ public class CallHistoryLoader {
                 data.setDate(date3);
 
                 switch (checkType){
-                    case CallLog.Calls.INCOMING_TYPE:
+                    case 1:
                         type = "수신";
                         break;
                     case 2:

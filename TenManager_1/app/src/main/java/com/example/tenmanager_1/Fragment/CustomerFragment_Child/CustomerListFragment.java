@@ -111,7 +111,6 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
             public void onClick(View v) {
                 int position = (int)v.getTag();
                 ContactVO contactData = adapter.getItem(position);
-                startActivity(new Intent("android.intent.action.SENDTO", Uri.parse("sms:"+contactData.getCellPhone())));
             }
         });
 
