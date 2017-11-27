@@ -109,7 +109,7 @@ public class StoredSmsFragment extends Fragment {
             txtContent.setText("");
         }
 
-
+        // 저장문자 목록(라디오) 선택에 따라 제목,내용 변화
         adapter.setHolderClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -191,7 +191,7 @@ public class StoredSmsFragment extends Fragment {
         startActivity(intent);
     }
 
-    // 즉시 메시지 전송 (다중 선택 안됨)
+    // 즉시 메시지 전송 (다중 선택 안됨 -> 반복문으로 처리)
     private void sendSMS() {
         ProgressDialog dialog = ProgressDialog.show(getActivity(), "타이틀", "문자 전송중입니다.", true);
         SmsManager sms = SmsManager.getDefault();

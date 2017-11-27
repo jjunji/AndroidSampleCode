@@ -5,15 +5,15 @@
     android:background="@color/layoutBackGround"
     tools:context="com.example.tenmanager_1.Fragment.ContactFragment">
 
-        <FrameLayout
-            android:id="@+id/fragment_contact_container"
-            android:layout_width="370dp"
-            android:layout_height="350dp"
-            android:layout_below="@+id/linearLayout6"
-            android:layout_centerHorizontal="true"
-            android:layout_alignParentBottom="true">
+    <FrameLayout
+        android:id="@+id/fragment_contact_container"
+        android:layout_width="370dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/linearLayout6">
 
-        </FrameLayout>
+    </FrameLayout>
 
         <LinearLayout
             android:background="@color/White"
@@ -113,5 +113,15 @@
                 android:text="선택된 인원 총 1 명 (김소나무)"
                 android:textStyle="bold" />
         </LinearLayout>
+
+    <Button
+        android:id="@+id/btnComplete"
+        android:layout_width="match_parent"
+        android:layout_height="35dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:background="@color/buttonColor"
+        android:text="완료" />
 </RelativeLayout>
 

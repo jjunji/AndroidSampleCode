@@ -18,9 +18,9 @@ import com.example.tenmanager_1.Fragment.FindContactFragment.RecentCallFragment;
 import java.util.ArrayList;
 
 public class FindContactActivity extends AppCompatActivity implements View.OnClickListener{
-    private final int FRAGMENT1 = 1;
-    private final int FRAGMENT2 = 2;
-    private final int FRAGMENT3 = 3;
+    private final int FRAGMENT_CONTACT = 1;
+    private final int FRAGMENT_CALLHISTORY = 2;
+    private final int FRAGMENT_GROUP = 3;
 
     private  int currentFragment = 0;
 
@@ -38,7 +38,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_find_contact);
         init();
         setButtonClickListener();
-        callFragment(FRAGMENT1);
+        callFragment(FRAGMENT_CONTACT);
     }
 
     private void init() {
@@ -59,10 +59,10 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
 
             @Override
             public void afterTextChanged(Editable s) {
-                if(currentFragment == FRAGMENT1){
+                if(currentFragment == FRAGMENT_CONTACT){
                     contactFragment.search(editTxtSearch.getText().toString());
                 }
-                else if(currentFragment == FRAGMENT2){
+                else if(currentFragment == FRAGMENT_CALLHISTORY){
 
                 }
             }
@@ -81,15 +81,15 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btnContact :
-                callFragment(FRAGMENT1);
+                callFragment(FRAGMENT_CONTACT);
                 break;
 
             case R.id.btnRecentCall :
-                callFragment(FRAGMENT2);
+                callFragment(FRAGMENT_CALLHISTORY);
                 break;
 
             case R.id.btnGroup :
-                callFragment(FRAGMENT3);
+                callFragment(FRAGMENT_GROUP);
                 break;
         }
     }

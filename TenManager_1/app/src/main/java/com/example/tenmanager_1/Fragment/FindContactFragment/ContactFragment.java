@@ -21,7 +21,7 @@ import io.realm.RealmResults;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ContactFragment extends Fragment implements View.OnClickListener {
+public class ContactFragment extends Fragment {
     Realm realm;
     View view;
     IndexableListView customerListView;
@@ -65,7 +65,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         customerListView = (IndexableListView) view.findViewById(R.id.customerListView);
         //customerListView2.requestDisallowInterceptTouchEvent(true);
         adapter = new ContactAdapter(getContext(), datas, mapSelected);
-        view.findViewById(R.id.btnConfirm).setOnClickListener(this);
+        //view.findViewById(R.id.btnConfirm).setOnClickListener(this);
     }
 
     private void setListView(){
@@ -73,7 +73,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
         customerListView.setFastScrollEnabled(true);
     }
 
-    @Override
+/*    @Override
     public void onClick(View v) {
         if(v.getId() == R.id.btnConfirm){
             //선택 된 리스트 가져오기
@@ -85,7 +85,7 @@ public class ContactFragment extends Fragment implements View.OnClickListener {
             FindContactActivity activity = (FindContactActivity) getActivity();
             activity.selectedContact(list);
         }
-    }
+    }*/
 
 /*    public void doListClear(){
         datas.clear();

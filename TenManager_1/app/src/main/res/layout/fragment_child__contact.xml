@@ -13,19 +13,9 @@
         <com.example.tenmanager_1.ContactUtil.IndexableListView
             android:id="@+id/customerListView"
             android:layout_width="match_parent"
-            android:layout_height="440dp"
-            android:layout_alignParentTop="true"
-            android:layout_above="@+id/btnConfirm" />
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true" />
 
-        <Button
-            android:id="@+id/btnConfirm"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:background="@color/buttonColor"
-            android:text="완 료"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true" />
     </RelativeLayout>
 
 </FrameLayout>
