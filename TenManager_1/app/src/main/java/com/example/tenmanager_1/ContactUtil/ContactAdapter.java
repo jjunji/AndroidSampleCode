@@ -28,6 +28,16 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
     private HashMap<ContactVO, Boolean> mapSelected;
 
+    private CheckBox.OnCheckedChangeListener contactCheckListener;
+
+    public CheckBox.OnCheckedChangeListener getContactCheckListener() {
+        return contactCheckListener;
+    }
+
+    public void setContactCheckListener(CheckBox.OnCheckedChangeListener contactCheckListener) {
+        this.contactCheckListener = contactCheckListener;
+    }
+
     public ContactAdapter(Context context, ArrayList<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
         this.datas = datas;
         layoutInflater = LayoutInflater.from(context);
@@ -64,7 +74,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
             convertView = layoutInflater.inflate(R.layout.item_contact, null);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtName);
             viewHolder.txtPhoneNumber = (TextView) convertView.findViewById(R.id.txtPhoneNumber);
-            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            viewHolder.contactCheckBox = (CheckBox) convertView.findViewById(R.id.contactCheckBox);
 
             convertView.setTag(viewHolder);
         } else {
@@ -76,13 +86,18 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
 
         viewHolder.txtName.setText(contactVO.getName());
         viewHolder.txtPhoneNumber.setText(contactVO.getCellPhone());
-        viewHolder.checkBox.setTag(position);
+        viewHolder.contactCheckBox.setTag(position);
+
+        if(contactCheckListener != null){
+            viewHolder.contactCheckBox.setOnCheckedChangeListener(contactCheckListener);
+        }
 
         Boolean isCheck = mapSelected.get(contactVO);  // 처음에는 다 false 겠지
         //Log.i("test", "isCheck :" + isCheck);
 
-        viewHolder.checkBox.setChecked(isCheck);
-        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        // TODO: 2017-11-27 asdf 
+        viewHolder.contactCheckBox.setChecked(isCheck);
+        viewHolder.contactCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int index = (int) buttonView.getTag();

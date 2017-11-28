@@ -1,7 +1,6 @@
 package com.example.tenmanager_1.RecentCallUtil;
 
 import android.content.Context;
-import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,27 +10,27 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.CallHistoryData;
-import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class CallHistoryAdapter extends BaseAdapter{
 
-    ArrayList<CallHistoryData> datas = new ArrayList<>();
+    List<CallHistoryData> datas = new ArrayList<>();
     Context context;
     private HashMap<CallHistoryData, Boolean> mapSelected;
     LayoutInflater layoutInflater;
 
-    public CallHistoryAdapter(ArrayList<CallHistoryData> datas, Context context, HashMap<CallHistoryData, Boolean> mapSelected) {
+    public CallHistoryAdapter(List<CallHistoryData> datas, Context context, HashMap<CallHistoryData, Boolean> mapSelected) {
         layoutInflater = LayoutInflater.from(context);
         this.datas = datas;
         this.context = context;
-        for(CallHistoryData data : datas){
+/*        for(CallHistoryData data : datas){
             mapSelected.put(data, false);  // 연락처(datas) 길이만큼 contactVo(키) 를 false(값)로 설정.
-        }
+        }*/
         this.mapSelected = mapSelected;
     }
 
@@ -60,7 +59,7 @@ public class CallHistoryAdapter extends BaseAdapter{
             convertView = layoutInflater.inflate(R.layout.item_recentcall, null);
             viewHolder.txtPhoneNumber = (TextView) convertView.findViewById(R.id.txtPhoneNumber);
             viewHolder.txtDate = (TextView) convertView.findViewById(R.id.txtDate);
-            viewHolder.callCheckBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            viewHolder.callCheckBox = (CheckBox) convertView.findViewById(R.id.callCheckBox);
 
             convertView.setTag(viewHolder);
         }

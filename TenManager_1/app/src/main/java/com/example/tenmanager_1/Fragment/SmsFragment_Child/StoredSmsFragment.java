@@ -68,6 +68,8 @@ public class StoredSmsFragment extends Fragment {
         realm = Realm.getDefaultInstance();
         storedSmsResults = realm.where(SmsVO.class).findAll().sort("regdate", Sort.ASCENDING);
         initView();
+        setButtonClickListener();
+        setHolderClickListener();
         setListItem();
         return view;
     }
@@ -75,26 +77,7 @@ public class StoredSmsFragment extends Fragment {
     private void initView() {
         txtResultName = (TextView) view.findViewById(R.id.txtResultName);
         btnContactSearch = (Button) view.findViewById(R.id.btnContactSearch);
-        btnContactSearch.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), FindContactActivity.class);
-                startActivityForResult(intent, REQUESTCODE);
-            }
-        });
         btnSend = (Button) view.findViewById(R.id.btnSend);
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (contactResultList.size() < 1) {
-                    Toast.makeText(getContext(), "연락처를 추가하세요~", Toast.LENGTH_SHORT).show();
-                    return;
-                } else {
-                    //sendSms();
-                    sendSMS();
-                }
-            }
-        });
         txtTitle = (TextView) view.findViewById(R.id.txtTitle);
         txtContent = (TextView) view.findViewById(R.id.txtContent);
         txtItemTitle = (TextView) view.findViewById(R.id.txtItemTitle);
@@ -108,7 +91,34 @@ public class StoredSmsFragment extends Fragment {
             txtTitle.setText("");
             txtContent.setText("");
         }
+        contactResultList = new ArrayList<>();
+    }
 
+    private void setButtonClickListener(){
+        // 저장문자를 보낼 연락처 검색 액티비티로 이동.
+        btnContactSearch.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), FindContactActivity.class);
+                startActivityForResult(intent, REQUESTCODE);  // 연락처 검색 액티비티를 종료할 때 액티비티에서 가지고 있던 데이터를 받아온다.
+            }
+        });
+
+        btnSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (contactResultList.size() < 1) {
+                    Toast.makeText(getContext(), "연락처를 추가하세요~", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    //sendSms();
+                    sendSMS();
+                }
+            }
+        });
+    }
+
+    private void setHolderClickListener(){
         // 저장문자 목록(라디오) 선택에 따라 제목,내용 변화
         adapter.setHolderClickListener(new View.OnClickListener() {
             @Override
@@ -134,11 +144,9 @@ public class StoredSmsFragment extends Fragment {
                         mSelectedRB = radioBtn;
                     }
                 }
-
                 adapter.notifyDataSetChanged();
             }
         });
-        contactResultList = new ArrayList<>();
     }
 
     public void setListItem() {
@@ -179,18 +187,6 @@ public class StoredSmsFragment extends Fragment {
         }
     }
 
-    // 메시지 창으로 이동 후 전송
-    public void sendSms() {
-        String address = "";
-        for (int i = 0; i < contactResultList.size(); i++) {
-            address = address + contactResultList.get(i) + ";";
-        }
-        Log.i(TAG, address);
-        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + address));
-        intent.putExtra("sms_body", txtContent.getText().toString());
-        startActivity(intent);
-    }
-
     // 즉시 메시지 전송 (다중 선택 안됨 -> 반복문으로 처리)
     private void sendSMS() {
         ProgressDialog dialog = ProgressDialog.show(getActivity(), "타이틀", "문자 전송중입니다.", true);
@@ -202,5 +198,17 @@ public class StoredSmsFragment extends Fragment {
         dialog.dismiss();
         Toast.makeText(getActivity(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
         //PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, SmsSender.class), 0);
+    }
+
+    // 메시지 창으로 이동 후 전송
+    public void sendSms() {
+        String address = "";
+        for (int i = 0; i < contactResultList.size(); i++) {
+            address = address + contactResultList.get(i) + ";";
+        }
+        Log.i(TAG, address);
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + address));
+        intent.putExtra("sms_body", txtContent.getText().toString());
+        startActivity(intent);
     }
 }

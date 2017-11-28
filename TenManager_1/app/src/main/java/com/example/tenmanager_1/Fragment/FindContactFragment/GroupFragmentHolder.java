@@ -10,5 +10,5 @@ import android.widget.TextView;
 public class GroupFragmentHolder {
     public TextView txtPhoneNumber;
     public TextView txtName;
-    public CheckBox checkBox;
+    public CheckBox groupCheckBox;
 }

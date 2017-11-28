@@ -7,20 +7,13 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.example.tenmanager_1.ContactUtil.StringMatcher;
-import com.example.tenmanager_1.Data.ContactGroupVO;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import io.realm.OrderedCollectionChangeSet;
-import io.realm.OrderedRealmCollectionChangeListener;
-import io.realm.RealmResults;
 
 /**
  * Created by 전지훈 on 2017-11-23.
@@ -69,7 +62,7 @@ public class UpdateGroupAdapter extends BaseAdapter{
             convertView = layoutInflater.inflate(R.layout.item_by_group, null);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtName);
             viewHolder.txtPhoneNumber = (TextView) convertView.findViewById(R.id.txtPhoneNumber);
-            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.callCheckBox);
             viewHolder.txtGroup = (TextView) convertView.findViewById(R.id.txtGroup);
             //viewHolder.txtGroup = (TextView) convertView.findViewById(R.id.txtGroup);
 

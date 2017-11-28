@@ -22,6 +22,7 @@ import com.example.tenmanager_1.RecentCallUtil.CallHistoryAdapter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -33,13 +34,10 @@ public class RecentCallFragment extends Fragment {
     CallHistoryLoader ChLoader;
     HashMap<CallHistoryData, Boolean> mapSelected;
     //CallHistoryData data;
+    List<CallHistoryData> datas;
 
     public RecentCallFragment() {
-        mapSelected = new HashMap<>();
 
-/*        for(int i=0; i<ChLoader.getContacts().size(); i++){
-            mapSelected.put(data, false);
-        }*/
     }
 
 
@@ -54,9 +52,17 @@ public class RecentCallFragment extends Fragment {
     }
 
     private void init() {
+        mapSelected = new HashMap<>();
+
+        ChLoader = new CallHistoryLoader(getContext());
+        datas = ChLoader.getContacts();
+
+        for(CallHistoryData data : datas){
+            mapSelected.put(data, false);
+        }
+
         recentCallListView = (ListView) view.findViewById(R.id.recentCalListView);
-        ChLoader = new CallHistoryLoader(getActivity());
-        adapter = new CallHistoryAdapter((ArrayList<CallHistoryData>) ChLoader.getContacts(), getContext(), mapSelected);
+        adapter = new CallHistoryAdapter(datas, getContext(), mapSelected);
     }
 
     private void setListView() {

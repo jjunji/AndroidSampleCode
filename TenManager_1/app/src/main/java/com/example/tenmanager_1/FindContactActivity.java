@@ -25,10 +25,13 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     private  int currentFragment = 0;
 
     TextView btnContact, btnRecentCall, btnGroup;
-    ArrayList<ContactVO> checkedContactResult;
-    ContactFragment contactFragment = new ContactFragment();
-    RecentCallFragment recentCallFragment = new RecentCallFragment();
-    GroupFragment groupFragment = new GroupFragment();
+    //ArrayList<ContactVO> checkedContactResult;  //
+
+    ArrayList<ContactVO> checkedList;
+
+    ContactFragment contactFragment = new ContactFragment();  // 연락처탭
+    RecentCallFragment recentCallFragment = new RecentCallFragment(); // 최근통화목록탭
+    GroupFragment groupFragment = new GroupFragment(); // 그룹탭
 
     EditText editTxtSearch;
 
@@ -38,6 +41,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         setContentView(R.layout.activity_find_contact);
         init();
         setButtonClickListener();
+        setTextChangeListener();
         callFragment(FRAGMENT_CONTACT);
     }
 
@@ -46,6 +50,11 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         btnRecentCall = (TextView) findViewById(R.id.btnRecentCall);
         btnGroup = (TextView) findViewById(R.id.btnGroup);
         editTxtSearch = (EditText) findViewById(R.id.editTxtSearch);
+
+    }
+
+
+    public void setTextChangeListener(){
         editTxtSearch.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -67,7 +76,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
                 }
             }
         });
-        checkedContactResult = new ArrayList<>();
+        //checkedContactResult = new ArrayList<>();
         doSearch();
     }
 
@@ -156,6 +165,5 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     /*public void search(String charText){
         contactFragment.doListClear();
     }*/
-
 
 }

@@ -11,7 +11,7 @@ import android.widget.TextView;
 public class ContactViewHolder {
     public TextView txtName;
     public TextView txtPhoneNumber;
-    public CheckBox checkBox;
+    public CheckBox contactCheckBox;
     //public Button btnCall;
     //public Button btnSns;
 }

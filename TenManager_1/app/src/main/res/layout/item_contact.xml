@@ -33,7 +33,7 @@
 
     <CheckBox
         android:layout_gravity="center_vertical"
-        android:id="@+id/checkBox"
+        android:id="@+id/contactCheckBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

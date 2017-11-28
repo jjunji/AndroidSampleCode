@@ -6,8 +6,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
+
 import com.example.tenmanager_1.ContactUtil.ContactAdapter;
 import com.example.tenmanager_1.ContactUtil.IndexableListView;
+import com.example.tenmanager_1.Data.CallHistoryData;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.R;
@@ -37,16 +40,16 @@ public class ContactFragment extends Fragment {
         realm = Realm.getDefaultInstance();
 
         mapSelected = new HashMap<>();
-        datas2 = realm.where(ContactVO.class).findAll();
+        datas2 = realm.where(ContactVO.class).findAll();  // 모든 연락처 정보를 가진 데이터
 
-        datas = new ArrayList<>();
+        datas = new ArrayList<>(); // 모든 연락처 정보를 가진 데이터 datas2를 datas에 복사
 
         for(ContactVO contactVO : datas2){
             datas.add(contactVO);
         }
 
         for(ContactVO contactVO : datas){
-            mapSelected.put(contactVO, false);  // 연락처(datas) 길이만큼 contactVo(키) 를 false(값)로 설정.
+            mapSelected.put(contactVO, false);  // 연락처(datas) 길이만큼 contactVO(키) 를 false(값)로 설정.
         }
     }
 
@@ -62,9 +65,32 @@ public class ContactFragment extends Fragment {
     }
 
     private void init() {
+/*        realm = Realm.getDefaultInstance();
+
+        mapSelected = new HashMap<>();
+        datas2 = realm.where(ContactVO.class).findAll();  // 모든 연락처 정보를 가진 데이터
+
+        datas = new ArrayList<>(); // 모든 연락처 정보를 가진 데이터 datas2를 datas에 복사
+
+        for(ContactVO contactVO : datas2){
+            datas.add(contactVO);
+        }
+
+        for(ContactVO contactVO : datas){
+            mapSelected.put(contactVO, false);  // 연락처(datas) 길이만큼 contactVO(키) 를 false(값)로 설정.
+        }*/
+
         customerListView = (IndexableListView) view.findViewById(R.id.customerListView);
         //customerListView2.requestDisallowInterceptTouchEvent(true);
         adapter = new ContactAdapter(getContext(), datas, mapSelected);
+        adapter.setContactCheckListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                int position = (int)buttonView.getTag();
+                ContactVO contactVO = adapter.getItem(position);
+                mapSelected.put(contactVO, true);
+            }
+        });
         //view.findViewById(R.id.btnConfirm).setOnClickListener(this);
     }
 

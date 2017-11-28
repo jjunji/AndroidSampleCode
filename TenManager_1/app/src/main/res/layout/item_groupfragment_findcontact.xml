@@ -27,7 +27,7 @@
             android:textSize="15sp" />
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/callCheckBox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"

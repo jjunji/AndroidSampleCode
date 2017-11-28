@@ -9,7 +9,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
-import com.example.tenmanager_1.CustomerGroup.Util.UpdateGroupHolder;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
 
@@ -62,7 +61,7 @@ public class GroupFragmentAdapter extends BaseAdapter{
             convertView = layoutInflater.inflate(R.layout.item_groupfragment_findcontact, null);
             viewHolder.txtName = (TextView) convertView.findViewById(R.id.txtName);
             viewHolder.txtPhoneNumber = (TextView) convertView.findViewById(R.id.txtPhoneNumber);
-            viewHolder.checkBox = (CheckBox) convertView.findViewById(R.id.checkBox);
+            viewHolder.groupCheckBox = (CheckBox) convertView.findViewById(R.id.callCheckBox);
 
             convertView.setTag(viewHolder);
         } else {
@@ -74,13 +73,13 @@ public class GroupFragmentAdapter extends BaseAdapter{
 
         viewHolder.txtName.setText(contactVO.getName());
         viewHolder.txtPhoneNumber.setText(contactVO.getCellPhone());
-        viewHolder.checkBox.setTag(position);
+        viewHolder.groupCheckBox.setTag(position);
 
         Boolean isCheck = mapSelected.get(contactVO);  // 처음에는 다 false 겠지
         //Log.i("test", "isCheck :" + isCheck);
 
-        viewHolder.checkBox.setChecked(isCheck);
-        viewHolder.checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        viewHolder.groupCheckBox.setChecked(isCheck);
+        viewHolder.groupCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int index = (int) buttonView.getTag();
