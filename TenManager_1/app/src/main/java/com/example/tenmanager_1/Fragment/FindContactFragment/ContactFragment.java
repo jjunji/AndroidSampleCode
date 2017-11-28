@@ -25,7 +25,6 @@ import io.realm.RealmResults;
  * A simple {@link Fragment} subclass.
  */
 public class ContactFragment extends Fragment {
-    private final static String FRAGMENT_TAG = "CONTACT_FRAGMENT_TAG";
     Realm realm;
     View view;
     IndexableListView customerListView;
@@ -98,7 +97,7 @@ public class ContactFragment extends Fragment {
 
     public ArrayList<ContactVO> getCheckedContactList(){
         list = adapter.getKey(mapSelected, true);
-        Log.i("ContactFragment", "Test ==========" + list.size());
+        Log.i("ContactFragment", "list.size ====================" + list.size());
         return list;
     }
 

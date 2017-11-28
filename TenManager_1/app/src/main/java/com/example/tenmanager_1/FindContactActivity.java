@@ -17,6 +17,7 @@ import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Fragment.FindContactFragment.ContactFragment;
 import com.example.tenmanager_1.Fragment.FindContactFragment.GroupFragment;
 import com.example.tenmanager_1.Fragment.FindContactFragment.RecentCallFragment;
+import com.example.tenmanager_1.Fragment.FindContactFragment.SelectedDataModel;
 
 import java.util.ArrayList;
 
@@ -108,8 +109,8 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
                 callFragment(FRAGMENT_GROUP);
                 break;
             case R.id.btnComplete :
-                //selectedContact();
-                selectedRecentCall();
+                selectedContact();
+                //selectedRecentCall();
                 break;
         }
     }
@@ -139,7 +140,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public void selectedContact(){
+    public void selectedContact2(){
         ArrayList arIndex = new ArrayList();
         ContactFragment contactFragment = (ContactFragment) getSupportFragmentManager().findFragmentByTag("CONTACT_FRAGMENT");
         ArrayList<ContactVO> list = contactFragment.getCheckedContactList();
@@ -150,6 +151,24 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         }
         Intent intent = getIntent();  // Sms프래그먼트로 부터 받은 intent
         intent.putExtra("listObject", arIndex);
+        setResult(RESULT_OK, intent);
+
+        finish();
+    }
+
+    public void selectedContact(){
+        ArrayList<SelectedDataModel> selectedList = new ArrayList<>();
+        ContactFragment contactFragment = (ContactFragment) getSupportFragmentManager().findFragmentByTag("CONTACT_FRAGMENT");
+        ArrayList<ContactVO> list = contactFragment.getCheckedContactList();
+        SelectedDataModel model = new SelectedDataModel();
+        for(int i=0; i<list.size(); i++){
+            model.setName(list.get(i).getName());
+            model.setPhoneNumber(list.get(i).getCellPhone());
+            selectedList.add(model);
+        }
+
+        Intent intent = getIntent();
+        intent.putExtra("listObject", selectedList);
         setResult(RESULT_OK, intent);
 
         finish();

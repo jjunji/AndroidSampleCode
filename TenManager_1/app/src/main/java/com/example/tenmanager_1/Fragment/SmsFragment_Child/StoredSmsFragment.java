@@ -21,6 +21,7 @@ import com.example.tenmanager_1.Data.ContactVO;
 
 import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.FindContactActivity;
+import com.example.tenmanager_1.Fragment.FindContactFragment.SelectedDataModel;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.StoredSmsUtil.StoredSmsAdapter;
 
@@ -50,6 +51,8 @@ public class StoredSmsFragment extends Fragment {
     ListView storedItemListView;
     StoredSmsAdapter adapter;
     ArrayList<String> contactResultList;
+
+    ArrayList<SelectedDataModel> ar;
 
     private final int REQUESTCODE = 1;
 
@@ -107,7 +110,7 @@ public class StoredSmsFragment extends Fragment {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (contactResultList.size() < 1) {
+                if (ar.size() < 1) {
                     Toast.makeText(getContext(), "연락처를 추가하세요~", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
@@ -161,26 +164,29 @@ public class StoredSmsFragment extends Fragment {
         if (resultCode == RESULT_OK) {
 
             if (requestCode == REQUESTCODE) {
-               // ArrayList<Integer> ar = data.getIntegerArrayListExtra("listObject"); // 체크박스 누른 포지션
-                ArrayList<Long> ar = (ArrayList<Long>) data.getSerializableExtra("listObject");
-                //ArrayList<Long> ar = data.getParcelableArrayListExtra("listObject");
-//                Integer arIds[] = new Integer[];
+                //ArrayList<Long> ar = (ArrayList<Long>) data.getSerializableExtra("listObject");
 
-                Long arList[] = new Long[ar.size()]; // arList 배열 선언
+                ar = (ArrayList<SelectedDataModel>) data.getSerializableExtra("listObject");
 
-                for (int i = 0; i < arList.length; i++) {
+                //Long arList[] = new Long[ar.size()]; // arList 배열 선언
+
+/*                for (int i = 0; i < arList.length; i++) {
                     arList[i] = ar.get(i); // arList 에는 체크박스 누른 포지션이 담긴다.
                 }
-                //Realm realm = Realm.getDefaultInstance();
                 contactResults = realm.where(ContactVO.class).in("id", arList).findAll();
 
-                Log.i("test", "results==============" + contactResults);
-
+                Log.i("test", "results==============" + contactResults);*/
+/*
                 String resultName = "";
                 for (int i = 0; i < arList.length; i++) {
                     //resultName += results.get(i).getName();
                     resultName = resultName + (contactResults.get(i).getName() + "  /");
                     contactResultList.add(contactResults.get(i).getCellPhone());
+                }
+                txtResultName.setText(resultName);*/
+                String resultName = "";
+                for(int i=0; i<ar.size(); i++){
+                    resultName = resultName + (ar.get(i).getName() + "  /");
                 }
                 txtResultName.setText(resultName);
             }
@@ -188,12 +194,24 @@ public class StoredSmsFragment extends Fragment {
     }
 
     // 즉시 메시지 전송 (다중 선택 안됨 -> 반복문으로 처리)
-    private void sendSMS() {
+/*    private void sendSMS() {
         ProgressDialog dialog = ProgressDialog.show(getActivity(), "타이틀", "문자 전송중입니다.", true);
         SmsManager sms = SmsManager.getDefault();
         for (int i = 0; i < contactResultList.size(); i++) {
             //address = address + contactResultList.get(i) + ";";
             sms.sendTextMessage(contactResultList.get(i), null, txtContent.getText().toString(), null, null);
+        }
+        dialog.dismiss();
+        Toast.makeText(getActivity(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
+        //PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, SmsSender.class), 0);
+    }*/
+
+    private void sendSMS() {
+        ProgressDialog dialog = ProgressDialog.show(getActivity(), "타이틀", "문자 전송중입니다.", true);
+        SmsManager sms = SmsManager.getDefault();
+        for (int i = 0; i < ar.size(); i++) {
+            //address = address + contactResultList.get(i) + ";";
+            sms.sendTextMessage(ar.get(i).getPhoneNumber(), null, txtContent.getText().toString(), null, null);
         }
         dialog.dismiss();
         Toast.makeText(getActivity(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
