@@ -161,14 +161,17 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
     }
 
     public void getAllSelectedList(){
-        ArrayList<ContactVO> list = contactFragment.getCheckedContactList();
-        for(int i= 0; i<list.size(); i++){
+        ArrayList<ContactVO> contactlist = contactFragment.getCheckedContactList();
+        Log.i(TAG, "contactlist ========================== " + contactlist);
+        for(int i= 0; i<contactlist.size(); i++){
             SelectedDataModel model = new SelectedDataModel();
-            model.setName(list.get(i).getName());
-            model.setPhoneNumber(list.get(i).getCellPhone());
+            model.setName(contactlist.get(i).getName());
+            model.setPhoneNumber(contactlist.get(i).getCellPhone());
             selectedList.add(model);
         }
+
         ArrayList<CallHistoryData> callList = recentCallFragment.getCheckedCallHistoryList();
+        Log.i(TAG, "callList ========================== " + contactlist);
         for(int i= 0; i<callList.size(); i++){
             SelectedDataModel model = new SelectedDataModel();
             if(callList.get(i).getName() != null){
@@ -176,11 +179,12 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
             }else{
                 model.setName(callList.get(i).getTel());
             }
-
             model.setPhoneNumber(callList.get(i).getTel());
             selectedList.add(model);
         }
+
         ArrayList<ContactVO> groupList = groupFragment.getCheckedGroupList();
+        Log.i(TAG, "grouplist ========================== " + contactlist);
         for(int i=0; i<groupList.size(); i++){
             SelectedDataModel model = new SelectedDataModel();
             model.setName(groupList.get(i).getName());
@@ -189,12 +193,13 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         }
 
         Intent intent = getIntent();
+        
         intent.putExtra("listObject", selectedList);
         setResult(RESULT_OK, intent);
 
-        for(int i=0; i<selectedList.size(); i++){
+/*        for(int i=0; i<selectedList.size(); i++){
             Log.i(TAG, "All List ================== " + selectedList.get(i).getName());
-        }
+        }*/
 
         finish();
     }
@@ -249,7 +254,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
             }
         }
         txtSelectedName.setText("("+result+")");
-        txtSelectedNumber.setText(resultName.size()+""); // +""공백문자열 넣어서 String으로 캐스팅하지 않으면 에러 발생. 이유 알기..// TODO: 2017-11-28  
+        txtSelectedNumber.setText(resultName.size()+""); // +"" 공백문자열 넣어서 String으로 캐스팅하지 않으면 에러 발생. 이유 알기..// TODO: 2017-11-28
     }
 
     @Override

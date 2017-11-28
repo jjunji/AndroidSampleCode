@@ -164,7 +164,12 @@ public class StoredSmsFragment extends Fragment {
 
                 String resultName = "";
                 for(int i=0; i<ar.size(); i++){
-                    resultName = resultName + (ar.get(i).getName() + "  /");
+                    if(i<ar.size()-1){
+                        resultName = resultName + (ar.get(i).getName() + ", ");
+                    }else{
+                        resultName = resultName + (ar.get(i).getName());
+                    }
+
                 }
                 txtResultName.setText(resultName);
             }

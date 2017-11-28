@@ -103,6 +103,7 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
         return convertView;
     }
 
+    //
     public static ArrayList<ContactVO> getKey(HashMap<ContactVO, Boolean> map, boolean value){
         ArrayList<ContactVO> list = new ArrayList<>();
 

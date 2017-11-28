@@ -88,12 +88,7 @@ public class ContactFragment extends Fragment {
         return list;
     }
 
-
-
-
-
     public void search(String charText) {
-
         // 문자 입력시마다 리스트를 지우고 새로 뿌려준다.
         //list.clear();
         datas.clear();
