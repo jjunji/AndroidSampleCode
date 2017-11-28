@@ -25,6 +25,7 @@ import io.realm.RealmResults;
  * A simple {@link Fragment} subclass.
  */
 public class ContactFragment extends Fragment {
+    private final static String FRAGMENT_TAG = "CONTACT_FRAGMENT_TAG";
     Realm realm;
     View view;
     IndexableListView customerListView;
@@ -34,7 +35,12 @@ public class ContactFragment extends Fragment {
     private HashMap<ContactVO, Boolean> mapSelected;
     ArrayList<ContactVO> list;
 
-    // TODO: 2017-11-09 프래그먼트 생성자는 항상 비워두는 것이 아닌가? ->
+    // TODO: 2017-11-09 프래그먼트 생성자는 항상 비워두는 것이 아닌가?
+    /*
+   -> 부모액티비티에서  ContactFragment contactFragment = new ContactFragment();
+      부모 액티비티 생성시 바로 프래그먼트를 메모리에 올려놓았기 때문에 프래그먼트 생성자는 한번만 호출된다. (부모액티비티가 죽기전까지)
+      프래그먼트 생성시 어떤 초기화 작업을 하고 싶다면 용도에 따라 이렇게 사용하는 것도 가능.
+     */
     public ContactFragment() {
         // Required empty public constructor
         realm = Realm.getDefaultInstance();
@@ -65,32 +71,9 @@ public class ContactFragment extends Fragment {
     }
 
     private void init() {
-/*        realm = Realm.getDefaultInstance();
-
-        mapSelected = new HashMap<>();
-        datas2 = realm.where(ContactVO.class).findAll();  // 모든 연락처 정보를 가진 데이터
-
-        datas = new ArrayList<>(); // 모든 연락처 정보를 가진 데이터 datas2를 datas에 복사
-
-        for(ContactVO contactVO : datas2){
-            datas.add(contactVO);
-        }
-
-        for(ContactVO contactVO : datas){
-            mapSelected.put(contactVO, false);  // 연락처(datas) 길이만큼 contactVO(키) 를 false(값)로 설정.
-        }*/
-
         customerListView = (IndexableListView) view.findViewById(R.id.customerListView);
         //customerListView2.requestDisallowInterceptTouchEvent(true);
         adapter = new ContactAdapter(getContext(), datas, mapSelected);
-        adapter.setContactCheckListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int position = (int)buttonView.getTag();
-                ContactVO contactVO = adapter.getItem(position);
-                mapSelected.put(contactVO, true);
-            }
-        });
         //view.findViewById(R.id.btnConfirm).setOnClickListener(this);
     }
 
@@ -112,6 +95,12 @@ public class ContactFragment extends Fragment {
             activity.selectedContact(list);
         }
     }*/
+
+    public ArrayList<ContactVO> getCheckedContactList(){
+        list = adapter.getKey(mapSelected, true);
+        Log.i("ContactFragment", "Test ==========" + list.size());
+        return list;
+    }
 
 /*    public void doListClear(){
         datas.clear();

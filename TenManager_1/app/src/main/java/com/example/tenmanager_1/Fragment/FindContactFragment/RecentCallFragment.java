@@ -17,6 +17,7 @@ import com.example.tenmanager_1.Data.CallHistoryData;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.Loader.CallHistoryLoader;
+import com.example.tenmanager_1.MyApplication;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.RecentCallUtil.CallHistoryAdapter;
 
@@ -35,11 +36,18 @@ public class RecentCallFragment extends Fragment {
     HashMap<CallHistoryData, Boolean> mapSelected;
     //CallHistoryData data;
     List<CallHistoryData> datas;
+    ArrayList<CallHistoryData> list;
 
     public RecentCallFragment() {
+        mapSelected = new HashMap<>();
 
+        ChLoader = new CallHistoryLoader(MyApplication.getInstance());  // getContext 로는 ContentResolver 에 접근하지 못했다..
+        datas = ChLoader.getContacts();
+
+        for(CallHistoryData data : datas){
+            mapSelected.put(data, false);
+        }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -52,15 +60,6 @@ public class RecentCallFragment extends Fragment {
     }
 
     private void init() {
-        mapSelected = new HashMap<>();
-
-        ChLoader = new CallHistoryLoader(getContext());
-        datas = ChLoader.getContacts();
-
-        for(CallHistoryData data : datas){
-            mapSelected.put(data, false);
-        }
-
         recentCallListView = (ListView) view.findViewById(R.id.recentCalListView);
         adapter = new CallHistoryAdapter(datas, getContext(), mapSelected);
     }
@@ -68,6 +67,11 @@ public class RecentCallFragment extends Fragment {
     private void setListView() {
         recentCallListView.setAdapter(adapter);
         recentCallListView.setFastScrollEnabled(true);
+    }
+
+    public ArrayList<CallHistoryData> getCheckedCallHistoryList(){
+        list = adapter.getKey(mapSelected, true);
+        return list;
     }
 
 }

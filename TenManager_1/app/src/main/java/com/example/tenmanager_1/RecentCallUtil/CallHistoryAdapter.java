@@ -1,6 +1,7 @@
 package com.example.tenmanager_1.RecentCallUtil;
 
 import android.content.Context;
+import android.telecom.Call;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.CallHistoryData;
+import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
 
 import java.util.ArrayList;
@@ -28,9 +30,6 @@ public class CallHistoryAdapter extends BaseAdapter{
         layoutInflater = LayoutInflater.from(context);
         this.datas = datas;
         this.context = context;
-/*        for(CallHistoryData data : datas){
-            mapSelected.put(data, false);  // 연락처(datas) 길이만큼 contactVo(키) 를 false(값)로 설정.
-        }*/
         this.mapSelected = mapSelected;
     }
 
@@ -92,5 +91,16 @@ public class CallHistoryAdapter extends BaseAdapter{
         });
 
         return convertView;
+    }
+
+    public static ArrayList<CallHistoryData> getKey(HashMap<CallHistoryData, Boolean> map, boolean value){
+        ArrayList<CallHistoryData> list = new ArrayList<>();
+
+        for(CallHistoryData li : map.keySet()){
+            if(map.get(li).equals(value)){
+                list.add(li);
+            }
+        }
+        return list;
     }
 }

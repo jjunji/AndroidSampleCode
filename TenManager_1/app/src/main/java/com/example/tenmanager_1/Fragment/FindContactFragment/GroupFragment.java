@@ -40,6 +40,20 @@ public class GroupFragment extends Fragment {
 
     public GroupFragment() {
         // Required empty public constructor
+        datas = new ArrayList<>();
+        realm = Realm.getDefaultInstance();
+        results = realm.where(ContactVO.class).findAll();
+        mapSelected = new HashMap<>();
+        contactDataSource = new ContactRepository();
+        arCategory = new ArrayList<>();
+
+        for(ContactVO contactVO : results){
+            datas.add(contactVO);
+        }
+
+        for(ContactVO contactVO : datas){
+            mapSelected.put(contactVO, false);
+        }
     }
 
     @Override
@@ -48,11 +62,16 @@ public class GroupFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_group, container, false);
 
         initView();
-        init();
+        reloadGroupList(0);
 
         createMenu(contactDataSource.getContactGroupList());
 
         return view;
+    }
+
+    private void initView() {
+        groupListView = (ListView) view.findViewById(R.id.groupListView);
+        llCategory = (LinearLayout) view.findViewById(R.id.llCategory);
     }
 
     private void createMenu(RealmResults<ContactGroupVO> arGroup) {
@@ -91,42 +110,11 @@ public class GroupFragment extends Fragment {
         Log.i("test", "selected group :"+contactGroupVO.toString());
 
         matchingContactByGroup(contactGroupVO);
-
     }
 
     private void matchingContactByGroup(ContactGroupVO cgvo){
         RealmResults<ContactVO> arContact = realm.where(ContactVO.class).equalTo("group.id", cgvo.getId()).findAll();
         adapter = new GroupFragmentAdapter(getContext(), arContact, mapSelected);
-        groupListView.setAdapter(adapter);
-    }
-
-    private void initView() {
-        groupListView = (ListView) view.findViewById(R.id.groupListView);
-        llCategory = (LinearLayout) view.findViewById(R.id.llCategory);
-    }
-
-    private void init(){
-        datas = new ArrayList<>();
-        realm = Realm.getDefaultInstance();
-        results = realm.where(ContactVO.class).findAll();
-        mapSelected = new HashMap<>();
-        contactDataSource = new ContactRepository();
-        arCategory = new ArrayList<>();
-
-        for(ContactVO contactVO : results){
-            datas.add(contactVO);
-        }
-
-        for(ContactVO contactVO : datas){
-            mapSelected.put(contactVO, false);
-        }
-
-        reloadGroupList(0);
-
-        //adapter = new GroupFragmentAdapter(getActivity(), datas, mapSelected);
-    }
-
-    private void setListView(){
         groupListView.setAdapter(adapter);
     }
 

@@ -28,16 +28,6 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
     private HashMap<ContactVO, Boolean> mapSelected;
 
-    private CheckBox.OnCheckedChangeListener contactCheckListener;
-
-    public CheckBox.OnCheckedChangeListener getContactCheckListener() {
-        return contactCheckListener;
-    }
-
-    public void setContactCheckListener(CheckBox.OnCheckedChangeListener contactCheckListener) {
-        this.contactCheckListener = contactCheckListener;
-    }
-
     public ContactAdapter(Context context, ArrayList<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
         this.datas = datas;
         layoutInflater = LayoutInflater.from(context);
@@ -46,7 +36,6 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
         // HashMap 초기화 -> 처음에 다 false를 주고 시작.
         this.mapSelected = mapSelected;
     }
-
 
     @Override
     public int getCount() {
@@ -65,7 +54,6 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-//        final Context context = parent.getContext();
         final ContactViewHolder viewHolder;
 
         if (convertView == null) {
@@ -83,19 +71,12 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
 
         ContactVO contactVO = getItem(position);
         //Log.i("test", "contactVO : " + contactVO.toString());
-
         viewHolder.txtName.setText(contactVO.getName());
         viewHolder.txtPhoneNumber.setText(contactVO.getCellPhone());
         viewHolder.contactCheckBox.setTag(position);
 
-        if(contactCheckListener != null){
-            viewHolder.contactCheckBox.setOnCheckedChangeListener(contactCheckListener);
-        }
-
         Boolean isCheck = mapSelected.get(contactVO);  // 처음에는 다 false 겠지
-        //Log.i("test", "isCheck :" + isCheck);
 
-        // TODO: 2017-11-27 asdf 
         viewHolder.contactCheckBox.setChecked(isCheck);
         viewHolder.contactCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
