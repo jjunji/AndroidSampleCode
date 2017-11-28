@@ -61,7 +61,8 @@ public class RecentCallFragment extends Fragment {
 
     private void init() {
         recentCallListView = (ListView) view.findViewById(R.id.recentCalListView);
-        adapter = new CallHistoryAdapter(datas, getContext(), mapSelected);
+        FindContactActivity activity = (FindContactActivity) getActivity();
+        adapter = new CallHistoryAdapter(datas, getContext(), mapSelected, activity);
     }
 
     private void setListView() {

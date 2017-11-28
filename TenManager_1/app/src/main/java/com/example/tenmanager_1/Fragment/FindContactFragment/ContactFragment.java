@@ -1,5 +1,6 @@
 package com.example.tenmanager_1.Fragment.FindContactFragment;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -72,8 +73,8 @@ public class ContactFragment extends Fragment {
     private void init() {
         customerListView = (IndexableListView) view.findViewById(R.id.customerListView);
         //customerListView2.requestDisallowInterceptTouchEvent(true);
-        adapter = new ContactAdapter(getContext(), datas, mapSelected);
-        //view.findViewById(R.id.btnConfirm).setOnClickListener(this);
+        FindContactActivity activity = (FindContactActivity) getActivity();
+        adapter = new ContactAdapter(getContext(), datas, mapSelected, activity);
     }
 
     private void setListView(){
@@ -81,29 +82,15 @@ public class ContactFragment extends Fragment {
         customerListView.setFastScrollEnabled(true);
     }
 
-/*    @Override
-    public void onClick(View v) {
-        if(v.getId() == R.id.btnConfirm){
-            //선택 된 리스트 가져오기
-            // HashMap 또는 ArrayList
-            list = adapter.getKey(mapSelected, true);
-            //Log.i("ContactFragment", "Test ==========" + adapter.getKey(mapSelected, true));
-            Log.i("ContactFragment", "Test ==========" + list.size());
-
-            FindContactActivity activity = (FindContactActivity) getActivity();
-            activity.selectedContact(list);
-        }
-    }*/
-
     public ArrayList<ContactVO> getCheckedContactList(){
         list = adapter.getKey(mapSelected, true);
-        Log.i("ContactFragment", "list.size ====================" + list.size());
+        //Log.i("ContactFragment", "list.size ====================" + list.size());
         return list;
     }
 
-/*    public void doListClear(){
-        datas.clear();
-    }*/
+
+
+
 
     public void search(String charText) {
 

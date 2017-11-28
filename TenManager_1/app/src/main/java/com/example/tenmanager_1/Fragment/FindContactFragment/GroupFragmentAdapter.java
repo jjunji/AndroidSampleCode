@@ -22,18 +22,19 @@ import io.realm.RealmResults;
  */
 
 public class GroupFragmentAdapter extends BaseAdapter{
+    checkBoxChangeListener cl;
     Context context;
     RealmResults<ContactVO> datas;
     LayoutInflater layoutInflater;
     private HashMap<ContactVO, Boolean> mapSelected;
 
-    public GroupFragmentAdapter(Context context, RealmResults<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
+    public GroupFragmentAdapter(Context context, RealmResults<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected, checkBoxChangeListener cl) {
         this.datas = datas;
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
-
         // HashMap 초기화 -> 처음에 다 false를 주고 시작.
         this.mapSelected = mapSelected;
+        this.cl = cl;
     }
 
     @Override
@@ -87,8 +88,12 @@ public class GroupFragmentAdapter extends BaseAdapter{
                 //Log.i("test", "change contact :" + contact.toString());
                 if (isChecked) {
                     mapSelected.put(contact, true);
+                    String name = contact.getName();
+                    cl.callbackChecked(name);
                 } else {
                     mapSelected.put(contact, false);
+                    String name = contact.getName();
+                    cl.callbackUnChecked(name);
                 }
             }
         });

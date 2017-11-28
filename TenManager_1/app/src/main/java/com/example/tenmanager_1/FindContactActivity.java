@@ -18,48 +18,71 @@ import com.example.tenmanager_1.Fragment.FindContactFragment.ContactFragment;
 import com.example.tenmanager_1.Fragment.FindContactFragment.GroupFragment;
 import com.example.tenmanager_1.Fragment.FindContactFragment.RecentCallFragment;
 import com.example.tenmanager_1.Fragment.FindContactFragment.SelectedDataModel;
+import com.example.tenmanager_1.Fragment.FindContactFragment.checkBoxChangeListener;
 
 import java.util.ArrayList;
 
-public class FindContactActivity extends AppCompatActivity implements View.OnClickListener{
+public class FindContactActivity extends AppCompatActivity implements View.OnClickListener, checkBoxChangeListener {
     private final String TAG = FindContactActivity.class.getSimpleName();
     private final int FRAGMENT_CONTACT = 1;
     private final int FRAGMENT_CALLHISTORY = 2;
     private final int FRAGMENT_GROUP = 3;
 
-    //private final static String FRAGMENT_TAG = "FRAGMENTB_TAG";
-
     private  int currentFragment = 0;
 
     TextView btnContact, btnRecentCall, btnGroup;
-    //ArrayList<ContactVO> checkedContactResult;
-
-    ArrayList<ContactVO> checkedList;
 
     ContactFragment contactFragment = new ContactFragment();  // 연락처탭
     RecentCallFragment recentCallFragment = new RecentCallFragment(); // 최근통화목록탭
     GroupFragment groupFragment = new GroupFragment(); // 그룹탭
 
+    GroupFragment groupFragmentManager;
+    ContactFragment contactFragmentManager;
+    RecentCallFragment recentCallFragmentManager;
+
     EditText editTxtSearch;
     Button btnComplete;
+    TextView txtSelectedNumber;
+    TextView txtSelectedName;
+
+    ArrayList<SelectedDataModel> selectedList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find_contact);
-        init();
+        initView();
         setButtonClickListener();
         setTextChangeListener();
+        setFragmentManager();
         callFragment(FRAGMENT_CONTACT);
     }
 
-    private void init() {
+    private void initView() {
         btnContact = (TextView) findViewById(R.id.btnContact);
         btnRecentCall = (TextView) findViewById(R.id.btnRecentCall);
         btnGroup = (TextView) findViewById(R.id.btnGroup);
         editTxtSearch = (EditText) findViewById(R.id.editTxtSearch);
         btnComplete = (Button) findViewById(R.id.btnComplete);
+        txtSelectedName = (TextView) findViewById(R.id.txtSelectedName);
+        txtSelectedNumber = (TextView) findViewById(R.id.txtSelectedNumber);
     }
+
+    private void setFragmentManager(){
+        contactFragmentManager = (ContactFragment) getSupportFragmentManager().findFragmentByTag("CONTACT_FRAGMENT");
+        recentCallFragmentManager = (RecentCallFragment) getSupportFragmentManager().findFragmentByTag("RECENT_CALL_FRAGMENT");
+        groupFragmentManager = (GroupFragment) getSupportFragmentManager().findFragmentByTag("GROUP_FRAGMENT");
+        selectedList = new ArrayList<>();
+    }
+
+/*    public void setSelectedText(){
+        adapter.setOnMyItemCheckedChanged(new ContactAdapter.OnMyItemCheckedChanged() {
+            @Override
+            public void onItemCheckedChanged(ContactVO data, boolean isChecked) {
+                txtSelectedName.setText(data.getName());
+            }
+        });
+    }*/
 
     public void setTextChangeListener(){
         editTxtSearch.addTextChangedListener(new TextWatcher() {
@@ -109,13 +132,10 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
                 callFragment(FRAGMENT_GROUP);
                 break;
             case R.id.btnComplete :
-                selectedContact();
-                //selectedRecentCall();
+                getAllSelectedList();
                 break;
         }
     }
-
-
 
     public void callFragment(int fragmentNo) {
         currentFragment = fragmentNo;
@@ -140,30 +160,31 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         }
     }
 
-    public void selectedContact2(){
-        ArrayList arIndex = new ArrayList();
-        ContactFragment contactFragment = (ContactFragment) getSupportFragmentManager().findFragmentByTag("CONTACT_FRAGMENT");
+    public void getAllSelectedList(){
         ArrayList<ContactVO> list = contactFragment.getCheckedContactList();
-        Log.i(TAG, "list================= " + list.toString());
-        for(ContactVO contactVO : list){
-            arIndex.add(new Long(contactVO.getId()));
-//            Log.i("test", "selected contact : " + contactVO.toString());   // 체크한 contactVO 담겨있음.
-        }
-        Intent intent = getIntent();  // Sms프래그먼트로 부터 받은 intent
-        intent.putExtra("listObject", arIndex);
-        setResult(RESULT_OK, intent);
-
-        finish();
-    }
-
-    public void selectedContact(){
-        ArrayList<SelectedDataModel> selectedList = new ArrayList<>();
-        ContactFragment contactFragment = (ContactFragment) getSupportFragmentManager().findFragmentByTag("CONTACT_FRAGMENT");
-        ArrayList<ContactVO> list = contactFragment.getCheckedContactList();
-        SelectedDataModel model = new SelectedDataModel();
-        for(int i=0; i<list.size(); i++){
+        for(int i= 0; i<list.size(); i++){
+            SelectedDataModel model = new SelectedDataModel();
             model.setName(list.get(i).getName());
             model.setPhoneNumber(list.get(i).getCellPhone());
+            selectedList.add(model);
+        }
+        ArrayList<CallHistoryData> callList = recentCallFragment.getCheckedCallHistoryList();
+        for(int i= 0; i<callList.size(); i++){
+            SelectedDataModel model = new SelectedDataModel();
+            if(callList.get(i).getName() != null){
+                model.setName(callList.get(i).getName());
+            }else{
+                model.setName(callList.get(i).getTel());
+            }
+
+            model.setPhoneNumber(callList.get(i).getTel());
+            selectedList.add(model);
+        }
+        ArrayList<ContactVO> groupList = groupFragment.getCheckedGroupList();
+        for(int i=0; i<groupList.size(); i++){
+            SelectedDataModel model = new SelectedDataModel();
+            model.setName(groupList.get(i).getName());
+            model.setPhoneNumber(groupList.get(i).getCellPhone());
             selectedList.add(model);
         }
 
@@ -171,27 +192,12 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         intent.putExtra("listObject", selectedList);
         setResult(RESULT_OK, intent);
 
-        finish();
-    }
-
-    public void selectedRecentCall(){
-        ArrayList arIndex = new ArrayList();
-        RecentCallFragment recentCallFragment = (RecentCallFragment) getSupportFragmentManager().findFragmentByTag("RECENT_CALL_FRAGMENT");
-        ArrayList<CallHistoryData> list = recentCallFragment.getCheckedCallHistoryList();
-        Log.i(TAG, "call list ============= " + list.toString());
-        for(CallHistoryData callHistoryData : list){
-            arIndex.add(new String(callHistoryData.getTel()));
+        for(int i=0; i<selectedList.size(); i++){
+            Log.i(TAG, "All List ================== " + selectedList.get(i).getName());
         }
 
-        Intent intent = getIntent();
-        intent.putExtra("listObject", arIndex);
-        setResult(RESULT_OK, intent);
-
         finish();
-
     }
-
-
 
     public void doSearch(){
         editTxtSearch.addTextChangedListener(new TextWatcher() {
@@ -214,4 +220,50 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         });
     }
 
+/*    String resultName = "";
+    @Override
+    public void callbackMethod(String name) {
+        if(!(resultName.equals(""))){
+            resultName = resultName + name;
+        }else{
+            resultName = name;
+        }
+        txtSelectedName.setText(resultName);
+    }
+
+    @Override
+    public void callbakcMethod() {
+        txtSelectedName.setText("");
+    }*/
+
+    ArrayList<String> resultName = new ArrayList<>();
+    @Override
+    public void callbackChecked(String name) {
+        String result="";
+        resultName.add(name);
+        for(int i=0; i<resultName.size(); i++){
+            if(i<resultName.size()-1){
+                result = result + resultName.get(i) + ", ";
+            }else{
+                result = result + resultName.get(i);
+            }
+        }
+        txtSelectedName.setText("("+result+")");
+        txtSelectedNumber.setText(resultName.size()+""); // +""공백문자열 넣어서 String으로 캐스팅하지 않으면 에러 발생. 이유 알기..// TODO: 2017-11-28  
+    }
+
+    @Override
+    public void callbackUnChecked(String name) {
+        String result="";
+        resultName.remove(name);
+        for(int i=0; i<resultName.size(); i++){
+            if(i<resultName.size()-1){
+                result = result + resultName.get(i) + ", ";
+            }else{
+                result = result + resultName.get(i);
+            }
+        }
+        txtSelectedName.setText("("+result+")");
+        txtSelectedNumber.setText(resultName.size()+"");
+    }
 }

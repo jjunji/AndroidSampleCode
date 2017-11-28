@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.CallHistoryData;
 import com.example.tenmanager_1.Data.ContactVO;
+import com.example.tenmanager_1.Fragment.FindContactFragment.checkBoxChangeListener;
 import com.example.tenmanager_1.R;
 
 import java.util.ArrayList;
@@ -20,17 +21,18 @@ import java.util.List;
 
 
 public class CallHistoryAdapter extends BaseAdapter{
-
+    checkBoxChangeListener cl;
     List<CallHistoryData> datas = new ArrayList<>();
     Context context;
     private HashMap<CallHistoryData, Boolean> mapSelected;
     LayoutInflater layoutInflater;
 
-    public CallHistoryAdapter(List<CallHistoryData> datas, Context context, HashMap<CallHistoryData, Boolean> mapSelected) {
+    public CallHistoryAdapter(List<CallHistoryData> datas, Context context, HashMap<CallHistoryData, Boolean> mapSelected, checkBoxChangeListener cl) {
         layoutInflater = LayoutInflater.from(context);
         this.datas = datas;
         this.context = context;
         this.mapSelected = mapSelected;
+        this.cl = cl;
     }
 
     @Override
@@ -81,11 +83,14 @@ public class CallHistoryAdapter extends BaseAdapter{
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int index = (int) buttonView.getTag();
                 CallHistoryData data = getItem(index);
-                //Log.i("test", "change contact :" + contact.toString());
                 if (isChecked) {
                     mapSelected.put(data, true);
+                    String name = data.getName();
+                    cl.callbackChecked(name);
                 } else {
                     mapSelected.put(data, false);
+                    String name = data.getName();
+                    cl.callbackUnChecked(name);
                 }
             }
         });

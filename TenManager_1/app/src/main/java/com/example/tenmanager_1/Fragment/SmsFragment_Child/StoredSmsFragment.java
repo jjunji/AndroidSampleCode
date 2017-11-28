@@ -4,7 +4,6 @@ package com.example.tenmanager_1.Fragment.SmsFragment_Child;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsManager;
@@ -17,7 +16,6 @@ import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
-import com.example.tenmanager_1.Data.ContactVO;
 
 import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.FindContactActivity;
@@ -38,9 +36,11 @@ import static android.app.Activity.RESULT_OK;
  */
 public class StoredSmsFragment extends Fragment {
     private final String TAG = StoredSmsFragment.class.getSimpleName();
+    private final int REQUESTCODE = 1;
+    private RadioButton mSelectedRB;
+    private int mSelectedPosition = -1;
 
     RealmResults<SmsVO> storedSmsResults;
-    RealmResults<ContactVO> contactResults;
     Realm realm;
     View view;
     TextView txtResultName;
@@ -51,13 +51,7 @@ public class StoredSmsFragment extends Fragment {
     ListView storedItemListView;
     StoredSmsAdapter adapter;
     ArrayList<String> contactResultList;
-
     ArrayList<SelectedDataModel> ar;
-
-    private final int REQUESTCODE = 1;
-
-    private RadioButton mSelectedRB;
-    private int mSelectedPosition = -1;
 
     public StoredSmsFragment() {
 
@@ -116,6 +110,8 @@ public class StoredSmsFragment extends Fragment {
                 } else {
                     //sendSms();
                     sendSMS();
+                    txtResultName.setText("");  // 문자 전송 후 텍스트뷰 초기화
+                    ar.clear(); // 문자 전송 후 리스트 초기화 (안하면 텍스트뷰는 비어있지만 버튼 클릭시 전에 보낸 번호로 계속 보냄)
                 }
             }
         });
@@ -164,26 +160,8 @@ public class StoredSmsFragment extends Fragment {
         if (resultCode == RESULT_OK) {
 
             if (requestCode == REQUESTCODE) {
-                //ArrayList<Long> ar = (ArrayList<Long>) data.getSerializableExtra("listObject");
-
                 ar = (ArrayList<SelectedDataModel>) data.getSerializableExtra("listObject");
 
-                //Long arList[] = new Long[ar.size()]; // arList 배열 선언
-
-/*                for (int i = 0; i < arList.length; i++) {
-                    arList[i] = ar.get(i); // arList 에는 체크박스 누른 포지션이 담긴다.
-                }
-                contactResults = realm.where(ContactVO.class).in("id", arList).findAll();
-
-                Log.i("test", "results==============" + contactResults);*/
-/*
-                String resultName = "";
-                for (int i = 0; i < arList.length; i++) {
-                    //resultName += results.get(i).getName();
-                    resultName = resultName + (contactResults.get(i).getName() + "  /");
-                    contactResultList.add(contactResults.get(i).getCellPhone());
-                }
-                txtResultName.setText(resultName);*/
                 String resultName = "";
                 for(int i=0; i<ar.size(); i++){
                     resultName = resultName + (ar.get(i).getName() + "  /");
@@ -192,19 +170,6 @@ public class StoredSmsFragment extends Fragment {
             }
         }
     }
-
-    // 즉시 메시지 전송 (다중 선택 안됨 -> 반복문으로 처리)
-/*    private void sendSMS() {
-        ProgressDialog dialog = ProgressDialog.show(getActivity(), "타이틀", "문자 전송중입니다.", true);
-        SmsManager sms = SmsManager.getDefault();
-        for (int i = 0; i < contactResultList.size(); i++) {
-            //address = address + contactResultList.get(i) + ";";
-            sms.sendTextMessage(contactResultList.get(i), null, txtContent.getText().toString(), null, null);
-        }
-        dialog.dismiss();
-        Toast.makeText(getActivity(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
-        //PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, SmsSender.class), 0);
-    }*/
 
     private void sendSMS() {
         ProgressDialog dialog = ProgressDialog.show(getActivity(), "타이틀", "문자 전송중입니다.", true);

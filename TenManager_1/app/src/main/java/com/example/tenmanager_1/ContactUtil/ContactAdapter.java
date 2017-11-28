@@ -1,5 +1,6 @@
 package com.example.tenmanager_1.ContactUtil;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,9 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.ContactVO;
+import com.example.tenmanager_1.FindContactActivity;
+import com.example.tenmanager_1.Fragment.FindContactFragment.checkBoxChangeListener;
+import com.example.tenmanager_1.MainActivity;
 import com.example.tenmanager_1.R;
 
 import java.util.ArrayList;
@@ -21,20 +25,22 @@ import java.util.HashMap;
  */
 
 public class ContactAdapter extends BaseAdapter implements SectionIndexer {
-
+    checkBoxChangeListener cl;
     Context context;
     ArrayList<ContactVO> datas;
     LayoutInflater layoutInflater;
     private String mSections = "#ㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ";
     private HashMap<ContactVO, Boolean> mapSelected;
 
-    public ContactAdapter(Context context, ArrayList<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected) {
+    public ContactAdapter(Context context, ArrayList<ContactVO> datas, HashMap<ContactVO, Boolean> mapSelected, checkBoxChangeListener cl) {
         this.datas = datas;
         layoutInflater = LayoutInflater.from(context);
         this.context = context;
 
         // HashMap 초기화 -> 처음에 다 false를 주고 시작.
         this.mapSelected = mapSelected;
+
+        this.cl = cl;
     }
 
     @Override
@@ -83,11 +89,14 @@ public class ContactAdapter extends BaseAdapter implements SectionIndexer {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 int index = (int) buttonView.getTag();
                 ContactVO contact = getItem(index);
-                //Log.i("test", "change contact :" + contact.toString());
                 if (isChecked) {
                     mapSelected.put(contact, true);
+                    String name = contact.getName();
+                    cl.callbackChecked(name);
                 } else {
                     mapSelected.put(contact, false);
+                    String name = contact.getName();
+                    cl.callbackUnChecked(name);
                 }
             }
         });

@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.example.tenmanager_1.Data.ContactGroupVO;
 import com.example.tenmanager_1.Data.ContactVO;
+import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.GroupView;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.repositories.service.ContactDataSource;
@@ -36,6 +37,7 @@ public class GroupFragment extends Fragment {
     ContactDataSource contactDataSource;
     GroupFragmentAdapter adapter;
     ListView groupListView;
+    ArrayList<ContactVO> list;
     private HashMap<ContactVO, Boolean> mapSelected;
 
     public GroupFragment() {
@@ -114,8 +116,15 @@ public class GroupFragment extends Fragment {
 
     private void matchingContactByGroup(ContactGroupVO cgvo){
         RealmResults<ContactVO> arContact = realm.where(ContactVO.class).equalTo("group.id", cgvo.getId()).findAll();
-        adapter = new GroupFragmentAdapter(getContext(), arContact, mapSelected);
+        FindContactActivity activity = (FindContactActivity) getActivity();
+        adapter = new GroupFragmentAdapter(getContext(), arContact, mapSelected, activity);
         groupListView.setAdapter(adapter);
+    }
+
+    public ArrayList<ContactVO> getCheckedGroupList(){
+        list = adapter.getKey(mapSelected, true);
+        Log.i("ContactFragment", "list.size ====================" + list.size());
+        return list;
     }
 
 }

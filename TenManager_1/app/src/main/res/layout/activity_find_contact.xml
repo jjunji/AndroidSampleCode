@@ -109,8 +109,35 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="13dp"
+                android:text="선택된 인원 총"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtSelectedNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="5dp"
+                android:text="n"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_gravity="center_vertical"
+                android:textStyle="bold"
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="명" />
+
+            <TextView
+                android:singleLine="true"
+                android:ellipsize="end"
+                android:id="@+id/txtSelectedName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_weight="1"
-                android:text="선택된 인원 총 1 명 (김소나무)"
+                android:textColor="#baadad"
                 android:textStyle="bold" />
         </LinearLayout>
 
