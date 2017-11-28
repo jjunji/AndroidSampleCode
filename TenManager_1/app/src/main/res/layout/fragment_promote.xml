@@ -1,13 +1,143 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.tenmanager_1.Fragment.SmsFragment_Child.PromoteFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/relativeLayout"
+            android:layout_width="match_parent"
+            android:layout_height="330dp"
+            android:layout_above="@+id/btnSend"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout5">
+
+            <RelativeLayout
+                android:id="@+id/relativeLayout3"
+                android:layout_width="match_parent"
+                android:layout_height="210dp">
+
+                <TextView
+                    android:id="@+id/txtTitle"
+                    android:layout_width="320dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/border"
+                    android:text="TextView"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:layout_above="@+id/txtContent"
+                    android:layout_centerHorizontal="true" />
+
+                <TextView
+                    android:id="@+id/txtContent"
+                    android:layout_width="320dp"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="6dp"
+                    android:background="@drawable/border"
+                    android:text="TextView"
+                    android:textSize="15dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignLeft="@+id/txtTitle"
+                    android:layout_alignStart="@+id/txtTitle" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_below="@+id/relativeLayout3"
+                android:id="@+id/view"
+                style="@style/Divider"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnSearchPlace"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/view"
+                android:background="@color/buttonColor"
+                android:text="홍보할 매물 찾기"
+                android:textColor="@color/White" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:layout_below="@+id/btnSearchPlace"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true">
+
+
+                <ListView
+                    android:id="@+id/storedPromoteListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="197dp"
+                    android:layout_marginLeft="10dp" />
+            </LinearLayout>
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/circleImageView"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:src="@drawable/icon_alarm"
+                app:civ_border_color="#000000"
+                app:civ_border_width="1dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="9dp" />
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:background="@color/layoutBackGround"
+            android:id="@+id/linearLayout5"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/linearLayout4"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+            <TextView
+                android:background="@color/White"
+                android:id="@+id/txtResultName"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_weight="1" />
+
+            <Button
+                android:id="@+id/btnContactSearch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0.10"
+                android:background="@color/buttonColor"
+                android:text="연락처 검색"
+                android:textColor="@color/White" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btnSend"
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:background="@color/buttonColor"
+            android:text="문자 보내기"
+            android:textColor="@color/White" />
+
+    </RelativeLayout>
+
 
 </FrameLayout>

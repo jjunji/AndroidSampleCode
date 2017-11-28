@@ -1,7 +1,6 @@
-package com.example.tenmanager_1.StoredSmsUtil;
+package com.example.tenmanager_1.SmsFragmentUtil;
 
 import android.content.Context;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -35,7 +34,8 @@ public class StoredSmsAdapter extends BaseAdapter {
         this.context = context;
         realm = Realm.getDefaultInstance();
         layoutInflater = LayoutInflater.from(context);
-        results = realm.where(SmsVO.class).findAll().sort("regdate", Sort.ASCENDING);
+        //results = realm.where(SmsVO.class).findAll().sort("regdate", Sort.ASCENDING);
+        results = realm.where(SmsVO.class).equalTo("group.id",1).findAllSorted("regdate", Sort.ASCENDING);
     }
 
     @Override
@@ -75,8 +75,6 @@ public class StoredSmsAdapter extends BaseAdapter {
         }*/
 
         viewHolder.txtItemTitle.setText(results.get(position).getTitle());
-        /*viewHolder.txtItemTitle.setMaxLines(1);
-        viewHolder.txtItemTitle.setEllipsize(TextUtils.TruncateAt.END);*/
 
         viewHolder.radioBtn.setTag(position);  // 뷰홀더 안에 라디오버튼의 포지션.
         if(holderClickListener != null){

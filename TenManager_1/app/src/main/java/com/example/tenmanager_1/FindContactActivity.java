@@ -193,13 +193,14 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         }
 
         Intent intent = getIntent();
-        
-        intent.putExtra("listObject", selectedList);
+        Bundle bundle = new Bundle();
+        //bundle.putSerializable("contactList", contactlist);
+        //bundle.putSerializable("callList", callList);
+        //bundle.putSerializable("groupList", groupList);
+        bundle.putSerializable("listObject", selectedList);
+        //intent.putExtra("listObject", selectedList);
+        intent.putExtras(bundle);
         setResult(RESULT_OK, intent);
-
-/*        for(int i=0; i<selectedList.size(); i++){
-            Log.i(TAG, "All List ================== " + selectedList.get(i).getName());
-        }*/
 
         finish();
     }
@@ -255,7 +256,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
         }
         txtSelectedName.setText("("+result+")");
         txtSelectedNumber.setText(resultName.size()+""); // +"" 공백문자열 넣어서 String으로 캐스팅하지 않으면 에러 발생. 이유 알기..// TODO: 2017-11-28
-    }
+    }                                                    // -> setText(int id), setText(String str) 두가지 메소드가 오버라이딩 되있기 때문. 숫자를 넣을 경우 단순히 int형이 아니라, 리소스 id 값을 뜻함.
 
     @Override
     public void callbackUnChecked(String name) {

@@ -1,8 +1,6 @@
 package com.example.tenmanager_1.Service_Dialog;
 
 
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsManager;
@@ -18,9 +16,7 @@ import android.widget.TextView;
 import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.Loader.CallHistoryLoader;
 import com.example.tenmanager_1.R;
-import com.example.tenmanager_1.StoredSmsUtil.StoredSmsAdapter;
-
-import java.util.ArrayList;
+import com.example.tenmanager_1.SmsFragmentUtil.StoredSmsAdapter;
 
 import io.realm.Realm;
 import io.realm.RealmResults;

@@ -21,7 +21,7 @@ import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.Fragment.FindContactFragment.SelectedDataModel;
 import com.example.tenmanager_1.R;
-import com.example.tenmanager_1.StoredSmsUtil.StoredSmsAdapter;
+import com.example.tenmanager_1.SmsFragmentUtil.StoredSmsAdapter;
 
 import java.util.ArrayList;
 
@@ -50,7 +50,6 @@ public class StoredSmsFragment extends Fragment {
     Button btnSend;
     ListView storedItemListView;
     StoredSmsAdapter adapter;
-    ArrayList<String> contactResultList;
     ArrayList<SelectedDataModel> ar;
 
     public StoredSmsFragment() {
@@ -61,14 +60,20 @@ public class StoredSmsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_stored_sms, container, false);
-        adapter = new StoredSmsAdapter(getContext());
-        realm = Realm.getDefaultInstance();
-        storedSmsResults = realm.where(SmsVO.class).findAll().sort("regdate", Sort.ASCENDING);
+
+        init();
         initView();
         setButtonClickListener();
         setHolderClickListener();
         setListItem();
+
         return view;
+    }
+
+    private void init(){
+        adapter = new StoredSmsAdapter(getContext());
+        realm = Realm.getDefaultInstance();
+        storedSmsResults = realm.where(SmsVO.class).equalTo("group.id",1).findAllSorted("regdate", Sort.ASCENDING);
     }
 
     private void initView() {
@@ -88,7 +93,6 @@ public class StoredSmsFragment extends Fragment {
             txtTitle.setText("");
             txtContent.setText("");
         }
-        contactResultList = new ArrayList<>();
     }
 
     private void setButtonClickListener(){
@@ -108,7 +112,6 @@ public class StoredSmsFragment extends Fragment {
                     Toast.makeText(getContext(), "연락처를 추가하세요~", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    //sendSms();
                     sendSMS();
                     txtResultName.setText("");  // 문자 전송 후 텍스트뷰 초기화
                     ar.clear(); // 문자 전송 후 리스트 초기화 (안하면 텍스트뷰는 비어있지만 버튼 클릭시 전에 보낸 번호로 계속 보냄)
@@ -188,15 +191,4 @@ public class StoredSmsFragment extends Fragment {
         //PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, SmsSender.class), 0);
     }
 
-    // 메시지 창으로 이동 후 전송
-    public void sendSms() {
-        String address = "";
-        for (int i = 0; i < contactResultList.size(); i++) {
-            address = address + contactResultList.get(i) + ";";
-        }
-        Log.i(TAG, address);
-        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + address));
-        intent.putExtra("sms_body", txtContent.getText().toString());
-        startActivity(intent);
-    }
 }

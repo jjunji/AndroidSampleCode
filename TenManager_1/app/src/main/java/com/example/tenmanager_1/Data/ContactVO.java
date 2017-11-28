@@ -1,5 +1,7 @@
 package com.example.tenmanager_1.Data;
 
+import java.io.Serializable;
+
 import io.realm.RealmList;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -8,7 +10,7 @@ import io.realm.annotations.PrimaryKey;
  * Created by 전지훈 on 2017-11-07.
  */
 
-public class ContactVO extends RealmObject{
+public class ContactVO extends RealmObject {
     @PrimaryKey
     private long id;
     private String name;
