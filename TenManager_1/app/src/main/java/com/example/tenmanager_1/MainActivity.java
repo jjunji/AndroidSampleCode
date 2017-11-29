@@ -71,6 +71,9 @@ public class MainActivity extends AppCompatActivity
         if(isInit){
             contactDataSource.contactCopyFromDevice();
             smsDataSource.initSmsGroup();
+            smsDataSource.initStoredSMS();
+            smsDataSource.initPromoteSMS();
+            smsDataSource.initRepresentSMS();
         }
 
         init();

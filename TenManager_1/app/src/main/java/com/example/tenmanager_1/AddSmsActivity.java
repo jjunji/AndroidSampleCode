@@ -146,7 +146,7 @@ public class AddSmsActivity extends AppCompatActivity implements View.OnClickLis
 
         SmsVO svo = realm.createObject(SmsVO.class, id); // 관리 객체 생성.
         //wso.setId(id);
-        svo.setRegdate(System.currentTimeMillis());
+        //svo.setRegdate(System.currentTimeMillis());
         svo.setTitle(etTitle.getText().toString());
         svo.setContent(etContent.getText().toString());
         svo.setRegdate(System.currentTimeMillis());

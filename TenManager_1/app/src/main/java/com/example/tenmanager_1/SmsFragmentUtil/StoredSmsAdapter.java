@@ -25,9 +25,6 @@ public class StoredSmsAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
     RealmResults<SmsVO> results;
 
-    private int mSelectedRadioPosition;
-    private RadioButton mLastSelectedRadioButton;
-
     private View.OnClickListener holderClickListener;
 
     public StoredSmsAdapter(Context context) {
@@ -68,12 +65,6 @@ public class StoredSmsAdapter extends BaseAdapter {
             viewHolder = (StoredSmsViewHolder) convertView.getTag();
         }
 
-/*        if(mSelectedRadioPosition == position) {
-            viewHolder.radioBtn.setChecked(true);
-        } else {
-            viewHolder.radioBtn.setChecked(false);
-        }*/
-
         viewHolder.txtItemTitle.setText(results.get(position).getTitle());
 
         viewHolder.radioBtn.setTag(position);  // 뷰홀더 안에 라디오버튼의 포지션.
@@ -81,26 +72,13 @@ public class StoredSmsAdapter extends BaseAdapter {
             //convertView.setOnClickListener(holderClickListener);
             viewHolder.radioBtn.setOnClickListener(holderClickListener);
         }
-       /* viewHolder.radioBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (mSelectedRadioPosition == position) {
-                    return;
-                }
-
-                mSelectedRadioPosition = position;
-
-                if (mLastSelectedRadioButton != null) {
-                    mLastSelectedRadioButton.setChecked(false);
-                }
-
-                mLastSelectedRadioButton = (RadioButton) v;
-                notifyDataSetChanged();
-            }
-        });*/
 
         return convertView;
     }
+
+  /*  public void defaultChecked(){
+        Vie
+    }*/
 
     public View.OnClickListener getHolderClickListener() {
         return holderClickListener;
@@ -111,29 +89,3 @@ public class StoredSmsAdapter extends BaseAdapter {
     }
 }
 
-/*
-final CallHistoryViewHolder viewHolder;
-
-        Boolean isCheck = mapSelected.get(callHistoryData);  // 처음에는 다 false 겠지
-        //Log.i("test", "isCheck :" + isCheck);
-
-        viewHolder.callCheckBox.setChecked(isCheck);
-        viewHolder.callCheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                int index = (int) buttonView.getTag();
-                CallHistoryData data = getItem(index);
-                //Log.i("test", "change contact :" + contact.toString());
-                if (isChecked) {
-                    mapSelected.put(data, true);
-                } else {
-                    mapSelected.put(data, false);
-                }
-            }
-        });
-
-        return convertView;
-    }
-
-
- */

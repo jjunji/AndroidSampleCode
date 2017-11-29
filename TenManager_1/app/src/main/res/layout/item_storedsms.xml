@@ -38,6 +38,8 @@
             android:orientation="vertical">
 
             <TextView
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:layout_gravity="center_vertical"
                 android:id="@+id/txtTitle"
                 android:layout_width="match_parent"
@@ -47,6 +49,8 @@
                 android:textStyle="bold" />
 
             <TextView
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:id="@+id/txtContent"
                 android:layout_gravity="center_vertical"
                 android:layout_width="match_parent"

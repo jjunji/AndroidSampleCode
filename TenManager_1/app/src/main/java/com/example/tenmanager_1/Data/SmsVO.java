@@ -11,11 +11,10 @@ import io.realm.annotations.PrimaryKey;
 public class SmsVO extends RealmObject{
     @PrimaryKey
     private long id;
-//    private int location;
     private String title;
     private String content;
-    private SmsGroupVO group;
-    private long regdate;
+    private SmsGroupVO group; // 그룹 1: 저장문자, 그룹 2: 대표안내문자, 그룹 3 : 매물홍보문자
+    private long regdate; // 저장문자 순서 변경을 위해 작성 시간 저장용(id값을 기본키로 바꾸면서 이동 못하게됨.)
 
     public long getId() {
         return id;
@@ -49,10 +48,6 @@ public class SmsVO extends RealmObject{
         this.group = group;
     }
 
-//    public int getLocation() {
-//        return location;
-//    }
-
     public long getRegdate() {
         return regdate;
     }
@@ -60,10 +55,6 @@ public class SmsVO extends RealmObject{
     public void setRegdate(long regdate) {
         this.regdate = regdate;
     }
-//
-//    public void setLocation(int location) {
-//        this.location = location;
-//    }
 
 }
 

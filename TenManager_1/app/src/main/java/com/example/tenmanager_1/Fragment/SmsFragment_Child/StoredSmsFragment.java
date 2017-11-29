@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -22,6 +23,7 @@ import com.example.tenmanager_1.FindContactActivity;
 import com.example.tenmanager_1.Fragment.FindContactFragment.SelectedDataModel;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.SmsFragmentUtil.StoredSmsAdapter;
+import com.example.tenmanager_1.SmsFragmentUtil.StoredSmsViewHolder;
 
 import java.util.ArrayList;
 
@@ -36,7 +38,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class StoredSmsFragment extends Fragment {
     private final String TAG = StoredSmsFragment.class.getSimpleName();
-    private final int REQUESTCODE = 1;
+    private final int REQUESTCODE_STORED = 1;
     private RadioButton mSelectedRB;
     private int mSelectedPosition = -1;
 
@@ -87,6 +89,7 @@ public class StoredSmsFragment extends Fragment {
         storedItemListView = (ListView) view.findViewById(R.id.storedItemListView);
 
         if (storedSmsResults.size() != 0) {
+
             txtTitle.setText(storedSmsResults.get(0).getTitle());
             txtContent.setText(storedSmsResults.get(0).getContent());
         } else {
@@ -101,7 +104,7 @@ public class StoredSmsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), FindContactActivity.class);
-                startActivityForResult(intent, REQUESTCODE);  // 연락처 검색 액티비티를 종료할 때 액티비티에서 가지고 있던 데이터를 받아온다.
+                startActivityForResult(intent, REQUESTCODE_STORED);  // 연락처 검색 액티비티를 종료할 때 액티비티에서 가지고 있던 데이터를 받아온다.
             }
         });
 
@@ -126,6 +129,7 @@ public class StoredSmsFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 int position = (int) v.getTag();  // 누른 포지션.
+                
                 RadioButton radioBtn = (RadioButton) v;
                 Log.i(TAG, "positioin =======" + position);
 
@@ -162,7 +166,7 @@ public class StoredSmsFragment extends Fragment {
 
         if (resultCode == RESULT_OK) {
 
-            if (requestCode == REQUESTCODE) {
+            if (requestCode == REQUESTCODE_STORED) {
                 ar = (ArrayList<SelectedDataModel>) data.getSerializableExtra("listObject");
 
                 String resultName = "";

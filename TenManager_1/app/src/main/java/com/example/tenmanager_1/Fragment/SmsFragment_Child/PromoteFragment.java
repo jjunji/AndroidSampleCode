@@ -29,6 +29,8 @@ import io.realm.Realm;
 import io.realm.RealmResults;
 import io.realm.Sort;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -156,6 +158,28 @@ public class PromoteFragment extends Fragment {
                 }
             }
         });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQUESTCODE_PROMOTE){
+            if(resultCode == RESULT_OK){
+                ar = (ArrayList<SelectedDataModel>) data.getSerializableExtra("listObject");
+
+                String resultName = "";
+                for(int i=0; i<ar.size(); i++){
+                    if(i<ar.size()-1){
+                        resultName = resultName + (ar.get(i).getName() + ", ");
+                    }else{
+                        resultName = resultName + (ar.get(i).getName());
+                    }
+
+                }
+                txtResultName.setText(resultName);
+            }
+        }
     }
 
     private void sendSMS() {

@@ -11,4 +11,7 @@ import io.realm.RealmResults;
 public interface SmsDataSource {
     RealmResults<SmsGroupVO> getSmsGroupList();
     void initSmsGroup();
+    void initStoredSMS();
+    void initRepresentSMS();
+    void initPromoteSMS();
 }

@@ -26,6 +26,8 @@
                 android:layout_height="210dp">
 
                 <TextView
+                    android:ellipsize="end"
+                    android:singleLine="true"
                     android:id="@+id/txtTitle"
                     android:layout_width="320dp"
                     android:layout_height="wrap_content"
@@ -109,11 +111,14 @@
             android:orientation="horizontal">
 
             <TextView
-                android:background="@color/White"
+                android:ellipsize="end"
+                android:singleLine="true"
                 android:id="@+id/txtResultName"
                 android:layout_width="wrap_content"
                 android:layout_height="20dp"
-                android:layout_weight="1" />
+                android:layout_marginRight="5dp"
+                android:layout_weight="0.99"
+                android:background="@color/White" />
 
             <Button
                 android:id="@+id/btnContactSearch"

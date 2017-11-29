@@ -138,7 +138,6 @@ public class ContactRepository implements ContactDataSource {
 
         for(ContactVO contactVO :  results){
             Log.i("test", "printAllContact data is : "+contactVO.toString());
-//            Log.i(TAG, "position data : " + contactVO.getName());
         }
     }
 
