@@ -22,6 +22,7 @@ public class DialogActivity extends AppCompatActivity {
     private final int HISTORYFRAGMENT = 2;
 
     CallHistoryLoader loader;
+    //MatchingHistoryLoader loader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +36,7 @@ public class DialogActivity extends AppCompatActivity {
         setButtonListener();
     }
 
+    // 통화 종료후 나타나는 팝업창에서 문자, 통화내역 각 버튼을 눌렀을 때 교체되는 프래그먼트
     private void callFragment(int fragmentIndex) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         switch (fragmentIndex){

@@ -1,6 +1,7 @@
 package com.example.tenmanager_1.Service_Dialog;
 
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.telephony.SmsManager;
@@ -12,12 +13,15 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.Loader.CallHistoryLoader;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.SmsFragmentUtil.StoredSmsAdapter;
 import com.example.tenmanager_1.SmsFragmentUtil.StoredSmsViewHolder;
+
+import java.util.ArrayList;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -38,13 +42,10 @@ public class Dialog_SmsFragment extends Fragment {
     private RadioButton mSelectedRB;
     private int mSelectedPosition = -1;
     CallHistoryLoader loader;
-    SmsManager sms;
-
 
     public Dialog_SmsFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,14 +61,11 @@ public class Dialog_SmsFragment extends Fragment {
     }
 
     private void init() {
-        sms = SmsManager.getDefault();
         storedSmsListView = (ListView) view.findViewById(R.id.storedSmsList);
         btnSend = (Button) view.findViewById(R.id.btnSend);
         txtContent = (TextView) view.findViewById(R.id.txtContent);
         loader = new CallHistoryLoader(getActivity());
         setSendButtonClickListener();
-        Log.i(TAG, "content =========== " + txtContent.getText().toString());
-        Log.i(TAG, "getTel ============ " + loader.getContacts().get(0).getTel());
     }
 
     private void setListView(){
@@ -135,13 +133,26 @@ public class Dialog_SmsFragment extends Fragment {
             public void onClick(View v) {
                 DialogActivity activity = (DialogActivity) getActivity();
                 if(txtContent.getText().toString() != null){
-                    sms.sendTextMessage(loader.getContacts().get(0).getTel(), null, txtContent.getText().toString(), null, null);
+                    sendMMS();
                     activity.finish();
                 }else{
                     activity.finish();
                 }
             }
         });
+    }
+
+    private void sendMMS(){
+        SmsManager sms = SmsManager.getDefault();
+        ProgressDialog dialog = ProgressDialog.show(getActivity(), "타이틀", "문자 전송중입니다.", true);
+        try{
+            ArrayList<String> parts = sms.divideMessage(txtContent.getText().toString());
+            sms.sendMultipartTextMessage(loader.getContacts().get(0).getTel(), null, parts, null, null);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        dialog.dismiss();
+        Toast.makeText(getActivity(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
 }

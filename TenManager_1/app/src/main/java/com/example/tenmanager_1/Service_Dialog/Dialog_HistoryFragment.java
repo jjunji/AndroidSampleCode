@@ -26,19 +26,15 @@ public class Dialog_HistoryFragment extends Fragment {
     View view;
     ListView callHistoryListView;
     Dialog_historyAdapter adapter;
-    CallHistoryLoader loader;
-    List<CallHistoryData> datas;
-    //HashMap<String, CallHistoryData> hashMap = new HashMap<>();
-    //HashMap<String, ArrayList<CallHistoryData>> hashMap = new HashMap<>();
+    //CallHistoryLoader loader;
+    MatchingHistoryLoader loader;
+    ArrayList<CallHistoryData> datas;
     String phoneNumber;
-    //List<CallHistoryData> matchingNumberInfo;
-    ArrayList<CallHistoryData> matchingNumberInfo = new ArrayList<>();
-
+    //ArrayList<CallHistoryData> matchingNumberInfo = new ArrayList<>();
 
     public Dialog_HistoryFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -47,15 +43,15 @@ public class Dialog_HistoryFragment extends Fragment {
 
         initView();
         init();
-        getMatchingCall();
+        //getMatchingCall();
         setListView();
 
         return view;
     }
 
     private void init() {
-        phoneNumber = getArguments().getString("phoneNumber");
-        loader = new CallHistoryLoader(getContext());
+        phoneNumber = getArguments().getString("phoneNumber");  // CallingService.class 에서 받은 데이터 (방금 통화한 번호)
+        loader = new MatchingHistoryLoader(getContext(), phoneNumber);
         datas = new ArrayList<>();
         datas = loader.getContacts();
         //adapter = new Dialog_historyAdapter();
@@ -71,7 +67,7 @@ public class Dialog_HistoryFragment extends Fragment {
         return datas;
     }*/
 
-    private void getMatchingCall(){
+/*    private void getMatchingCall(){
         //ArrayList<CallHistoryData> matchingNumberInfo = new ArrayList<>();
 
         for(int i=0; i<datas.size(); i++){
@@ -83,11 +79,12 @@ public class Dialog_HistoryFragment extends Fragment {
         //hashMap.put(phoneNumber, matchingNumberInfo);
         //hashMap.get(phoneNumber);
         //Log.i(TAG, "hashMapinfo ===========: "+ hashMap.get(phoneNumber).toString());
-    }
+    }*/
+
 
     private void setListView(){
         //adapter = new Dialog_historyAdapter(getActivity(), matchingNumberInfo);
-        adapter = new Dialog_historyAdapter(getActivity(), matchingNumberInfo);
+        adapter = new Dialog_historyAdapter(getActivity(), datas);
         callHistoryListView.setAdapter(adapter);
     }
 

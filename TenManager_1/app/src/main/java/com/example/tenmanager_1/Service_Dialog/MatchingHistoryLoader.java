@@ -1,4 +1,4 @@
-package com.example.tenmanager_1.Loader;
+package com.example.tenmanager_1.Service_Dialog;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -8,7 +8,6 @@ import android.net.Uri;
 import android.provider.CallLog;
 
 import com.example.tenmanager_1.Data.CallHistoryData;
-import com.example.tenmanager_1.Fragment.FindContactFragment.RecentCallFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,32 +15,35 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by 전지훈 on 2017-11-06.
+ * Created by 전지훈 on 2017-11-30.
  */
 
-public class CallHistoryLoader {
-    private List<CallHistoryData> datas = new ArrayList<>();
-    private Context context;
-    long installDate;
-    String str_installDate;
-    Cursor cursor;
+/* 통화종료 후 서비스로 띄워주는 팝업에서 방금 통화한 번호에 해당하는 통화내역만을 가져오는 Loader 클래스. */
 
-    public CallHistoryLoader(Context context){
+public class MatchingHistoryLoader {
+    private ArrayList<CallHistoryData> datas = new ArrayList<>();
+    private Context context;
+    Cursor cursor;
+    String numberToSearch; // 전화번호(해당 번호에 매칭되는 통화내역 검색용.)
+    long installDate;  // 앱 설치 날짜
+    String str_installDate;
+
+    public MatchingHistoryLoader(Context context, String numberToSearch){
         this.context = context;
+        this.numberToSearch = numberToSearch;
     }
 
-    public List<CallHistoryData> getContacts() {
+    public ArrayList<CallHistoryData> getContacts() {
         ContentResolver resolver = context.getContentResolver();
 
-        // 1. 데이터 컨텐츠 URI (자원의 주소)를 정의
+        // 1. 데이터 컨텐츠 URI (자원의 주소)를 정
         Uri callUri = CallLog.Calls.CONTENT_URI;
 
         // 2. 데이터에서 가져올 컬럼명을 정의
         String projections[] = {CallLog.Calls.CACHED_NAME, CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.TYPE};
 
-        String selection = CallLog.Calls.DATE +">?";  // ?에 선택인수가 대체되어 들어감, 조건을 추가하려면 뒤에 괄호로 묶어야함.
+        String selection = CallLog.Calls.DATE +">? AND(" + CallLog.Calls.NUMBER + "=?)";  // ?에 선택인수가 대체되어 들어감, 조건을 추가하려면 뒤에 괄호로 묶어야함.
 
-         /* String selectionArgs[] = {CallLog.Calls.INCOMING_TYPE, CallLog.Calls.OUTGOING_TYPE};*/
         String sortOrder=CallLog.Calls.DATE + " DESC";
 
         try {
@@ -51,7 +53,7 @@ public class CallHistoryLoader {
             cursor = resolver.query(callUri,    // 데이터의 주소 (URI)
                     projections,    // 가져올 데이터 컬럼명 배열 (projection)
                     selection,           // 조건절에 들어가는 컬럼명들 지정
-                    new String[]{str_installDate},           // 지정된 컬럼명과 매핑되는 실제 조건 값
+                    new String[]{str_installDate, numberToSearch},           // 지정된 컬럼명과 매핑되는 실제 조건 값
                     sortOrder);          // 정렬
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
@@ -73,18 +75,7 @@ public class CallHistoryLoader {
 
                 int dateIndex = cursor.getColumnIndex(projections[2]);
 
-/*                long setupTime = 0;
-                try {
-                    setupTime = context.getPackageManager().getPackageInfo(context.getApplicationContext().getPackageName(), 0).firstInstallTime;  // 설치한 시간
-                    //setupTime = setupTime - 1000*60*60*24;
-                } catch (PackageManager.NameNotFoundException e) {
-                    e.printStackTrace();
-                }*/
-
                 long callTime = cursor.getLong(dateIndex);
-/*                if(callTime < setupTime){
-                    continue;
-                }*/
 
                 Date date = new Date(callTime);
                 String date2 = date.toString();
@@ -131,3 +122,4 @@ public class CallHistoryLoader {
     }
 
 }
+
