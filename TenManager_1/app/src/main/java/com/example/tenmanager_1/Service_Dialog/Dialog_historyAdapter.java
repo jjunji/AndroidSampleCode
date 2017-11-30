@@ -12,7 +12,6 @@ import com.example.tenmanager_1.Data.CallHistoryData;
 import com.example.tenmanager_1.R;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by 전지훈 on 2017-11-27.
@@ -59,6 +58,7 @@ public class Dialog_historyAdapter extends BaseAdapter{
         //final Dialog_historyHolder holder;
         final Dialog_historyHolder_receive receiveHolder;
         final Dialog_historyHolder_transmit transmitHolder;
+        final Dialog_historyHolder_callMemo callMemoHolder;
 
         // 통화내역 타입이 1일 경우(수신)
         if(datas.get(position).getType().equals("수신") || datas.get(position).getType().equals("부재중")){
@@ -66,7 +66,7 @@ public class Dialog_historyAdapter extends BaseAdapter{
                 receiveHolder = new Dialog_historyHolder_receive();
 
                 convertView = inflater.inflate(R.layout.item_service_dialog_callreceive, null);
-                receiveHolder.txtReceive = (TextView) convertView.findViewById(R.id.txtReceive);
+                receiveHolder.txtReceive = (TextView) convertView.findViewById(R.id.textView);
                 receiveHolder.txtReceiveTime = (TextView) convertView.findViewById(R.id.txtReceiveTime);
                 receiveHolder.imgReceive = (ImageView) convertView.findViewById(R.id.imgReceive);
                 convertView.setTag(receiveHolder);
@@ -78,7 +78,7 @@ public class Dialog_historyAdapter extends BaseAdapter{
                     receiveHolder = new Dialog_historyHolder_receive();
 
                     convertView = inflater.inflate(R.layout.item_service_dialog_callreceive, null);
-                    receiveHolder.txtReceive = (TextView) convertView.findViewById(R.id.txtReceive);
+                    receiveHolder.txtReceive = (TextView) convertView.findViewById(R.id.textView);
                     receiveHolder.txtReceiveTime = (TextView) convertView.findViewById(R.id.txtReceiveTime);
                     receiveHolder.imgReceive = (ImageView) convertView.findViewById(R.id.imgReceive);
                     convertView.setTag(receiveHolder);
