@@ -66,16 +66,16 @@ public class StoredSmsFragment extends Fragment {
         init();
         initView();
         setButtonClickListener();
-        setHolderClickListener();
+        setAdapterItemClickListener();
         setListItem();
 
         return view;
     }
 
-    private void init(){
+    private void init() {
         adapter = new StoredSmsAdapter(getContext());
         realm = Realm.getDefaultInstance();
-        storedSmsResults = realm.where(SmsVO.class).equalTo("group.id",1).findAllSorted("regdate", Sort.ASCENDING);
+        storedSmsResults = realm.where(SmsVO.class).equalTo("group.id", 1).findAllSorted("regdate", Sort.ASCENDING);
     }
 
     private void initView() {
@@ -89,7 +89,6 @@ public class StoredSmsFragment extends Fragment {
         storedItemListView = (ListView) view.findViewById(R.id.storedItemListView);
 
         if (storedSmsResults.size() != 0) {
-
             txtTitle.setText(storedSmsResults.get(0).getTitle());
             txtContent.setText(storedSmsResults.get(0).getContent());
         } else {
@@ -98,7 +97,7 @@ public class StoredSmsFragment extends Fragment {
         }
     }
 
-    private void setButtonClickListener(){
+    private void setButtonClickListener() {
         // 저장문자를 보낼 연락처 검색 액티비티로 이동.
         btnContactSearch.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,7 +114,8 @@ public class StoredSmsFragment extends Fragment {
                     Toast.makeText(getContext(), "연락처를 추가하세요~", Toast.LENGTH_SHORT).show();
                     return;
                 } else {
-                    sendSMS();
+                    //sendSMS();
+                    sendMMS2();
                     txtResultName.setText("");  // 문자 전송 후 텍스트뷰 초기화
                     ar.clear(); // 문자 전송 후 리스트 초기화 (안하면 텍스트뷰는 비어있지만 버튼 클릭시 전에 보낸 번호로 계속 보냄)
                 }
@@ -123,15 +123,14 @@ public class StoredSmsFragment extends Fragment {
         });
     }
 
-    private void setHolderClickListener(){
+    private void setAdapterItemClickListener() {
         // 저장문자 목록(라디오) 선택에 따라 제목,내용 변화
-        adapter.setHolderClickListener(new View.OnClickListener() {
+        adapter.setRadioButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = (int) v.getTag();  // 누른 포지션.
-                
-                RadioButton radioBtn = (RadioButton) v;
-                Log.i(TAG, "positioin =======" + position);
+                RadioButton radioBtn = (RadioButton) v; // 누른 버튼
+                Log.i(TAG, "position =======" + position);
 
                 if (position != mSelectedPosition && mSelectedRB != null) {
                     mSelectedRB.setChecked(false);
@@ -146,18 +145,46 @@ public class StoredSmsFragment extends Fragment {
                     radioBtn.setChecked(true);
                     txtTitle.setText(storedSmsResults.get(position).getTitle());
                     txtContent.setText(storedSmsResults.get(position).getContent());
-                    if (mSelectedRB != null && radioBtn != mSelectedRB) {
+/*                    if (mSelectedRB != null && radioBtn != mSelectedRB) {
                         mSelectedRB = radioBtn;
-                    }
+                    }*/
                 }
                 adapter.notifyDataSetChanged();
             }
         });
+
+        adapter.setHolderClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StoredSmsViewHolder viewHolder = (StoredSmsViewHolder) v.getTag();
+                int position = viewHolder.getTag();
+                RadioButton radioBtn = viewHolder.radioBtn;
+
+                if (position != mSelectedPosition && mSelectedRB != null) {
+                    mSelectedRB.setChecked(false);
+                }
+
+                mSelectedPosition = position; // 누른위치
+                mSelectedRB = viewHolder.radioBtn; // 누른위치에 해당하는 라디오버튼
+
+                if (mSelectedPosition != position) {
+                    radioBtn.setChecked(false);
+                } else {
+                    radioBtn.setChecked(true);
+                    txtTitle.setText(storedSmsResults.get(position).getTitle());
+                    txtContent.setText(storedSmsResults.get(position).getContent());
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
+
     }
 
     public void setListItem() {
         storedItemListView.setAdapter(adapter);
         storedItemListView.setFastScrollEnabled(true);
+        //StoredSmsViewHolder viewHolder = new StoredSmsViewHolder();
+        //storedItemListView.getItemAtPosition(0).
     }
 
     @Override
@@ -170,13 +197,12 @@ public class StoredSmsFragment extends Fragment {
                 ar = (ArrayList<SelectedDataModel>) data.getSerializableExtra("listObject");
 
                 String resultName = "";
-                for(int i=0; i<ar.size(); i++){
-                    if(i<ar.size()-1){
+                for (int i = 0; i < ar.size(); i++) {
+                    if (i < ar.size() - 1) {
                         resultName = resultName + (ar.get(i).getName() + ", ");
-                    }else{
+                    } else {
                         resultName = resultName + (ar.get(i).getName());
                     }
-
                 }
                 txtResultName.setText(resultName);
             }
@@ -193,6 +219,21 @@ public class StoredSmsFragment extends Fragment {
         dialog.dismiss();
         Toast.makeText(getActivity(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
         //PendingIntent pi = PendingIntent.getActivity(this, 0, new Intent(this, SmsSender.class), 0);
+    }
+
+    private void sendMMS2() {
+        SmsManager sms = SmsManager.getDefault();
+        ProgressDialog dialog = ProgressDialog.show(getActivity(), "타이틀", "문자 전송중입니다.", true);
+        try {
+            for (int i = 0; i < ar.size(); i++) {
+                ArrayList<String> parts = sms.divideMessage(txtContent.getText().toString());
+                sms.sendMultipartTextMessage(ar.get(i).getPhoneNumber(), null, parts, null, null);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        dialog.dismiss();
+        Toast.makeText(getActivity(), "문자가 전송되었습니다.", Toast.LENGTH_SHORT).show();
     }
 
 }

@@ -39,7 +39,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
     CustomerAdapter adapter;
     TextView txtSearch;
 
-    ArrayList<ContactVO> checkedContactResult;
+    //ArrayList<ContactVO> checkedContactResult;
     ArrayList<ContactVO> datas;
     RealmResults<ContactVO> datas2;
 
@@ -47,7 +47,6 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
 
     private final int REQUESTCODE_STORE = 1;
     private final int REQESTCODE_UPDATE = 2;
-
 
     public CustomerListFragment() {
         realm = Realm.getDefaultInstance();
@@ -60,7 +59,6 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
             datas.add(contactVO);
         }
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -94,7 +92,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
                 search(txtSearch.getText().toString());
             }
         });
-        checkedContactResult = new ArrayList<>();
+        //checkedContactResult = new ArrayList<>();
         //doSearch();
 
         adapter.setCallButtonClickListener(new View.OnClickListener() {
@@ -111,6 +109,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
             public void onClick(View v) {
                 int position = (int)v.getTag();
                 ContactVO contactData = adapter.getItem(position);
+                startActivity(new Intent("android.intent.action.SENDTO", Uri.parse("sms:"+contactData.getCellPhone())));
             }
         });
 
@@ -124,10 +123,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
                 Intent intent = new Intent(getContext(), AddContactActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("flag", 2);
-                // putExtra 여러개 사용할 때 bundle에 담아서.
-   /*             bundle.putString("title", writeSmsVO.getTitle());
-                bundle.putString("content", writeSmsVO.getContent());
-                bundle.putLong("id", writeSmsVO.getId());*/
+                // putExtra 여러개 사용할 때 bundle에 담아서 보냄.
                 bundle.putLong("id", contactVO.getId());
                 bundle.putString("name", contactVO.getName());
                 bundle.putString("call1", contactVO.getTel1());

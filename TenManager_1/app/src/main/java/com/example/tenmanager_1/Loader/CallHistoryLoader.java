@@ -22,6 +22,7 @@ import java.util.List;
 public class CallHistoryLoader {
     private List<CallHistoryData> datas = new ArrayList<>();
     private Context context;
+    Cursor cursor;
 
     public CallHistoryLoader(Context context){
         this.context = context;
@@ -36,17 +37,31 @@ public class CallHistoryLoader {
         // 2. 데이터에서 가져올 컬럼명을 정의
         String projections[] = {CallLog.Calls.CACHED_NAME, CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.TYPE};
 
-/*        String selection = CallLog.Calls.TYPE + "=?"; // Where절 타입이
-        String selectionArgs[] = {CallLog.Calls.INCOMING_TYPE, CallLog.Calls.OUTGOING_TYPE};*/
+        String numberToSearch = "01022530830";
+        String selection2 = CallLog.Calls.DATE +">? AND(" + CallLog.Calls.NUMBER + "=?)";  // ?에 선택인수가 대체되어 들어감, 조건을 추가하려면 뒤에 괄호로 묶어야함.
+        long installDate;
+        String str_installDate;
 
+
+         /* String selectionArgs[] = {CallLog.Calls.INCOMING_TYPE, CallLog.Calls.OUTGOING_TYPE};*/
         String sortOrder=CallLog.Calls.DATE + " DESC";
 
-        // 3. Content Resolver로 쿼리를 날려서 데이터를 가져온다.
-        Cursor cursor = resolver.query(callUri,    // 데이터의 주소 (URI)
-                projections,    // 가져올 데이터 컬럼명 배열 (projection)
-                null,           // 조건절에 들어가는 컬럼명들 지정
-                null,           // 지정된 컬럼명과 매핑되는 실제 조건 값
-                sortOrder);          // 정렬
+        try {
+            installDate = context.getPackageManager().getPackageInfo(context.getApplicationContext().getPackageName(),0).firstInstallTime;
+            str_installDate = String.valueOf(installDate);
+            // 3. Content Resolver로 쿼리를 날려서 데이터를 가져온다.
+           cursor = resolver.query(callUri,    // 데이터의 주소 (URI)
+                    projections,    // 가져올 데이터 컬럼명 배열 (projection)
+                    selection2,           // 조건절에 들어가는 컬럼명들 지정
+                    new String[]{str_installDate, numberToSearch},           // 지정된 컬럼명과 매핑되는 실제 조건 값
+                    sortOrder);          // 정렬
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+
+
 
 
         // 4. 반복문을 통해 cursor에 담겨있는 데이터를 하나씩 추출한다.
@@ -65,18 +80,18 @@ public class CallHistoryLoader {
 
                 int dateIndex = cursor.getColumnIndex(projections[2]);
 
-                long setupTime = 0;
+/*                long setupTime = 0;
                 try {
-                    setupTime = context.getPackageManager().getPackageInfo(context.getApplicationContext().getPackageName(), 0).firstInstallTime;
+                    setupTime = context.getPackageManager().getPackageInfo(context.getApplicationContext().getPackageName(), 0).firstInstallTime;  // 설치한 시간
                     //setupTime = setupTime - 1000*60*60*24;
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
-                }
+                }*/
 
                 long callTime = cursor.getLong(dateIndex);
-                if(callTime < setupTime){
+/*                if(callTime < setupTime){
                     continue;
-                }
+                }*/
 
                 Date date = new Date(callTime);
                 String date2 = date.toString();
@@ -84,7 +99,6 @@ public class CallHistoryLoader {
                 //SimpleDateFormat sdf = new SimpleDateFormat("MM-dd HH:mm");
                 SimpleDateFormat sdf = new SimpleDateFormat("a HH:mm");
                 String date3 = sdf.format(new Date(date2));
-
 
                 int typeIndex = cursor.getColumnIndex(projections[3]);
                 int checkType = cursor.getInt(typeIndex);

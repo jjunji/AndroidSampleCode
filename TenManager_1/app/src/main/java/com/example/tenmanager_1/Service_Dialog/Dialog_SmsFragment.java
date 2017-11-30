@@ -17,6 +17,7 @@ import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.Loader.CallHistoryLoader;
 import com.example.tenmanager_1.R;
 import com.example.tenmanager_1.SmsFragmentUtil.StoredSmsAdapter;
+import com.example.tenmanager_1.SmsFragmentUtil.StoredSmsViewHolder;
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -53,7 +54,7 @@ public class Dialog_SmsFragment extends Fragment {
         storedSmsResults = realm.where(SmsVO.class).findAll().sort("regdate", Sort.ASCENDING);
         init();
         setListView();
-        setRadionBtnClickListener();
+        setAdapterItemClickListener();
 
         return view;
     }
@@ -75,8 +76,8 @@ public class Dialog_SmsFragment extends Fragment {
         storedSmsListView.setFastScrollEnabled(true);
     }
 
-    private void setRadionBtnClickListener() {
-        storedSmsAdapter.setHolderClickListener(new View.OnClickListener() {
+    private void setAdapterItemClickListener() {
+        storedSmsAdapter.setRadioButtonClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = (int) v.getTag();  // 누른 포지션.
@@ -95,8 +96,6 @@ public class Dialog_SmsFragment extends Fragment {
                 }else{
                     radioBtn.setChecked(true);
                     txtContent.setText(storedSmsResults.get(position).getContent());
-                    //txtTitle.setText(storedSmsResults.get(position).getTitle());
-                    //txtContent.setText(storedSmsResults.get(position).getContent());
                     if(mSelectedRB != null && radioBtn != mSelectedRB){
                         mSelectedRB = radioBtn;
                     }
@@ -104,7 +103,30 @@ public class Dialog_SmsFragment extends Fragment {
                 storedSmsAdapter.notifyDataSetChanged();
             }
         });
-        //contactResultList = new ArrayList<>();
+
+        storedSmsAdapter.setHolderClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                StoredSmsViewHolder viewHolder = (StoredSmsViewHolder) v.getTag();
+                int position = viewHolder.getTag();
+                RadioButton radioBtn = viewHolder.radioBtn;
+
+                if (position != mSelectedPosition && mSelectedRB != null) {
+                    mSelectedRB.setChecked(false);
+                }
+
+                mSelectedPosition = position; // 누른위치
+                mSelectedRB = viewHolder.radioBtn; // 누른위치에 해당하는 라디오버튼
+
+                if (mSelectedPosition != position) {
+                    radioBtn.setChecked(false);
+                } else {
+                    radioBtn.setChecked(true);
+                    txtContent.setText(storedSmsResults.get(position).getContent());
+                }
+                storedSmsAdapter.notifyDataSetChanged();
+            }
+        });
     }
 
     private void setSendButtonClickListener(){
@@ -118,7 +140,6 @@ public class Dialog_SmsFragment extends Fragment {
                 }else{
                     activity.finish();
                 }
-
             }
         });
     }

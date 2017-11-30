@@ -25,10 +25,8 @@ public class PromoteSmsAdapter extends BaseAdapter {
     LayoutInflater layoutInflater;
     RealmResults<SmsVO> results;
 
-    private int mSelectedRadioPosition;
-    private RadioButton mLastSelectedRadioButton;
-
     private View.OnClickListener holderClickListener;
+    private View.OnClickListener radioButtonClickListener;
 
     public PromoteSmsAdapter(Context context) {
         this.context = context;
@@ -71,9 +69,13 @@ public class PromoteSmsAdapter extends BaseAdapter {
         viewHolder.txtItemTitle.setText(results.get(position).getTitle());
 
         viewHolder.radioBtn.setTag(position);  // 뷰홀더 안에 라디오버튼의 포지션.
+        if(radioButtonClickListener != null){
+            viewHolder.radioBtn.setOnClickListener(radioButtonClickListener);
+        }
+
+        viewHolder.setTag(position);
         if(holderClickListener != null){
-            //convertView.setOnClickListener(holderClickListener);
-            viewHolder.radioBtn.setOnClickListener(holderClickListener);
+            convertView.setOnClickListener(holderClickListener);
         }
 
         return convertView;
@@ -85,5 +87,13 @@ public class PromoteSmsAdapter extends BaseAdapter {
 
     public void setHolderClickListener(View.OnClickListener holderClickListener) {
         this.holderClickListener = holderClickListener;
+    }
+
+    public View.OnClickListener getRadioButtonClickListener() {
+        return radioButtonClickListener;
+    }
+
+    public void setRadioButtonClickListener(View.OnClickListener radioButtonClickListener) {
+        this.radioButtonClickListener = radioButtonClickListener;
     }
 }

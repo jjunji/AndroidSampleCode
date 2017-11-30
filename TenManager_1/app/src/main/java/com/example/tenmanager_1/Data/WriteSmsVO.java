@@ -10,6 +10,7 @@ import io.realm.RealmObject;
  * Created by 전지훈 on 2017-11-10.
  */
 
+/*
 public class WriteSmsVO extends RealmObject{
     private long id;
     private String title;
@@ -48,3 +49,4 @@ public class WriteSmsVO extends RealmObject{
         this.content = content;
     }
 }
+*/
