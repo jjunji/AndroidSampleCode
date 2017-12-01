@@ -10,6 +10,12 @@ import android.os.IBinder;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.example.tenmanager_1.Data.CallHistoryData;
+import com.example.tenmanager_1.Data.CallHistoryVO;
+import com.example.tenmanager_1.Data.SmsVO;
+
+import io.realm.Realm;
+
 /**
  * Created by 전지훈 on 2017-11-20.
  */
@@ -17,6 +23,7 @@ import android.util.Log;
 public class CallingService extends Service {
     public static final String TAG = "PHONE STATE";
     private static String mLastState;
+    Realm realm;
     //BroadcastReceiver mReceiver;
 
     private final BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -26,7 +33,7 @@ public class CallingService extends Service {
         public void onReceive(Context context, Intent intent) {
             Log.i(TAG, "onReceive()");
 
-            String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);  //
+            String state = intent.getStringExtra(TelephonyManager.EXTRA_STATE);
             Log.i(TAG, "state =============== " + state);
 
             if (state.equals("RINGING")) {
@@ -68,7 +75,8 @@ public class CallingService extends Service {
 
     @Override
     public void onCreate() {
-        Log.i("callingService","onDestroy ============");
+        Log.i("callingService","onCreate ============");
+        realm = Realm.getDefaultInstance();
         IntentFilter filter = new IntentFilter();
         filter.addAction(TelephonyManager.ACTION_PHONE_STATE_CHANGED);
 //        mReceiver = new BroadcastReceiver

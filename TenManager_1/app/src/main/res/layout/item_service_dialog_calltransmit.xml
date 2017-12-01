@@ -6,7 +6,7 @@
 
 
     <ImageView
-        android:id="@+id/imgReceive"
+        android:id="@+id/imgTransmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="13dp"
@@ -22,15 +22,15 @@
         android:id="@+id/txtTransmit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/imgReceive"
-        android:layout_alignParentTop="true"
-        android:layout_alignRight="@+id/imgReceive"
-        android:layout_marginEnd="29dp"
-        android:layout_marginRight="29dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginEnd="7dp"
+        android:layout_marginRight="7dp"
         android:text="TextView"
         android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/imgTransmit"
+        android:layout_toStartOf="@+id/imgTransmit"
+        android:layout_marginTop="10dp" />
 
     <TextView
         android:id="@+id/txtTransmitDate"

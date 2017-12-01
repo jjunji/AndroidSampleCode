@@ -16,6 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.tenmanager_1.Data.CallHistoryData;
+import com.example.tenmanager_1.Data.CallHistoryVO;
 import com.example.tenmanager_1.Data.CallMemoVO;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.Loader.CallHistoryLoader;
@@ -28,6 +29,7 @@ import java.util.List;
 import io.realm.Realm;
 import io.realm.RealmList;
 import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +41,9 @@ public class Dialog_HistoryFragment extends Fragment {
     ListView callHistoryListView;
     Dialog_historyAdapter adapter;
     MatchingHistoryLoader loader;
-    ArrayList<CallHistoryData> datas;
+    //ArrayList<CallHistoryData> datas;
+    //ArrayList<CallHistoryVO> datas;
+    RealmResults<CallHistoryVO> datas;
     String phoneNumber;
     EditText etCallMemo;
     Button btnMemoStore;
@@ -69,8 +73,10 @@ public class Dialog_HistoryFragment extends Fragment {
         realm = Realm.getDefaultInstance();
         phoneNumber = getArguments().getString("phoneNumber");  // CallingService.class 에서 받은 데이터 (방금 통화한 번호)
         loader = new MatchingHistoryLoader(getContext(), phoneNumber);
-        datas = new ArrayList<>();
-        datas = loader.getContacts();
+        //datas = new ArrayList<>();
+        //datas = loader.getContacts();
+        //datas = realm.where(CallHistoryVO.class).findAll().sort("date", Sort.DESCENDING);
+        datas = realm.where(CallHistoryVO.class).equalTo("contactVO.cellPhone", phoneNumber).findAllSorted("date", Sort.DESCENDING);
         setStoreButtonListener();
     }
 
@@ -83,23 +89,30 @@ public class Dialog_HistoryFragment extends Fragment {
         btnMemoStore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Number maxid = realm.where(CallMemoVO.class).max("id");
+                Number maxid = realm.where(CallHistoryVO.class).max("id");
                 int id = 1; // 빈 데이터베이스면 index 1로 시작.
                 if (maxid != null) { // 비어있지 않으면 마지막 index + 1
                     id = maxid.intValue() + 1;
                 }
                 realm.beginTransaction();
-                CallMemoVO callMemoVO = realm.createObject(CallMemoVO.class, id);
-                callMemoVO.setContent(etCallMemo.getText().toString());
-                callMemoVO.setRegdate(System.currentTimeMillis());
+                CallHistoryVO callHistoryVO = realm.createObject(CallHistoryVO.class, id);
+                //callHistoryVO.setContent(etCallMemo.getText().toString());
+                callHistoryVO.setCallMemo(etCallMemo.getText().toString());
+                //callMemoVO.setRegdate(System.currentTimeMillis());
+                callHistoryVO.setDate(System.currentTimeMillis());
+                callHistoryVO.setType(3);
                 ContactVO contactVO = realm.where(ContactVO.class).equalTo("cellPhone", phoneNumber).findFirst();
-                callMemoVO.setContactVO(contactVO);
-                RealmList<CallMemoVO> list = new RealmList<CallMemoVO>();
-                list.add(callMemoVO);
+                callHistoryVO.setContactVO(contactVO);
+                RealmList<CallHistoryVO> list = new RealmList<CallHistoryVO>();
+                list.add(callHistoryVO);
                 contactVO.setArCallMemo(list);
                 realm.commitTransaction();
 
-                Log.i(TAG, "callMemo ============= : " + callMemoVO.toString());
+                RealmResults<CallHistoryVO> results = realm.where(CallHistoryVO.class).findAll();
+                for(int i=0; i<results.size(); i++) {
+                    Log.i(TAG, "callHistoryVO ============= " + results.get(i).toString());
+                }
+
 
                 /*Activity activity = (DialogActivity)getActivity();
                 activity.finish();*/

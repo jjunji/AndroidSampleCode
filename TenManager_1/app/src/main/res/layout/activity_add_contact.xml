@@ -172,6 +172,7 @@
             android:text="메모" />
 
         <EditText
+            android:gravity="top"
             android:id="@+id/etMemo"
             android:layout_width="wrap_content"
             android:layout_height="60dp"
@@ -189,6 +190,7 @@
         android:orientation="horizontal">
 
         <TextView
+            android:layout_gravity=""
             android:id="@+id/textView13"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
@@ -204,7 +206,9 @@
             android:layout_weight="1"
             android:background="@drawable/border"
             android:ems="10"
-            android:inputType="textPersonName" />
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:singleLine="false" />
     </LinearLayout>
 
     <Button

@@ -20,7 +20,7 @@ public class ContactVO extends RealmObject {
     private ContactGroupVO group;
     private String address;
     private String memo;
-    private RealmList<CallMemoVO> arCallMemo;
+    private RealmList<CallHistoryVO> arCallMemo;
 
     public String getName() {
         return name;
@@ -86,11 +86,11 @@ public class ContactVO extends RealmObject {
         this.id = id;
     }
 
-    public RealmList<CallMemoVO> getArCallMemo() {
+    public RealmList<CallHistoryVO> getArCallMemo() {
         return arCallMemo;
     }
 
-    public void setArCallMemo(RealmList<CallMemoVO> arCallMemo) {
+    public void setArCallMemo(RealmList<CallHistoryVO> arCallMemo) {
         this.arCallMemo = arCallMemo;
     }
 

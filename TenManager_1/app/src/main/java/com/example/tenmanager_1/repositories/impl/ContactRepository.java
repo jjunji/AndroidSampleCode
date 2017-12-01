@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
+import com.example.tenmanager_1.Data.CallHistoryVO;
 import com.example.tenmanager_1.Data.CallMemoVO;
 import com.example.tenmanager_1.Data.ContactGroupVO;
 import com.example.tenmanager_1.Data.ContactVO;
@@ -79,7 +80,7 @@ public class ContactRepository implements ContactDataSource {
             contactVO.setName(tempVO.getName());
             contactVO.setCellPhone(tempVO.getCellPhone());
             contactVO.setGroup(contactGroupVO);
-            contactVO.setArCallMemo(new RealmList<CallMemoVO>());
+            contactVO.setArCallMemo(new RealmList<CallHistoryVO>());
         }
         realm.commitTransaction();
 

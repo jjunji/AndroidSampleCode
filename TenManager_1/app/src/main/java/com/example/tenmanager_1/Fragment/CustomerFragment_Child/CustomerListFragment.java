@@ -6,8 +6,10 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.telecom.Call;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,9 +19,12 @@ import com.example.tenmanager_1.AddContactActivity;
 import com.example.tenmanager_1.CustomerUtil.CustomerAdapter;
 import com.example.tenmanager_1.CustomerUtil.CustomerViewHolder;
 import com.example.tenmanager_1.CustomerUtil.IndexableCustomerListView;
+import com.example.tenmanager_1.Data.CallHistoryVO;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
 
+import java.io.Console;
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import io.realm.Realm;
@@ -32,6 +37,7 @@ import static android.app.Activity.RESULT_OK;
  * A simple {@link Fragment} subclass.
  */
 public class CustomerListFragment extends Fragment implements View.OnClickListener{
+    private final String TAG = CustomerListFragment.class.getSimpleName();
     Realm realm;
     View view;
     //ListView customerListView;
@@ -131,7 +137,21 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
                 bundle.putString("phoneNumber", contactVO.getCellPhone());
                 bundle.putString("address", contactVO.getAddress());
                 bundle.putString("memo", contactVO.getMemo());
-//                bundle.putString("callMemo", contactVO.getCallMemo());
+
+                RealmResults<CallHistoryVO> results = realm.where(CallHistoryVO.class).equalTo("contactVO.cellPhone", contactVO.getCellPhone()).equalTo("type",3).findAll();
+
+                StringBuilder totalMemo = new StringBuilder();
+
+                if(results != null){
+                    for(int i=0; i<results.size(); i++){
+                        totalMemo.append(results.get(i).getCallMemo()+"\n");
+                    }
+                }else{
+                    totalMemo.append("");
+                }
+
+                bundle.putString("callMemo", totalMemo.toString());
+
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQESTCODE_UPDATE);
             }

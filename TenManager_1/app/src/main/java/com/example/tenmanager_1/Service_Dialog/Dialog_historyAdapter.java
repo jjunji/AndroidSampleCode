@@ -8,10 +8,14 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.tenmanager_1.Data.CallHistoryData;
+import com.example.tenmanager_1.Data.CallHistoryVO;
 import com.example.tenmanager_1.R;
 
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
+import io.realm.RealmChangeListener;
+import io.realm.RealmResults;
 
 /**
  * Created by 전지훈 on 2017-11-27.
@@ -20,20 +24,29 @@ import java.util.ArrayList;
 public class Dialog_historyAdapter extends BaseAdapter{
     private static final int ITEM_VIEW_TYPE_RECEIVE = 0 ;
     private static final int ITEM_VIEW_TYPE_TRANSMIT= 1 ;
-    private static final int ITEM_VIEW_TYPE_MAX = 2 ;
+    private static final int ITEM_VIEW_TYPE_MAX = 3 ;
 
     Context context;
     LayoutInflater inflater;
+    SimpleDateFormat sdf = new SimpleDateFormat("a HH:mm");
 
     //List<CallHistoryData> datas = new ArrayList<>();
     //HashMap<String, ArrayList<CallHistoryData>> datas = new HashMap<>();
-    ArrayList<CallHistoryData> datas = new ArrayList<>();
+    //ArrayList<CallHistoryData> datas = new ArrayList<>();
+    RealmResults<CallHistoryVO> datas;
 
     //private ArrayList<Dialog_historyHolder> listViewItemList = new ArrayList<Dialog_historyHolder>() ;
 
-    public Dialog_historyAdapter(Context context, ArrayList<CallHistoryData> matchingNumberInfo) {
+    public Dialog_historyAdapter(Context context, RealmResults<CallHistoryVO> datas) {
         this.context = context;
-        this.datas = matchingNumberInfo;
+        //this.datas = matchingNumberInfo;
+        this.datas = datas;
+        this.datas.addChangeListener(new RealmChangeListener<RealmResults<CallHistoryVO>>() {
+            @Override
+            public void onChange(RealmResults<CallHistoryVO> callHistoryVOs) {
+                notifyDataSetChanged();
+            }
+        });
         inflater = LayoutInflater.from(context);
     }
 
@@ -43,7 +56,7 @@ public class Dialog_historyAdapter extends BaseAdapter{
     }
 
     @Override
-    public CallHistoryData getItem(int position) {
+    public CallHistoryVO getItem(int position) {
         return datas.get(position);
     }
 
@@ -61,7 +74,7 @@ public class Dialog_historyAdapter extends BaseAdapter{
         final Dialog_historyHolder_callMemo callMemoHolder;
 
         // 통화내역 타입이 1일 경우(수신)
-        if(datas.get(position).getType().equals("수신") || datas.get(position).getType().equals("부재중")){
+        if(datas.get(position).getType() == 1){
             if(convertView == null){
                 receiveHolder = new Dialog_historyHolder_receive();
 
@@ -85,20 +98,22 @@ public class Dialog_historyAdapter extends BaseAdapter{
                 }
             }
 
+            long date = datas.get(position).getDate();
+            String str_date = sdf.format(new Date(date));
             receiveHolder.txtReceive.setText("수신");
-            receiveHolder.txtReceiveTime.setText(datas.get(position).getDate());
+            receiveHolder.txtReceiveTime.setText(str_date);
 
             //return convertView;
 
            // 통화내역 타입이 2일 경우(발신)
-        }else if(datas.get(position).getType().equals("발신")) {
+        }else if(datas.get(position).getType() == 2) {
             if (convertView == null) {
                 transmitHolder = new Dialog_historyHolder_transmit();
 
                 convertView = inflater.inflate(R.layout.item_service_dialog_calltransmit, null);
                 transmitHolder.txtTransmit = (TextView) convertView.findViewById(R.id.txtTransmit);
                 transmitHolder.txtTransmitTime = (TextView) convertView.findViewById(R.id.txtTransmitDate);
-                transmitHolder.imgTransmit = (ImageView) convertView.findViewById(R.id.imgReceive);
+                transmitHolder.imgTransmit = (ImageView) convertView.findViewById(R.id.imgTransmit);
                 convertView.setTag(transmitHolder);
             } else {
                 if (convertView.getTag() instanceof Dialog_historyHolder_transmit) {
@@ -109,15 +124,40 @@ public class Dialog_historyAdapter extends BaseAdapter{
                     convertView = inflater.inflate(R.layout.item_service_dialog_calltransmit, null);
                     transmitHolder.txtTransmit = (TextView) convertView.findViewById(R.id.txtTransmit);
                     transmitHolder.txtTransmitTime = (TextView) convertView.findViewById(R.id.txtTransmitDate);
-                    transmitHolder.imgTransmit = (ImageView) convertView.findViewById(R.id.imgReceive);
+                    transmitHolder.imgTransmit = (ImageView) convertView.findViewById(R.id.imgTransmit);
                     convertView.setTag(transmitHolder);
                 }
             }
 
+            long date = datas.get(position).getDate();
+            String str_date = sdf.format(new Date(date));
             transmitHolder.txtTransmit.setText("발신");
-            transmitHolder.txtTransmitTime.setText(datas.get(position).getDate());
-        }
+            transmitHolder.txtTransmitTime.setText(str_date);
 
+            // 통화내역 타입이 3일 경우(콜메모)
+        }else if(datas.get(position).getType() == 3){
+            if(convertView == null){
+                callMemoHolder = new Dialog_historyHolder_callMemo();
+
+                convertView = inflater.inflate(R.layout.item_service_dialog_callmemo, null);
+                callMemoHolder.txtContent = (TextView) convertView.findViewById(R.id.txtCallMemoContent);
+                callMemoHolder.imgCallMemo = (ImageView) convertView.findViewById(R.id.imgCallMemo);
+                convertView.setTag(callMemoHolder);
+            }else{
+                if(convertView.getTag() instanceof Dialog_historyHolder_callMemo){
+                    callMemoHolder = (Dialog_historyHolder_callMemo) convertView.getTag();
+                }else{
+                    callMemoHolder = new Dialog_historyHolder_callMemo();
+
+                    convertView = inflater.inflate(R.layout.item_service_dialog_callmemo, null);
+                    callMemoHolder.txtContent = (TextView) convertView.findViewById(R.id.txtCallMemoContent);
+                    callMemoHolder.imgCallMemo = (ImageView) convertView.findViewById(R.id.imgCallMemo);
+                    convertView.setTag(callMemoHolder);
+                }
+            }
+
+            callMemoHolder.txtContent.setText(datas.get(position).getCallMemo());
+        }
 
         return convertView;
     }
@@ -125,6 +165,10 @@ public class Dialog_historyAdapter extends BaseAdapter{
     @Override
     public int getViewTypeCount() {
         return ITEM_VIEW_TYPE_MAX;
+    }
+
+    public void addItem(){
+
     }
 
  /*   @Override

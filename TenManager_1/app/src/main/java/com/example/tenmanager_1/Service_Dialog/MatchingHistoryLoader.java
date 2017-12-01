@@ -42,7 +42,7 @@ public class MatchingHistoryLoader {
         // 2. 데이터에서 가져올 컬럼명을 정의
         String projections[] = {CallLog.Calls.CACHED_NAME, CallLog.Calls.NUMBER, CallLog.Calls.DATE, CallLog.Calls.TYPE};
 
-        String selection = CallLog.Calls.DATE +">? AND(" + CallLog.Calls.NUMBER + "=?)";  // ?에 선택인수가 대체되어 들어감, 조건을 추가하려면 뒤에 괄호로 묶어야함.
+        String selection = CallLog.Calls.DATE +">? AND " + CallLog.Calls.NUMBER + "=?";  // ?에 선택인수가 대체되어 들어감, 조건을 추가하려면 뒤에 괄호로 묶어야함.
 
         String sortOrder=CallLog.Calls.DATE + " DESC";
 

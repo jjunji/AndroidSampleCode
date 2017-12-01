@@ -10,12 +10,18 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.tenmanager_1.Data.CallHistoryVO;
+import com.example.tenmanager_1.Data.ContactVO;
+import com.example.tenmanager_1.Data.SmsVO;
 import com.example.tenmanager_1.Loader.CallHistoryLoader;
 import com.example.tenmanager_1.R;
+
+import io.realm.Realm;
 
 
 public class DialogActivity extends AppCompatActivity {
     private final String TAG = DialogActivity.class.getSimpleName();
+    Realm realm;
     Button btnSms, btnHistory;
     TextView txtPhoneNumber, txtName;
     TextView txtCallState;
@@ -32,6 +38,7 @@ public class DialogActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dialog);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         init();
+        storeCalldata();
         callFragment(SMSFRAGMENT);
         setText();
         setButtonListener();
@@ -94,7 +101,38 @@ public class DialogActivity extends AppCompatActivity {
 
     }
 
+    private void storeCalldata(){
+        int flag = getIntent().getExtras().getInt("flag");
+        String phoneNumber = getIntent().getExtras().getString("phoneNumber");
+
+        Number maxid = realm.where(CallHistoryVO.class).max("id");
+        int id = 1; // 빈 데이터베이스면 index 1로 시작.
+        if(maxid != null){ // 비어있지 않으면 마지막 index + 1
+            id = maxid.intValue()+1;
+        }
+
+        if(flag == 1){
+            realm.beginTransaction();
+            CallHistoryVO callHistoryVO = realm.createObject(CallHistoryVO.class, id);
+            ContactVO contactVO = realm.where(ContactVO.class).equalTo("cellPhone", phoneNumber).findFirst();
+            callHistoryVO.setContactVO(contactVO);
+            callHistoryVO.setType(1);
+            callHistoryVO.setDate(System.currentTimeMillis());
+            realm.commitTransaction();
+        }else if(flag == 2){
+            realm.beginTransaction();
+            CallHistoryVO callHistoryVO = realm.createObject(CallHistoryVO.class, id);
+            ContactVO contactVO = realm.where(ContactVO.class).equalTo("cellPhone", phoneNumber).findFirst();
+            callHistoryVO.setContactVO(contactVO);
+            callHistoryVO.setType(2);
+            callHistoryVO.setDate(System.currentTimeMillis());
+            realm.commitTransaction();
+        }
+
+    }
+
     private void init() {
+        realm = Realm.getDefaultInstance();
         loader = new CallHistoryLoader(DialogActivity.this);
         btnSms = (Button) findViewById(R.id.btnSms);
         btnHistory = (Button) findViewById(R.id.btnHistory);

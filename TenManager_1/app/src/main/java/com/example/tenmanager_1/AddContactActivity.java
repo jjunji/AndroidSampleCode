@@ -186,10 +186,12 @@ public class AddContactActivity extends AppCompatActivity {
                 etPhoneNumber.setText(cvo.getCellPhone());
                 Log.i(TAG, "group ============ " + cvo.getGroup());
                 //spinner.setSelection((int) cvo.getGroup().getId());
-                etMemo.setText("TEST!!!");
+                etMemo.setText("");
                 spinner.setAdapter(spinner_adapter);
                 int spinnerPosition = (int) cvo.getGroup().getId();
                 spinner.setSelection(spinnerPosition -1);
+
+                etCallMemo.setText(bundle.getString("callMemo"));
 
 /*                etName.setText(name);
                 etCall1.setText(call1);
