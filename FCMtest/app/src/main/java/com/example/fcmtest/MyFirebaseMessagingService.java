@@ -7,10 +7,8 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -20,12 +18,12 @@ import com.google.firebase.messaging.RemoteMessage;
  * Created by 전지훈 on 2017-12-01.
  *
  */
+
                             //com.google.firebase.messaging.FirebaseMessagingService
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseMsgService";
     Context context = MyApplication.getInstanc();
 
-    // [START receive_message]
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Intent popupIntent = new Intent(context, DialogActivity.class);
@@ -40,7 +38,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     private void sendPushNotification(String message) {
         System.out.println("received message : " + message);
-        Intent intent = new Intent(this, MainActivity.class);
+        Intent intent = new Intent(this, DialogActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
                 PendingIntent.FLAG_ONE_SHOT);
