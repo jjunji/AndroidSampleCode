@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "705934229350",
+    "firebase_url": "https://fcmtest-2bb5a.firebaseio.com",
+    "project_id": "fcmtest-2bb5a",
+    "storage_bucket": "fcmtest-2bb5a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:705934229350:android:84ec7ae49f5f06f2",
+        "android_client_info": {
+          "package_name": "com.example.tenmanager_1"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "705934229350-ue90s4nfurh57ak6974ur05337h8k1sc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqDAME1NRThrC7TpLR-v6Cf8jAkeJTW2Y"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -138,6 +138,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
                 bundle.putString("address", contactVO.getAddress());
                 bundle.putString("memo", contactVO.getMemo());
 
+                // result : 통화내역VO 에서 방금 통화한 번호와 같고, 타입이 3(콜메모)인 데이터
                 RealmResults<CallHistoryVO> results = realm.where(CallHistoryVO.class).equalTo("contactVO.cellPhone", contactVO.getCellPhone()).equalTo("type",3).findAll();
 
                 StringBuilder totalMemo = new StringBuilder();
