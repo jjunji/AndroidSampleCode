@@ -22,6 +22,7 @@ import com.example.tenmanager_1.CustomerUtil.IndexableCustomerListView;
 import com.example.tenmanager_1.Data.CallHistoryVO;
 import com.example.tenmanager_1.Data.ContactVO;
 import com.example.tenmanager_1.R;
+import com.example.tenmanager_1.SoundSearcher;
 
 import java.io.Console;
 import java.io.Serializable;
@@ -38,6 +39,7 @@ import static android.app.Activity.RESULT_OK;
  */
 public class CustomerListFragment extends Fragment implements View.OnClickListener{
     private final String TAG = CustomerListFragment.class.getSimpleName();
+    SoundSearcher soundSearcher = new SoundSearcher();
     Realm realm;
     View view;
     //ListView customerListView;
@@ -46,8 +48,8 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
     TextView txtSearch;
 
     //ArrayList<ContactVO> checkedContactResult;
-    ArrayList<ContactVO> datas;
-    RealmResults<ContactVO> datas2;
+    ArrayList<ContactVO> datas_result;
+    RealmResults<ContactVO> datas_original;
 
     FloatingActionButton fab;
 
@@ -57,12 +59,12 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
     public CustomerListFragment() {
         realm = Realm.getDefaultInstance();
 
-        datas2 = realm.where(ContactVO.class).findAllSorted("name", Sort.ASCENDING);
+        datas_original = realm.where(ContactVO.class).findAllSorted("name", Sort.ASCENDING);
 
-        datas = new ArrayList<>();
+        datas_result = new ArrayList<>();
 
-        for(ContactVO contactVO : datas2){
-            datas.add(contactVO);
+        for(ContactVO contactVO : datas_original){
+            datas_result.add(contactVO);
         }
     }
 
@@ -80,7 +82,7 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
         fab = (FloatingActionButton) view.findViewById(R.id.fab_addContact);
         //customerListView = (ListView) view.findViewById(R.id.c_customerListView);
         indexableCustomerListView = (IndexableCustomerListView) view.findViewById(R.id.c_customerListView);
-        adapter = new CustomerAdapter(getContext(), datas);
+        adapter = new CustomerAdapter(getContext(), datas_result);
         txtSearch = (TextView) view.findViewById(R.id.txtSearch);
         txtSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -165,28 +167,57 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
     }
 
 
-    public void search(String charText) {
+/*    public void search(String charText) {
         // 문자 입력시마다 리스트를 지우고 새로 뿌려준다.
         //list.clear();
-        datas.clear();
+        datas_result.clear();
 
         // 문자 입력이 없을때는 모든 데이터를 보여준다.
         if (charText.length() == 0) {
-            for(ContactVO contactVO : datas2){
-                datas.add(contactVO);
+            for(ContactVO contactVO : datas_original){
+                datas_result.add(contactVO);
             }
         }
         // 문자 입력을 할때..
         else
         {
             // 리스트의 모든 데이터를 검색한다.
-            for(int i = 0;i < datas2.size(); i++)
+            for(int i = 0;i < datas_original.size(); i++)
             {
                 // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
-                if (datas2.get(i).getName().toLowerCase().contains(charText) || datas2.get(i).getCellPhone().toLowerCase().contains(charText))
+                if (datas_original.get(i).getName().toLowerCase().contains(charText) || datas_original.get(i).getCellPhone().toLowerCase().contains(charText))
                 {
                     // 검색된 데이터를 리스트에 추가한다.
-                    datas.add(datas2.get(i));
+                    datas_result.add(datas_original.get(i));
+                }
+            }
+        }
+        // 리스트 데이터가 변경되었으므로 아답터를 갱신하여 검색된 데이터를 화면에 보여준다.
+        adapter.notifyDataSetChanged();
+    }*/
+
+    public void search(String charText) {
+        // 문자 입력시마다 리스트를 지우고 새로 뿌려준다.
+        //list.clear();
+        datas_result.clear();
+
+        // 문자 입력이 없을때는 모든 데이터를 보여준다.
+        if (charText.length() == 0) {
+            for(int i=0; i<datas_original.size(); i++){
+                datas_result.add(datas_original.get(i));
+            }
+        }
+        // 문자 입력을 할때..
+        else
+        {
+            // 리스트의 모든 데이터를 검색한다.
+            for(int i = 0;i < datas_original.size(); i++)
+            {
+                // arraylist의 모든 데이터에 입력받은 단어(charText)가 포함되어 있으면 true를 반환한다.
+                if (soundSearcher.matchString(datas_original.get(i).getName(), charText) || datas_original.get(i).getCellPhone().toLowerCase().contains(charText))
+                {
+                    // 검색된 데이터를 리스트에 추가한다.
+                    datas_result.add(datas_original.get(i));
                 }
             }
         }
@@ -201,14 +232,14 @@ public class CustomerListFragment extends Fragment implements View.OnClickListen
 
         if(resultCode == RESULT_OK){
             if(requestCode == REQUESTCODE_STORE) {
-                datas2 = realm.where(ContactVO.class).findAllSorted("name", Sort.ASCENDING);
+                datas_original = realm.where(ContactVO.class).findAllSorted("name", Sort.ASCENDING);
 
-                datas = new ArrayList<>();
+                datas_result = new ArrayList<>();
 
-                for(ContactVO contactVO : datas2){
-                    datas.add(contactVO);
+                for(ContactVO contactVO : datas_original){
+                    datas_result.add(contactVO);
                 }
-                adapter.setDatas(datas);
+                adapter.setDatas(datas_result);
                 adapter.notifyDataSetChanged();
             }else if (requestCode == REQESTCODE_UPDATE){
                 adapter.notifyDataSetChanged();

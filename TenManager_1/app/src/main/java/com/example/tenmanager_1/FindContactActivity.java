@@ -107,7 +107,7 @@ public class FindContactActivity extends AppCompatActivity implements View.OnCli
             }
         });
         //checkedContactResult = new ArrayList<>();
-        doSearch();
+        //doSearch();
     }
 
     public void setButtonClickListener(){
